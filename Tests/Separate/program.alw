@@ -1,0 +1,8 @@
+begin
+   procedure separate(string(10) value message);
+      algol "separate";
+
+   write("Here we go:");
+   separate("Hi there!");
+   write("Done.");
+end.

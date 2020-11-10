@@ -1,0 +1,14 @@
+begin
+    write(maxinteger);
+    write(pi);   
+    write(maxreal);
+    write(epsilon);
+    write(longepsilon);
+end.
+----stdout
+    2147483647
+      3.141593
+ 1.797693'+308
+  2.220446'-16
+  2.220446'-16
+----end

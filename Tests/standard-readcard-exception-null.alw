@@ -1,0 +1,27 @@
+begin
+  string(5) s;
+  endfile := null;
+  for i := 1 until 10 do
+     begin
+         readcard(s);
+         write("""", s, """")        
+     end
+end.
+----stdin
+one
+two
+three
+four
+five
+----stdout
+"one  "
+"two  "
+"three"
+"four "
+"five "
+"     "
+"     "
+"     "
+"     "
+"     "
+----end

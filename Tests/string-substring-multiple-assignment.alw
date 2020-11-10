@@ -1,0 +1,20 @@
+begin
+   string(2) a, b;
+   string(1) c;
+
+   a := b := "ab";
+   assert(a = "ab");
+   assert(b = "ab");
+
+   c := b(1|1) := "2";
+   assert(c = "2");
+   assert(b = "a2");
+
+   a(1|1) := c := "3";
+   assert(c = "3");
+   assert(a = "a3");
+
+   a(1|1) := b(1|1) := "4";
+   assert(a = "a4");
+   assert(b = "a4");
+end.

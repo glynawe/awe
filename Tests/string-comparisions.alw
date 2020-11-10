@@ -1,0 +1,24 @@
+begin
+   assert("abc" = "abc");
+   assert("bce" > "abc");
+   assert("abc" < "bce");
+
+   assert("abc" ~= "abcd");
+   assert("abcd" > "abc");
+   assert("abc"  < "abcd");
+
+
+   comment Spaces at the ends of strings do not count in comparisions;
+
+   assert("abc"  = "abc ");
+   assert("bce " > "abc");
+   assert("abc " < "bce");
+   assert("bce"  > "abc ");
+   assert("abc"  < "bce ");
+
+   assert("abc "  = "abc  ");
+   assert("bce  " > "abc ");
+   assert("abc  " < "bce ");
+   assert("bce "  > "abc  ");
+   assert("abc "  < "bce  ");
+end.

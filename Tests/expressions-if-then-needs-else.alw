@@ -1,0 +1,8 @@
+begin
+  integer i;
+  logical b;
+  i := if b then 1;
+end.
+----compile
+Tests/expressions-if-then-needs-else.alw:4:18: expected a statement here, got an INTEGER
+----end

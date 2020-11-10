@@ -1,0 +1,7 @@
+begin 
+   write(2 + 2);
+   TRUE
+end.
+----compile
+Tests/program-exit-code-wrong-type.alw:3:4: a program should be a statement, this returns a LOGICAL
+----end

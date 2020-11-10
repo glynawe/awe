@@ -1,0 +1,179 @@
+begin
+    % Each of the declarations below is the equivalent of a C prototype. 
+      Awe ouputs the prototypes as compiler mesages. (At the end of this
+      file you will see the expected prototypes for these examples.) %
+
+    record r (integer i);
+
+    procedure i1 (integer name);                    algol "i1";
+    procedure i2 (integer value v);                 algol "i2";
+    procedure i3 (integer result pv);               algol "i3";
+    procedure i4 (integer value result pv);         algol "i4";
+    procedure i5 (integer array arr(*));            algol "i5";
+    procedure i6 (integer procedure proc);          algol "i6";
+    procedure i7 (procedure proc(integer value v)); algol "i7";
+    integer procedure i8;                           algol "i8";
+
+    % Strings are a little different, because they are already pointers: %
+    % (The semantics of substring designators demands that things be done in an inconsistant way.) %
+    procedure s1 (string(10) name);                    algol "s1";
+    procedure s2 (string(10) value v);                 algol "s2";
+    procedure s3 (string(10) result pv);               algol "s3";
+    procedure s4 (string(10) value result pv);         algol "s4";
+    procedure s5 (string(10) array arr(*));            algol "s5";
+    procedure s6 (string(10) procedure proc);          algol "s6";
+    procedure s7 (procedure proc(string(10) value v)); algol "s7";
+    string(10) procedure s8;                           algol "s8";
+
+    % String(1) is back to normal, because it is represented by characters: %
+    procedure c1 (string(1) name);                    algol "c1";
+    procedure c2 (string(1) value v);                 algol "c2";
+    procedure c3 (string(1) result pv);               algol "c3";
+    procedure c4 (string(1) value result pv);         algol "c4";
+    procedure c5 (string(1) array arr(*));            algol "c5";
+    procedure c6 (string(1) procedure proc);          algol "c6";
+    procedure c7 (procedure proc(string(1) value v)); algol "c7";
+    string(1) procedure c8;                           algol "c8";
+
+    % All references are pointers to void: %
+    procedure r1 (reference(r) name);                    algol "r1";
+    procedure r2 (reference(r) value v);                 algol "r2";
+    procedure r3 (reference(r) result pv);               algol "r3";
+    procedure r4 (reference(r) value result pv);         algol "r4";
+    procedure r5 (reference(r) array arr(*));            algol "r5";
+    procedure r6 (reference(r) procedure proc);          algol "r6";
+    procedure r7 (procedure proc(reference(r) value v)); algol "r7";
+    reference(r) procedure r8;                           algol "r8";
+    reference(r) procedure r9;                           algol "r9";
+
+    % some weirdos, these use Awe's procedure parameter language extension %
+    procedure p1; algol "p1";
+    procedure p2 (procedure a); algol "p2";
+    procedure p3 (procedure a (procedure b)); algol "p3";
+    procedure p4 (procedure a (real procedure b)); algol "p4";
+    integer procedure p5 (integer n; procedure a (real result x; procedure f(logical result z))); algol "p5";
+
+    assert true
+end.
+----compiler
+Tests/prototypes.alw:8:19: Note, this is a call-by-name formal parameter.
+Tests/prototypes.alw:19:19: Note, this is a call-by-name formal parameter.
+Tests/prototypes.alw:29:19: Note, this is a call-by-name formal parameter.
+Tests/prototypes.alw:39:19: Note, this is a call-by-name formal parameter.
+Tests/prototypes.alw:54:27: Note, this is a call-by-name formal parameter.
+----messages
+/* PROCEDURE i1 (INTEGER name); ALGOL "i1"; */
+void i1 (int *(*name)(void));
+
+/* PROCEDURE i2 (INTEGER VALUE v); ALGOL "i2"; */
+void i2 (int v);
+
+/* PROCEDURE i3 (INTEGER RESULT pv); ALGOL "i3"; */
+void i3 (int *pv);
+
+/* PROCEDURE i4 (INTEGER VALUE RESULT pv); ALGOL "i4"; */
+void i4 (int *pv);
+
+/* PROCEDURE i5 (INTEGER ARRAY arr (*)); ALGOL "i5"; */
+void i5 (_awe_array_t *arr);
+
+/* PROCEDURE i6 (INTEGER PROCEDURE proc); ALGOL "i6"; */
+void i6 (int (*proc)());
+
+/* PROCEDURE i7 (PROCEDURE proc (INTEGER VALUE v)); ALGOL "i7"; */
+void i7 (void (*proc)(int v));
+
+/* INTEGER PROCEDURE i8; ALGOL "i8"; */
+int i8 (void);
+
+/* PROCEDURE s1 (STRING(10) name); ALGOL "s1"; */
+void s1 (_awe_str (name)(void));
+
+/* PROCEDURE s2 (STRING(10) VALUE v); ALGOL "s2"; */
+void s2 (_awe_str v);
+
+/* PROCEDURE s3 (STRING(10) RESULT pv); ALGOL "s3"; */
+void s3 (_awe_str pv);
+
+/* PROCEDURE s4 (STRING(10) VALUE RESULT pv); ALGOL "s4"; */
+void s4 (_awe_str pv);
+
+/* PROCEDURE s5 (STRING(10) ARRAY arr (*)); ALGOL "s5"; */
+void s5 (_awe_array_t *arr);
+
+/* PROCEDURE s6 (STRING(10) PROCEDURE proc); ALGOL "s6"; */
+void s6 (_awe_str (proc)());
+
+/* PROCEDURE s7 (PROCEDURE proc (STRING(10) VALUE v)); ALGOL "s7"; */
+void s7 (void (*proc)(_awe_str v));
+
+/* STRING(10) PROCEDURE s8; ALGOL "s8"; */
+_awe_str s8 (void);
+
+/* PROCEDURE c1 (STRING(1) name); ALGOL "c1"; */
+void c1 (unsigned char *(*name)(void));
+
+/* PROCEDURE c2 (STRING(1) VALUE v); ALGOL "c2"; */
+void c2 (unsigned char v);
+
+/* PROCEDURE c3 (STRING(1) RESULT pv); ALGOL "c3"; */
+void c3 (unsigned char *pv);
+
+/* PROCEDURE c4 (STRING(1) VALUE RESULT pv); ALGOL "c4"; */
+void c4 (unsigned char *pv);
+
+/* PROCEDURE c5 (STRING(1) ARRAY arr (*)); ALGOL "c5"; */
+void c5 (_awe_array_t *arr);
+
+/* PROCEDURE c6 (STRING(1) PROCEDURE proc); ALGOL "c6"; */
+void c6 (unsigned char (*proc)());
+
+/* PROCEDURE c7 (PROCEDURE proc (STRING(1) VALUE v)); ALGOL "c7"; */
+void c7 (void (*proc)(unsigned char v));
+
+/* STRING(1) PROCEDURE c8; ALGOL "c8"; */
+unsigned char c8 (void);
+
+/* PROCEDURE r1 (REFERENCE(r) name); ALGOL "r1"; */
+void r1 (void * *(*name)(void));
+
+/* PROCEDURE r2 (REFERENCE(r) VALUE v); ALGOL "r2"; */
+void r2 (void * v);
+
+/* PROCEDURE r3 (REFERENCE(r) RESULT pv); ALGOL "r3"; */
+void r3 (void * *pv);
+
+/* PROCEDURE r4 (REFERENCE(r) VALUE RESULT pv); ALGOL "r4"; */
+void r4 (void * *pv);
+
+/* PROCEDURE r5 (REFERENCE(r) ARRAY arr (*)); ALGOL "r5"; */
+void r5 (_awe_array_t *arr);
+
+/* PROCEDURE r6 (REFERENCE(r) PROCEDURE proc); ALGOL "r6"; */
+void r6 (void * (*proc)());
+
+/* PROCEDURE r7 (PROCEDURE proc (REFERENCE(r) VALUE v)); ALGOL "r7"; */
+void r7 (void (*proc)(void * v));
+
+/* REFERENCE(r) PROCEDURE r8; ALGOL "r8"; */
+void * r8 (void);
+
+/* REFERENCE(r) PROCEDURE r9; ALGOL "r9"; */
+void * r9 (void);
+
+/* PROCEDURE p1; ALGOL "p1"; */
+void p1 (void);
+
+/* PROCEDURE p2 (PROCEDURE a); ALGOL "p2"; */
+void p2 (void (*a)());
+
+/* PROCEDURE p3 (PROCEDURE a (PROCEDURE b)); ALGOL "p3"; */
+void p3 (void (*a)(void (*b)()));
+
+/* PROCEDURE p4 (PROCEDURE a (REAL PROCEDURE b)); ALGOL "p4"; */
+void p4 (void (*a)(double (*b)()));
+
+/* INTEGER PROCEDURE p5 (INTEGER n; PROCEDURE a (REAL RESULT x; PROCEDURE f (LOGICAL RESULT z))); ALGOL "p5"; */
+int p5 (int *(*n)(void), void (*a)(double *x, void (*f)(int *z)));
+
+----end

@@ -1,0 +1,15 @@
+begin
+   record rec(integer f);
+   reference(rec) r;
+
+   r := rec(42);
+   assert(f(r) = 42);
+
+   r := null;
+   assert(f(r) = 42)
+end.
+----stderr
+Tests/records-fields-do-not-work-on-null.alw:9:11: reference error: tried to find field f of a NULL reference
+----exitcode
+1
+----end

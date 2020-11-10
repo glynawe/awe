@@ -1,0 +1,34 @@
+begin
+   write("sqrt(0.5)       ", sqrt(0.5));
+   write("exp(0.5)        ", exp(0.5));
+   write("ln(0.5)         ", ln(0.5));
+   write("log(0.5)        ", log(0.5));
+   write("sin(0.5)        ", sin(0.5));
+   write("cos(0.5)        ", cos(0.5));
+   write("arctan(0.5)     ", arctan(0.5));
+   write(" ");
+   write("longsqrt(0.5)   ", longsqrt(0.5));
+   write("longexp(0.5)    ", longexp(0.5));
+   write("longln(0.5)     ", longln(0.5));
+   write("longlog(0.5)    ", longlog(0.5));
+   write("longsin(0.5)    ", longsin(0.5));
+   write("longcos(0.5)    ", longcos(0.5));
+   write("longarctan(0.5) ", longarctan(0.5));
+end.
+----stdout
+sqrt(0.5)            0.7071068
+exp(0.5)              1.648721
+ln(0.5)             -0.6931472
+log(0.5)              -0.30103
+sin(0.5)             0.4794255
+cos(0.5)             0.8775826
+arctan(0.5)          0.4636476
+
+longsqrt(0.5)        0.7071068
+longexp(0.5)          1.648721
+longln(0.5)         -0.6931472
+longlog(0.5)          -0.30103
+longsin(0.5)         0.4794255
+longcos(0.5)         0.8775826
+longarctan(0.5)      0.4636476
+----end

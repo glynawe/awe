@@ -1,0 +1,24 @@
+begin
+  integer i;
+  string(8) four;
+  four := "44444444";
+  write("*");
+  writecard("1", "2", i := 1, "33333", four);
+  write("*");
+
+  comment "*" Should not be on the same line as "5", writecard writes entire lines;
+  writecard("5");
+  writeon("*");   
+
+  assert i = 1
+end.
+----stdout
+*
+1
+2
+33333
+44444444
+*
+5
+*
+----end

@@ -1,0 +1,11 @@
+begin
+   record rec1 (integer f1);
+   reference(rec1) r;
+   r := null;
+   f1(r) := 1;
+end.
+----stderr
+Tests/records-field-of-null-run-time.alw:5:4: reference error: tried to find field f1 of a NULL reference
+----exitcode
+1
+----end

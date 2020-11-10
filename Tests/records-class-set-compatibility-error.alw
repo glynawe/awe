@@ -1,0 +1,17 @@
+begin
+   record rec2(integer f2);
+   record rec3(integer f3);
+   record rec4(integer f4);
+   record rec5(integer f5);
+
+   reference(rec2, rec3, rec4) r234;
+   reference(rec4, rec5) r45;
+
+   r45 := rec5;
+   r234  := r45
+end.
+----stderr
+Tests/records-class-set-compatibility-error.alw:11:4: reference error: a REFERENCE(rec4, rec3, rec2) cannot be made to refer to a 'rec5' record.
+----exitcode
+1
+----end

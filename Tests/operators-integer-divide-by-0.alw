@@ -1,0 +1,6 @@
+write(1 div 0).
+----stderr
+Tests/operators-integer-divide-by-0.alw:1:9: Integer division by zero.
+----exitcode
+1
+----end

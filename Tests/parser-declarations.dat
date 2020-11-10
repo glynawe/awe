@@ -1,0 +1,137 @@
+INTEGER a
+INTEGER a
+
+INTEGER a, b
+INTEGER a, b
+
+INTEGER a, b, c
+INTEGER a, b, c
+
+REAL a
+REAL a
+
+LONG REAL a
+LONG REAL a
+
+COMPLEX a
+COMPLEX a
+
+LONG COMPLEX a
+LONG COMPLEX a
+
+STRING(20) a
+STRING(20) a
+
+LOGICAL a
+LOGICAL a
+
+$ The "Programmers' Guide" in CS-TR-68-89 says this is okay.
+BOOLEAN a
+LOGICAL a
+
+STRING a
+STRING a
+
+STRING(a) b
+       ^Syntax Error
+
+BITS a
+BITS a
+
+BITS(32) a
+BITS a
+
+BITS(a) a
+     ^Syntax Error
+
+LOGICAL a
+LOGICAL a
+
+INTEGER ARRAY (b :: c)
+              ^Syntax Error
+
+INTEGER ARRAY a ()
+                 ^Syntax Error
+
+INTEGER ARRAY a (b :: c)
+INTEGER ARRAY a (b :: c)
+
+INTEGER ARRAY a (b :: c, d :: e)
+INTEGER ARRAY a (b :: c, d :: e)
+
+INTEGER ARRAY x, y (b :: c, d :: e)
+INTEGER ARRAY x, y (b :: c, d :: e)
+
+PROCEDURE p; 0
+PROCEDURE p; 0
+
+PROCEDURE P; ALGOL "p"
+PROCEDURE p; ALGOL "p"
+
+$all external linkage schemes are the same to Awe
+PROCEDURE P; FORTRAN "p"
+PROCEDURE p; ALGOL "p"
+
+PROCEDURE p; i := p
+PROCEDURE p; (i := p)
+
+PROCEDURE p (INTEGER i); i
+PROCEDURE p (INTEGER i); i
+
+PROCEDURE p (INTEGER i, j); i
+PROCEDURE p (INTEGER i, j); i
+
+PROCEDURE p (INTEGER i, j; REAL k); i
+PROCEDURE p (INTEGER i, j; REAL k); i
+
+PROCEDURE p (INTEGER VALUE i); i
+PROCEDURE p (INTEGER VALUE i); i
+
+PROCEDURE p (INTEGER RESULT i); i
+PROCEDURE p (INTEGER RESULT i); i
+
+PROCEDURE p (INTEGER VALUE RESULT i); i
+PROCEDURE p (INTEGER VALUE RESULT i); i
+
+PROCEDURE p (INTEGER ARRAY i ()); i
+                              ^Syntax Error
+
+PROCEDURE p (INTEGER ARRAY (*)); i
+                           ^Syntax Error
+
+PROCEDURE p (INTEGER ARRAY i); i
+                            ^Syntax Error
+
+PROCEDURE p (INTEGER ARRAY i (*)); i
+PROCEDURE p (INTEGER ARRAY i (*)); i
+
+PROCEDURE p (INTEGER ARRAY i (*, *)); i
+PROCEDURE p (INTEGER ARRAY i (*, *)); i
+
+PROCEDURE p (INTEGER ARRAY i, j (*, *)); i
+PROCEDURE p (INTEGER ARRAY i, j (*, *)); i
+
+PROCEDURE p (PROCEDURE p); i
+PROCEDURE p (PROCEDURE p); i
+
+PROCEDURE p (REAL PROCEDURE p); i
+PROCEDURE p (REAL PROCEDURE p); i
+
+RECORD a (INTEGER i)
+RECORD a (INTEGER i)
+
+RECORD a (INTEGER i;)
+                    ^Syntax Error
+
+RECORD a (INTEGER i; REAL r)
+RECORD a (INTEGER i; REAL r)
+
+RECORD a, b (INTEGER i; REAL r)
+        ^Syntax Error
+
+REFERENCE(a) b
+REFERENCE(a) b
+
+REFERENCE(a, b) b
+REFERENCE(a, b) b
+

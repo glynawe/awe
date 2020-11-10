@@ -1,0 +1,544 @@
+comment
+    wumpus.alw -- Hunt the Wumpus in Algol W. It plays Wumpus like lightning!
+
+    This version follows the rules and appearance of Gegory Yob's
+    BASIC game as closely as possible (the complete 1976 experience.)
+
+    The correct way to play Hunt the Wumpus is to be VERY SERIOUS and draw
+    diagrams on note paper between moves like your life depends on it.
+
+    See: http://www.atariarchives.org/bcc1/showpage.php?page=247
+
+
+    The set up of the Cave and the Things.
+    --------------------------------------
+
+    The code allows for any number of bats and pits, and any shape of cave
+    with any number of tunnels leaving each room (but it's up to you to take
+    advantage of this.)
+
+    The Cave.
+
+       The cave is made of numbered rooms, each which has numbered tunnels.
+
+       NumRooms:      the number of rooms in the cave
+       MaxTunnels:    the maximum number of tunnels that can leave a room.
+       NumTunnels(r): the actual number of tunnels leaving room r.
+       Tunnels(r,n):  the number of the room at the end of tunnel n of room r.
+
+    The Things in the Cave.
+
+       The things in the cave are the player, Wumpus, pits and bats.
+       All the things are numbered. The player is always 0, the Wumpus
+       is always 1. The numbers of the bats and pits depends how many
+       of each there are.
+
+       RoomOf(t):         the room that thing t is in.
+       OriginalRoomOf(t): a copy of 'RoomOf', made at the start of a game.
+
+    Miscellaneous.
+
+       InitialNumArrows:  The number of arrows at the start of a game.
+
+    The default Hunt the Wumpus cave is twenty rooms with 3 tunnels
+    each, connected as a dodecahedron, with two pits and two bats.
+    You can try changing this. The "CaveSanityCheck" procedure will
+    complain if rooms are not connected properly.
+
+
+    The state of play.
+    ------------------
+
+    StateOfPlay: "Playing" while the game is on progress,
+                 "Won" when the player has killed the Wumpus,
+                 "Lost" when the Wumpus has killed the player.
+
+    NumArrows:   The number of arrows the player has left.
+                 The player loses if he runs out of arrows.
+;
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  %
+
+@title                       constants block
+
+begin
+
+    integer NumRooms, MaxTunnels, NumBats, NumPits, NumThings, InitialNumArrows;
+    integer Player, Wumpus, FirstBat, LastBat, FirstPit, LastPit;
+    integer StateOfPlay, NumArrows;
+    integer Playing, Won, Lost;
+
+    NumRooms := 20;
+    MaxTunnels := 3;
+    NumBats := 2;
+    NumPits := 2;
+    NumThings := 2 + NumBats + NumPits;
+    InitialNumArrows := 5;
+
+    Player := 1;
+    Wumpus := 2;
+    FirstBat := 3;
+    LastBat := FirstBat + NumBats - 1;
+    FirstPit := LastBat + 1;
+    LastPit := FirstPit + NumPits - 1;
+
+    Playing := 0; Won := 1; Lost := 2;
+
+
+@title                        Data array block
+
+begin
+
+    % This is the standard dodedecahedral cave system. %
+
+    integer array  Tunnels (1 :: NumRooms, 1 :: MaxTunnels);
+    integer array  NumTunnels (1 :: NumRooms);
+    integer array  RoomOf, OriginalRoomOf (1 :: NumThings);
+
+    Tunnels( 1, 1) := 2;  Tunnels( 1, 2) := 5;  Tunnels( 1, 3) := 8;
+    Tunnels( 2, 1) := 1;  Tunnels( 2, 2) := 3;  Tunnels( 2, 3) := 10;
+    Tunnels( 3, 1) := 2;  Tunnels( 3, 2) := 4;  Tunnels( 3, 3) := 12;
+    Tunnels( 4, 1) := 3;  Tunnels( 4, 2) := 5;  Tunnels( 4, 3) := 14;
+    Tunnels( 5, 1) := 1;  Tunnels( 5, 2) := 4;  Tunnels( 5, 3) := 6;
+    Tunnels( 6, 1) := 5;  Tunnels( 6, 2) := 7;  Tunnels( 6, 3) := 15;
+    Tunnels( 7, 1) := 6;  Tunnels( 7, 2) := 8;  Tunnels( 7, 3) := 17;
+    Tunnels( 8, 1) := 1;  Tunnels( 8, 2) := 7;  Tunnels( 8, 3) := 9;
+    Tunnels( 9, 1) := 8;  Tunnels( 9, 2) := 10; Tunnels( 9, 3) := 18;
+    Tunnels(10, 1) := 2;  Tunnels(10, 2) := 9;  Tunnels(10, 3) := 11;
+    Tunnels(11, 1) := 10; Tunnels(11, 2) := 12; Tunnels(11, 3) := 19;
+    Tunnels(12, 1) := 3;  Tunnels(12, 2) := 11; Tunnels(12, 3) := 13;
+    Tunnels(13, 1) := 12; Tunnels(13, 2) := 14; Tunnels(13, 3) := 20;
+    Tunnels(14, 1) := 4;  Tunnels(14, 2) := 13; Tunnels(14, 3) := 15;
+    Tunnels(15, 1) := 6;  Tunnels(15, 2) := 14; Tunnels(15, 3) := 16;
+    Tunnels(16, 1) := 15; Tunnels(16, 2) := 17; Tunnels(16, 3) := 20;
+    Tunnels(17, 1) := 7;  Tunnels(17, 2) := 16; Tunnels(17, 3) := 18;
+    Tunnels(18, 1) := 9;  Tunnels(18, 2) := 17; Tunnels(18, 3) := 19;
+    Tunnels(19, 1) := 11; Tunnels(19, 2) := 18; Tunnels(19, 3) := 20;
+    Tunnels(20, 1) := 13; Tunnels(20, 2) := 16; Tunnels(20, 3) := 19;
+
+    for room := 1 until NumRooms do NumTunnels(room) := 3;
+
+
+@title                           Code block
+
+begin % code block %
+
+
+procedure Main;
+begin
+    % The I/O system should not trim spaces from the ends of lines in %
+    % this program, they're part of the command line I/O formatting %
+    iocontrol(40008);
+
+    Randomize;
+
+    write("WELCOME TO 'HUNT THE WUMPUS'");
+    write("(Press Ctrl-C when you are fed up.)");
+    write(" ");
+
+    CaveSanityCheck;
+
+    if YesTo("INSTRUCTIONS") then
+        GiveInstructions;
+
+    PlaceThings;
+    while true do
+        begin
+            PlayGame;
+            if YesTo("SAME SETUP ") then
+                ReplaceThings
+            else
+                PlaceThings
+        end
+end Main;
+
+
+procedure CaveSanityCheck;
+comment
+    In a proper cave, if you go from one room to another, you
+    should be able to go back again through the same tunnel
+    This warns the programmer and player when that is not so ;
+begin
+    logical okay;
+    okay := true;
+    for room := 1 until NumRooms do
+      for otherroom := 1 until NumRooms do
+        if Adjacent(room, otherroom) and ~Adjacent(otherroom, room) then
+            begin
+                write( i_w := 1,
+                       "Room ", room, " connects to room ", otherroom,
+                       ", but not vis-versa." );
+                okay := false
+            end;
+    if ~okay then
+        begin
+            write(" ");
+            write("This game is going to be difficult or impossible to play.");
+            write(" ")
+        end
+end CaveSanityCheck;
+
+
+procedure PlaceThings;
+comment
+    Place things randomly in the cave. ;
+begin
+repeat:
+    for thing := 1 until NumThings do
+        RoomOf(thing) := RandomInteger(1, NumRooms);
+
+    % Check that no two things are in the same room %
+    % if something is, place everything again. %
+    for thing := 1 until NumThings do
+        for otherthing := 1 until NumThings do
+            if thing ~= otherthing and RoomOf(thing) = RoomOf(otherthing) then
+                goto repeat;
+
+    % Copy placements so the player can replay same set up. %
+    for thing := 1 until NumThings do
+        OriginalRoomOf(thing) := RoomOf(thing)
+end PlaceThings;
+
+
+procedure ReplaceThings;
+comment
+    Restore things to their original rooms so the
+    player can play a new game in the same set up. ;
+begin
+    for thing := 1 until NumThings do
+        RoomOf(thing) := OriginalRoomOf(thing)
+end ReplaceThings;
+
+
+procedure GiveInstructions;
+comment
+    The instructions from the original game, warts and all;
+begin
+    string(1) dummy;
+
+    write("WELCOME TO 'HUNT THE WUMPUS'");
+    write("  THE WUMPUS LIVES IN A CAVE OF 20 ROOMS. EACH ROOM");
+    write("HAS 3 TUNNELS LEADING TO OTHER ROOMS. (LOOK AT A");
+    write("DODECAHEDRON TO SEE HOW THIS WORKS-IF YOU DON'T KNOW");
+    write("WHAT A DODECAHEDRON IS, ASK SOMEONE)");
+    write(" ");
+    write("     HAZARDS:");
+    write(" BOTTOMLESS PITS - TWO ROOMS HAVE BOTTOMLESS PITS IN THEM");
+    write("     IF YOU GO THERE, YOU FALL INTO THE PIT (& LOSE!)");
+    write(" SUPER BATS - TWO OTHER ROOMS HAVE SUPER BATS. IF YOU");
+    write("     GO THERE, A BAT GRABS YOU AND TAKES YOU TO SOME OTHER");
+    write("     ROOM AT RANDOM. (WHICH MAY BE TROUBLESOME)");
+    write("TYPE AN E THEN RETURN ");
+    readcard(dummy);
+
+    write("     WUMPUS:");
+    write(" THE WUMPUS IS NOT BOTHERED BY HAZARDS (HE HAS SUCKER");
+    write(" FEET AND IS TOO BIG FOR A BAT TO LIFT).  USUALLY");
+    write(" HE IS ASLEEP.  TWO THINGS WAKE HIM UP: YOU SHOOTING AN");
+    write(" ARROW OR YOU ENTERING HIS ROOM.");
+    write("     IF THE WUMPUS WAKES HE MOVES (P=.75) ONE ROOM");
+    write(" OR STAYS STILL (P=.25).  AFTER THAT, IF HE IS WHERE YOU");
+    write(" ARE, HE EATS YOU UP AND YOU LOSE!");
+    write(" ");
+    write("     YOU:");
+    write(" EACH TURN YOU MAY MOVE OR SHOOT A CROOKED ARROW");
+    write("   MOVING:  YOU CAN MOVE ONE ROOM (THRU ONE TUNNEL)");
+    write("   ARROWS:  YOU HAVE 5 ARROWS.  YOU LOSE WHEN YOU RUN OUT");
+    write("   EACH ARROW CAN GO FROM 1 TO 5 ROOMS. YOU AIM BY TELLING");
+    write("   THE COMPUTER THE ROOM#S YOU WANT THE ARROW TO GO TO.");
+    write("   IF THE ARROW CAN'T GO THAT WAY (IF NO TUNNEL) IT MOVES");
+    write("   AT RANDOM TO THE } ROOM.");
+    write("     IF THE ARROW HITS THE WUMPUS, YOU WIN.");
+    write("     IF THE ARROW HITS YOU, YOU LOSE.");
+    write("TYPE AN E THEN RETURN ");
+    readcard(dummy);
+
+    write("    WARNINGS:");
+    write("     WHEN YOU ARE ONE ROOM AWAY FROM A WUMPUS OR HAZARD,");
+    write("     THE COMPUTER SAYS:");
+    write(" WUMPUS:  'I SMELL A WUMPUS'");
+    write(" BAT   :  'BATS NEARBY'");
+    write(" PIT   :  'I FEEL A DRAFT'");
+    write(" ");
+end GiveInstructions;
+
+
+procedure PlayGame;
+comment
+    Play a game of Hunt the Wumpus.
+    (The Cave and the Things must be already be set up.) ;
+begin
+    NumArrows := InitialNumArrows;
+
+    write(" ");
+    write("HUNT THE WUMPUS");
+
+    StateOfPlay := Playing;
+    while StateOfPlay = Playing do
+        begin
+            InformPlayer;
+            PlayersTurn;
+        end;
+
+    if StateOfPlay = Lost then
+        write("HA HA HA - YOU LOSE!");
+    if StateOfPlay = Won then
+        write("HEE HEE HEE - THE WUMPUS'LL GET YOU NEXT TIME!!")
+end PlayGame;
+
+
+procedure InformPlayer;
+comment
+    Print hazard warnings and player's location. ;
+begin
+    integer room;
+    room := RoomOf(Player);
+
+    % Give vague warnings about the Things at the other ends of the tunnels. %
+    for tunnel := 1 until NumTunnels(room) do
+        begin
+            integer otherroom;
+            otherroom := Tunnels(room, tunnel);
+            if otherroom = RoomOf(Wumpus) then write("I SMELL A WUMPUS!");
+            for pit := FirstPit until LastPit do
+                if otherroom = RoomOf(pit) then write("I FEEL A DRAFT");
+            for bat := FirstBat until LastBat do
+                if otherroom = RoomOf(bat) then write("BATS NEARBY!");
+        end;
+
+    % Say where the player is and where he can go. %
+    write(i_w := 1, "YOU ARE IN ROOM ", room);
+    write("TUNNELS LEAD TO ");
+    for tunnel := 1 until NumTunnels(room) do
+        writeon(i_w := 1, Tunnels(room, tunnel));
+    write(" ");
+end InformPlayer;
+
+
+procedure PlayersTurn;
+comment
+    Let the player decide what to do next. ;
+begin
+    string(1) reply;
+repeat:
+    write("SHOOT OR MOVE (S-M) ");
+    readcard(reply);
+    reply := Uppercase(reply);
+    if reply = "S" then
+        Shoot
+    else if reply = "M" then
+        Move
+    else
+        goto repeat
+end PlayersTurn;
+
+
+procedure Move;
+comment
+    The player moves and faces the consequences. ;
+begin
+    integer room, bat, pit;
+
+    % Here the player moves to an adjacent room, or stays in the same room. %
+repeat:
+    write("WHERE TO ");
+    iocontrol(1);
+    read(room);
+    if room < 1 or room > NumRooms then goto repeat;
+    if ~Adjacent(room, RoomOf(Player)) and room ~= RoomOf(Player) then goto repeat;
+    RoomOf(Player) := room;
+
+    % The player is moved to a random room if he enters a bat's cave.
+      (He may end up in the same room as a bat, but doesn't get moved
+      again, confusing, but those are the rules.) %
+    for bat := FirstBat until LastBat do
+        if RoomOf(Player) = RoomOf(bat) then
+            begin
+                write("ZAP--SUPER BAT SNATCH! ELSEWHEREVILLE FOR YOU!");
+                RoomOf(Player) := RandomInteger(1, NumRooms);
+                goto break
+            end;
+break:
+
+    % The Wumpus moves if the player enters its room,
+      or it doesn't move, which will have killed the Player. %
+    if RoomOf(Player) = RoomOf(Wumpus) then
+        begin
+            write("... OOPS! BUMPED A WUMPUS!");
+            MoveWumpus;
+            if StateOfPlay = Lost then goto return;
+        end;
+
+    % The player dies if he enters a room with a pit. %
+    for pit := FirstPit until LastPit do
+        if RoomOf(Player) = RoomOf(pit) then
+            begin
+                write("YYYYIIIIEEEE . . . FELL IN PIT");
+                StateOfPlay := Lost;
+                goto return;
+            end;
+return:
+end Move;
+
+
+procedure Shoot;
+comment
+    The player shoots and faces the consequences. ;
+begin
+    integer i;
+    integer pathlength;
+    integer array path(1 ::5);
+    integer room;
+
+    % Ask for the path of the arrow.
+      The player can ask for the arrow to go anywhere at all
+      except back to where it was two rooms before, although the
+      arrow won't actually fly into non-adjacent rooms, see below.
+      It's confusing, but it's the rules. %
+
+    while
+        begin
+            write("NO. OF ROOMS (1-5) ");
+            iocontrol(1);
+            read(pathlength);
+            pathlength < 1 or pathlength > 5
+        end
+    do ;
+    for i := 1 until pathlength do
+        while
+            begin
+                write(s_w := 0, i_w := 1, "ROOM ", i, " ");
+                iocontrol(1);
+                read(path(i));
+                i > 2 and path(i) = path(i - 2)
+            end
+        do
+            write("ARROWS AREN'T THAT CROOKED - TRY ANOTHER ROOM");
+
+    % Shoot the arrow.
+      If the arrow has been asked to move into non-adjacent room, it goes
+      into a random room instead. Missing the Wumpus makes him move. %
+    room := RoomOf(Player);
+    for i := 1 until pathlength do
+        begin
+            room := if Adjacent(path(i), room) then path(i)
+                                               else RandomInteger(1, NumRooms);
+            if room = RoomOf(Wumpus) then
+                begin
+                    write("AHA! YOU GOT THE WUMPUS!");
+                    StateOfPlay := Won;
+                    goto return
+                end
+            else if room = RoomOf(Player) then
+                begin
+                    write("OUCH! ARROW GOT YOU!");
+                    StateOfPlay := Lost;
+                    goto return
+                end
+        end;
+    write("MISSED");
+    MoveWumpus;
+
+    % No arrows and no dead Wumpus means you lose. %
+    NumArrows := NumArrows - 1;
+    if NumArrows = 0 then StateOfPlay := Lost;
+return:
+end Shoot;
+
+
+procedure MoveWumpus;
+comment
+    The Wumpus usually moves when an arrow misses it or the player
+    stumbles across it. There is a 1/4 chance of the Wumpus staying
+    where it is, otherwise the Wumpus moves down a tunnel at
+    random. If the Wumpus ends up in the same room as the player, the
+    player dies. ;
+begin
+    integer tunnel;
+
+    if RandomInteger(1, 4) ~= 1 then
+        begin
+            tunnel := RandomInteger(1, NumTunnels(RoomOf(Wumpus)));
+            RoomOf(Wumpus) := Tunnels(RoomOf(Wumpus), tunnel);
+        end;
+    if RoomOf(Wumpus) = RoomOf(Player) then
+        begin
+            write("TSK TSK TSK - WUMPUS GOT YOU!");
+            StateOfPlay := Lost;
+        end
+end MoveWumpus;
+
+
+logical procedure Adjacent (integer value room1; integer value room2);
+comment
+    Is there a tunnel from room1 to room2? ;
+begin
+    logical return_value;
+    for tunnel := 1 until NumTunnels(room1) do
+        if Tunnels(room1, tunnel) = room2 then
+            begin
+               return_value := true;
+               goto return
+            end;
+    return_value := false;
+return:
+    return_value
+end Adjacent;
+
+
+logical procedure YesTo (string(12) value prompt);
+begin
+    string(1) reply;
+
+    reply := " ";
+    while reply ~= "Y" and reply ~= "N" do
+        begin
+            write(prompt, " (Y-N) ");
+            readcard(reply);
+            reply := Uppercase(reply)
+        end;
+    reply = "Y"
+end YesTo;
+
+
+procedure Randomize;
+comment
+    Seed the C standard library's random number generator;
+begin
+    procedure srand (integer value seed); algol "srand";
+    integer procedure time (integer value dummy); algol "time";
+
+    srand(time(0))
+end Randomize;
+
+
+integer procedure RandomInteger (integer value min; integer value max);
+comment
+    Return a random integer between min and max ;
+begin
+    integer procedure rand; algol "rand";
+
+    assert min < max;
+    rand rem (max - min + 1) + min
+end RandomInteger;
+
+
+string(1) procedure Uppercase (string(1) value c);
+comment
+    Converts a character to uppercase
+    (note that this function works on EBCDIC codes);
+begin
+    if c >= "a" and c <= "i"
+    or c >= "j" and c <= "r"
+    or c >= "s" and c <= "z" then
+        code(decode(c) + 64)
+    else
+        c
+end Uppercase;
+
+
+Main
+end; % code block %
+end; % data array block %
+end. % constants block %

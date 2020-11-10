@@ -1,0 +1,17 @@
+% stip_end.alw -- 'Software Tools in Pascal' library for Algol W %
+
+% stip_begin.alw and stip_end.alw provide an outer block
+  for programs writen in the 'Software Tools in Pascal' style, 
+  they define string and I/O functions very like those found in C.
+
+  This file cleans up after the library and closes the block. %
+
+end;  % program section %
+
+EXIT_POINT:
+
+stip_finialize;
+
+end;  % library section %
+
+end.  % global constants section %

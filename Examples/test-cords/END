@@ -1,0 +1,10 @@
+comment
+     An "end" to let the contents of a preceeding
+     sequence of source files exist in the same scope,
+     which gives you a primitive module system.
+     The idea is that you do something like this: 
+         
+              awe BEGIN defs1.alw defs1.alw prog.alw END -c prog.c   
+
+     (Note that prog.alw cannot end on a fullstop.) ;
+END.

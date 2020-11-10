@@ -1,0 +1,21 @@
+% io.alw -- simple file I/O procedures %
+
+% (This file is a header for functions in io-library.c) %
+
+record file_handle (integer dummy);
+
+reference(file_handle) procedure open ( string(256) value path; 
+                                        string(2) value mode ); 
+    algol "algolw_open";
+
+procedure readline ( reference(file_handle) value handle; 
+                     string(256) result line;
+                     logical result success ); 
+    algol "algolw_readline";
+
+procedure writeline ( reference(file_handle) value handle;
+                      string(256) value line ); 
+    algol "algolw_writeline";
+
+procedure close (reference(file_handle) value handle); 
+    algol "algolw_close";

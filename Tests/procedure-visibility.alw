@@ -1,0 +1,9 @@
+begin
+  procedure P1; begin P2 end;
+  procedure P2; begin I := 42 end;
+  bits B;
+  integer I;
+
+  P1;
+  assert I = 42
+end.

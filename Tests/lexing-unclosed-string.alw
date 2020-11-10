@@ -1,0 +1,8 @@
+begin
+    integer i;
+    i := 0;
+    write("now we are in trouble -->');
+end.
+----compiler
+Tests/lexing-unclosed-string.alw:4:11: This string is not closed with a double quote
+----end

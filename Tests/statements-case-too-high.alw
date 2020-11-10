@@ -1,0 +1,20 @@
+begin
+   for i := 1, 6, 7 do
+      case i of
+      begin
+         write(1);
+         write(2);
+         write(3);
+         write(4);
+         write(5);
+         write(6)
+      end
+end.
+----stdout
+             1
+             6
+----stderr
+Tests/statements-case-too-high.alw:3:7: CASE range error: selector is 7
+----exitcode
+1
+----end

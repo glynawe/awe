@@ -1,0 +1,26 @@
+begin
+   integer array A(1::3);
+   integer r, n, vr;
+
+   procedure test_c_parameters ( integer value v;
+                                 integer result r;
+                                 integer value result vr;
+                                 integer n;
+                                 integer array a(*) );   algol "Test";
+
+   A(1) := 10;
+   A(2) := 20;
+   A(3) := 30;
+   r := 40;
+   vr := 50;   
+   n := 60;   
+
+   test_c_parameters(1, r, vr, n, A);
+
+   assert A(1) = 11;
+   assert A(2) = 21;
+   assert A(3) = 31;
+   assert r = 41;
+   assert vr = 51;
+   assert n = 61;
+end.

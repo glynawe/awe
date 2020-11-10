@@ -1,0 +1,8 @@
+begin
+  integer i;
+  logical b;
+  i := if b then #1FFC else 3;
+end.
+----compile
+Tests/expressions-if-then-incompatible.alw:4:8: incompatible types: the THEN clause is BITS and the ELSE clause is an INTEGER
+----end

@@ -1,0 +1,723 @@
+% macro -- expand string definitions, with arguments
+
+This is a simplified version of the Unix 'm4' preprocessor.
+
+Basic usage: macro reads its input, looking for macro definitions of
+the form
+
+    define(ident,string)
+
+and writes its output with each subsequent instance of the identifier
+'ident' replaced by the arbitrary sequence of characters 'string'.
+Within a replacement string, any dollar sign followed by a digit
+is replaced by an argument corresponding to that digit.
+
+See the man page for the full instructions, or read Software Tools
+in Pascal by Brian W. Kernighan and P. J. Plauger, which is well
+worth doing.
+
+---
+This example program is derived from the source code provided for the
+book Software Tools in Pascal by Brian W. Kernighan and P. J. Plauger,
+Copyright (C) 1981 by Bell Laboratories, Inc.  and Whitesmiths Ltd.
+%
+
+
+begin % constants section %
+
+% maccons -- const declarations for macro %
+% mactype -- type declarations for macro %
+
+record ndblock (               % name-defn block %
+        integer ndname;        % index of name in ndtable %
+        integer nddefn;        % index of defn in ndtable %
+        integer ndkind;        % symbol type %
+        reference(ndblock) ndnextptr
+);
+
+
+integer
+        BUFSIZE, MAXCHARS, MAXPOS, CALLSIZE, ARGSIZE,
+        EVALSIZE, MAXDEF, MAXTOK, HASHSIZE, ARGFLAG;
+integer
+        DEFTYPE, MACTYPE, IFTYPE, SUBTYPE,
+        EXPRTYPE, LENTYPE, CHQTYPE;
+
+
+        BUFSIZE := 1000;                % size of pushback buffer %
+        MAXCHARS := 5000;               % size of name-defn table %
+        MAXPOS := 500;                  % size of position arrays %
+        CALLSIZE := MAXPOS;
+        ARGSIZE := MAXPOS;
+        EVALSIZE := MAXCHARS;
+        MAXDEF := MAXSTR;               % max chars in a defn %
+        MAXTOK := MAXSTR;               % max chars in a token %
+        HASHSIZE := 53;                 % size of hash table %
+        ARGFLAG := DOLLAR;              % macro invocation character %
+
+        DEFTYPE := 0;                   % symbol table types %
+        MACTYPE := 1;
+        IFTYPE := 2;
+        SUBTYPE := 3;
+        EXPRTYPE := 4;
+        LENTYPE := 5;
+        CHQTYPE := 6;
+
+
+
+begin % main section %
+
+% macvar -- var declarations for macro %
+        integer array buf (1::BUFSIZE);       % for pushback %
+        integer bp;                           % next available character init=0 %
+
+        reference(ndblock) array hashtab (1::HASHSIZE);
+        integer array ndtable (1::MAXCHARS);
+        integer nexttab;                      % first free position in ndtable %
+
+        integer array callstk (1::MAXPOS);    % call stack %
+        integer cp;                           % current call stack position %
+        integer array typestk (1::CALLSIZE);  % type %
+        integer array plev (1::CALLSIZE);     % paren level %
+
+        integer array argstk (1::MAXPOS);     % argument stack for this call %
+        integer ap;                           % current argument position %
+
+        integer array evalstk (1::MAXCHARS);  % evaluation stack %
+        integer ep;                           % first character unused in evalstk %
+
+        % built-ins: %
+        integer array defname,                % value is "define" %
+                      exprname,               % value is "expr" %
+                      subname,                % value is "substr" %
+                      ifname,                 % value is "ifelse" %
+                      lenname,                % value is "len" %
+                      chqname,                % value is "changeq" %
+                      nullstr (1::8);         % value is "" %
+
+        integer lquote;                       % left quote character %
+        integer rquote;                       % right quote character %
+
+
+% macproc -- procedures for macro %
+
+
+
+% equalfrom -- test substrings for equality %
+logical procedure equalfrom ( integer array str1 (*); integer value i;
+                              integer array str2 (*); integer value j );
+begin
+        while (str1(i) = str2(j)) and (str2(j) ~= ENDSTR) do begin
+                i := i + 1;
+                j := j + 1;
+        end;
+        (str1(i) = str2(j))
+end;
+
+
+
+% cscopy -- copy cb(i)... to string s %
+procedure cscopy (integer array cb (*);
+                  integer value i;
+                  integer array s (*) );
+begin
+        integer j;
+        j := 1;
+        while (cb(i) ~= ENDSTR) do begin
+                s(j) := cb(i);
+                i := i + 1;
+                j := j + 1
+        end;
+        s(j) := ENDSTR
+end;
+
+
+
+% sccopy -- copy string s to cb(i)... %
+procedure sccopy (integer array s (*);
+                  integer array cb (*);
+                  integer value i );
+begin
+        integer j;
+        j := 1;
+        while (s(j) ~= ENDSTR) do begin
+                cb(i) := s(j);
+                j := j + 1;
+                i := i + 1
+        end;
+        cb(i) := ENDSTR
+end;
+
+
+
+% putback -- push character back onto input %
+procedure putback (integer value c);
+begin
+        if (bp >= BUFSIZE) then
+                error("too many characters pushed back");
+        bp := bp + 1;
+        buf(bp) := c
+end;
+
+
+
+% getpbc -- get a (possibly pushed back) character %
+integer procedure getpbc (integer result c);
+begin
+        if (bp > 0) then
+                c := buf(bp)
+        else begin
+                bp := 1;
+                buf(bp) := getc(c);
+        end;
+        if (c ~= EOF) then
+                bp := bp - 1;
+        c
+end;
+
+
+
+% pbstr -- push string back onto input %
+procedure pbstr (integer array s (*));
+begin
+        for i := length(s) step -1 until 1 do
+                putback(s(i))
+end;
+
+
+
+% pbnum -- convert number to string, push back on input %
+procedure pbnum (integer value n);
+begin
+        integer junk;
+        integer array temp (1::MAXSTR);
+        junk := itoc(n, temp, 1);
+        pbstr(temp)
+end;
+
+
+
+% gettok -- get token for define %
+integer procedure gettok (integer array token (*);
+                          integer value toksize);
+begin
+        integer i;
+        logical done;
+        i := 1;
+        done := false;
+        while (~ done) and (i < toksize) do
+                if (isalphanum(getpbc(token(i)))) then
+                        i := i + 1
+                else
+                        done := true;
+        if (i >= toksize) then
+                error("macro: token too long");
+        if (i > 1) then begin % some alpha was seen %
+                putback(token(i));
+                i := i - 1
+        end;
+        % else single non-alphanumeric %
+        token(i+1) := ENDSTR;
+        token(1)
+end;
+
+
+
+% inithash -- initialize hash table to nil %
+procedure inithash;
+begin
+        nexttab := 1; % first free slot in table %
+        for i := 1 until HASHSIZE do
+                hashtab(i) := null
+end;
+
+
+
+% hash -- compute hash function of a name %
+integer procedure hash (integer array name (*));
+begin
+        integer h;
+        h := 0;
+        for i := 1 until length(name) do
+                h := (3 * h + name(i)) rem HASHSIZE;
+        h + 1
+end;
+
+
+
+% hashfind -- find name in hash table %
+reference(ndblock) procedure hashfind (integer array name (*));
+begin
+        logical found;
+        reference(ndblock) p;
+        found := false;
+        p := hashtab(hash(name));
+        while (~ found) and (p ~= null) do begin
+                if (equalfrom(name, 1, ndtable, ndname(p))) then
+                        found := true
+                else
+                        p := ndnextptr(p)
+        end;
+        p
+end;
+
+
+
+% install -- add name, definition and type to table %
+procedure install (integer array name, defn (*); integer value kind);
+begin
+        integer h, dlen, nlen;
+        reference(ndblock) p;
+        nlen := length(name) + 1; % 1 for ENDSTR %
+        dlen := length(defn) + 1;
+        if (nexttab + nlen + dlen > MAXCHARS) then begin
+                putstr(name, STDERR);
+                error("macro: too many definitions")
+        end
+        else begin % put it at front of chain %
+                h := hash(name);
+                p := ndblock(,,,);
+                assert p ~= null;
+                ndnextptr(p) := hashtab(h);
+                hashtab(h) := p;
+                ndname(p) := nexttab;
+                sccopy(name, ndtable, nexttab);
+                nexttab := nexttab + nlen;
+                nddefn(p) := nexttab;
+                sccopy(defn, ndtable, nexttab);
+                nexttab := nexttab + dlen;
+                ndkind(p) := kind;
+        end
+end install;
+
+
+
+% lookup -- locate name, get defn and type from table %
+logical procedure lookup (integer array name, defn (*); integer result kind);
+begin
+        reference(ndblock) p;
+        p := hashfind(name);
+        if (p = null) then
+                false
+        else begin
+                cscopy(ndtable, nddefn(p), defn);
+                kind := ndkind(p);
+                true
+        end
+end lookup;
+
+
+
+% push -- push ep onto argstk, return new position ap %
+integer procedure push (integer value ep;
+                         integer array argstk (*);
+                         integer value ap);
+begin
+        if (ap > ARGSIZE) then
+                error("macro: argument stack overflow");
+        argstk(ap) := ep;
+        ap + 1
+end push;
+
+
+
+% putchr -- put single char on output or evaluation stack %
+procedure putchr (integer value c);
+begin
+        if (cp <= 0) then
+                putc(c)
+        else begin
+                if (ep > EVALSIZE) then
+                        error("macro: evaluation stack overflow");
+                evalstk(ep) := c;
+                ep := ep + 1
+        end
+end putchr;
+
+
+
+% puttok -- put token on output or evaluation stack %
+procedure puttok (integer array s (*));
+begin
+        integer i;
+        i := 1;
+        while (s(i) ~= ENDSTR) do begin
+                putchr(s(i));
+                i := i + 1
+        end
+end puttok;
+
+
+
+% expr -- recursive expression evaluation %
+integer procedure expr (integer array s (*); integer value result i);
+begin
+
+        % gnbchar -- get next non-blank character %
+        integer procedure gnbchar (integer array s (*); integer value result i);
+        begin
+                while (s(i) = BLANK) or (s(i) = TAB) or (s(i) = NEWLINE) do
+                        i := i + 1;
+                s(i)
+        end gnbchar;
+
+
+        % term -- evaluate term of arithmetic expression %
+        integer procedure term (integer array s (*); integer value result i);
+        begin
+
+                % factor -- evaluate factor of arithmetic expression %
+                integer procedure factor (integer array s (*);
+                                          integer value result i);
+                begin
+                        integer r;
+                        if (gnbchar(s, i) = LPAREN) then begin
+                                i := i + 1;
+                                r := expr(s, i);
+                                if (gnbchar(s, i) = RPAREN) then
+                                        i := i + 1
+                                else
+                                        message("macro: missing paren in expr")
+                        end
+                        else
+                                r := ctoi(s, i);
+                        r
+                end factor;
+
+                integer v;
+                integer t;
+                v := factor(s, i);
+                t := gnbchar(s, i);
+                while (t = STAR) or (t = SLASH) or (t = PERCENT) do begin
+                        i := i + 1;
+                        if (t = STAR) then
+                                v := v * factor(s, i)
+                        else if (t = SLASH) then
+                                v := v div factor(s, i)
+                        else % PERCENT %
+                                v := v rem factor(s, i);
+                        t := gnbchar(s, i)
+                end;
+                v
+        end term;
+
+
+        integer v;
+        integer t;
+        v := term(s, i);
+        t := gnbchar(s, i);
+        while (t = PLUS) or (t = MINUS) do begin
+                i := i + 1;
+                if (t = PLUS) then
+                        v := v + term(s, i)
+                else
+                        v := v - term(s, i);
+                t := gnbchar(s, i)
+        end;
+        v
+end expr;
+
+
+
+% dodef -- install definition in table %
+procedure dodef (integer array argstk (*); integer value i, j);
+begin
+        procedure circular_definition_error;
+        begin
+                putcf(NEWLINE, STDERR);
+                puttextf("macro:", STDERR);
+                putcf(BLANK, STDERR);
+                putcf(GRAVE, STDERR);
+                putstr(name, STDERR);
+                putcf(ACUTE, STDERR);
+                puttextf(" defined as itself", STDERR);
+                exit(1)
+        end;
+        
+        integer array name, defn (1::MAXSTR);
+        if (j - i > 2) then begin
+                cscopy(evalstk, argstk(i+2), name);
+                cscopy(evalstk, argstk(i+3), defn);
+                if (equal(name,defn)) then
+                        circular_definition_error
+                else
+                        install(name, defn, MACTYPE)
+        end
+end;
+
+
+
+% doif -- select one of two arguments %
+procedure doif (integer array argstk (*); integer value i, j);
+begin
+        integer array temp1, temp2, temp3 (1::MAXSTR);
+        if (j - i >= 4) then begin
+                cscopy(evalstk, argstk(i+2), temp1);
+                cscopy(evalstk, argstk(i+3), temp2);
+                if (equal(temp1, temp2)) then
+                        cscopy(evalstk, argstk(i+4), temp3)
+                else if (j - i >= 5) then
+                        cscopy(evalstk, argstk(i+5), temp3)
+                else
+                        temp3(1) := ENDSTR;
+                pbstr(temp3)
+        end
+end;
+
+
+
+% doexpr -- evaluate arithmetic expressions %
+procedure doexpr (integer array argstk (*); integer value i, j);
+begin
+        integer array temp (1::MAXSTR);
+        integer junk;
+        cscopy(evalstk, argstk(i+2), temp);
+        junk := 1;
+        pbnum(expr(temp, junk))
+end;
+
+
+
+% dolen -- return length of argument %
+procedure dolen (integer array argstk (*); integer value i, j);
+begin
+        integer array temp (1::MAXSTR);
+        if (j - i > 1) then begin
+                cscopy(evalstk, argstk(i+2), temp);
+                pbnum(length(temp))
+        end
+        else
+                pbnum(0)
+end;
+
+
+
+% dochq -- change quote characters %
+procedure dochq (integer array argstk (*); integer value i, j);
+begin
+        integer array temp (1::MAXSTR);
+        integer n;
+        cscopy(evalstk, argstk(i+2), temp);
+        n := length(temp);
+        if (n <= 0) then begin
+                lquote := GRAVE;
+                rquote := ACUTE
+        end
+        else if (n = 1) then begin
+                lquote := temp(1);
+                rquote := lquote
+        end
+        else begin
+                lquote := temp(1);
+                rquote := temp(2)
+        end
+end;
+
+
+
+% dosub -- select substring %
+procedure dosub (integer array argstk (*); integer value i, j);
+begin
+        integer ap, fc, k, nc;
+        integer array temp1, temp2 (1::MAXSTR);
+        if (j - i >= 3) then begin
+                if (j - i < 4) then
+                        nc := MAXTOK
+                else begin
+                        cscopy(evalstk, argstk(i+4), temp1);
+                        k := 1;
+                        nc := expr(temp1, k)
+                end;
+                cscopy(evalstk, argstk(i+3), temp1); % origin %
+                ap := argstk(i+2); % target string %
+                k := 1;
+                fc := ap + expr(temp1, k) - 1; % first char %
+                cscopy(evalstk, ap, temp2);
+                if (fc >= ap) and (fc < ap+length(temp2)) then begin
+                        cscopy(evalstk, fc, temp1);
+                        for k := fc+min(nc,length(temp1))-1 step -1 until fc do
+                                putback(evalstk(k))
+                end
+        end
+end;
+
+
+
+% eval -- expand args i..j: do built-in or push back defn %
+procedure eval (integer array argstk (*); integer value td, i, j);
+begin
+        integer argno, k, t;
+        integer array temp (1::MAXSTR);
+        t := argstk(i);
+        if (td = DEFTYPE) then
+                dodef(argstk, i, j)
+        else if (td = EXPRTYPE) then
+                doexpr(argstk, i, j)
+        else if (td = SUBTYPE) then
+                dosub(argstk, i, j)
+        else if (td = IFTYPE) then
+                doif(argstk, i, j)
+        else if (td = LENTYPE) then
+                dolen(argstk, i, j)
+        else if (td = CHQTYPE) then
+                dochq(argstk, i, j)
+        else begin
+                k := t;
+                while (evalstk(k) ~= ENDSTR) do
+                        k := k + 1;
+                k := k - 1;  % last character of defn %
+                while (k > t) do begin
+                        if (evalstk(k-1) ~= ARGFLAG) then
+                                putback(evalstk(k))
+                        else begin
+                                argno := evalstk(k) - ZERO;
+                                if (argno >= 0) and (argno < j-i) then begin
+                                      cscopy(evalstk, argstk(i+argno+1), temp);
+                                      pbstr(temp)
+                                end;
+                                k := k - 1 % skip over $ %
+                        end;
+                        k := k - 1
+                end;
+                if (k = t) then % do last character %
+                        putback(evalstk(k))
+        end
+end eval;
+
+
+
+% initmacro -- initialize variables for macro %
+procedure initmacro;
+begin
+        setstring(nullstr, " ", 0);
+        setstring(defname, "define", 6);
+        setstring(subname, "substr", 6);
+        setstring(exprname, "expr", 4);
+        setstring(ifname, "ifelse", 6);
+        setstring(lenname, "len", 3);
+        setstring(chqname, "changeq", 7);
+        bp := 0;  % pushback buffer pointer %
+        inithash;
+        lquote := GRAVE;
+        rquote := ACUTE
+end initmacro;
+
+
+
+@awe_text
+(not used at the moment)
+procedure dump_ndtable;
+begin
+    putdec(0, 4); putc(BLANK); putc(DQUOTE);
+    for i := 1 until nexttab - 1 do begin
+        if (ndtable(i) = ENDSTR) then begin
+            putc(DQUOTE);
+            putc(NEWLINE);
+            putdec(i, 4); putc(BLANK); putc(DQUOTE);
+        end
+        else putc(ndtable(i));
+    end;
+    putc(DQUOTE);
+    putc(NEWLINE);
+end dump_ndtable;
+@awe_code
+
+
+
+procedure macro;
+begin
+        integer array defn (1::MAXSTR);
+        integer array token (1::MAXSTR);
+        integer toktype;
+        integer t;
+        integer nlpar;
+
+        initmacro;
+        install(defname, nullstr, DEFTYPE);
+        install(exprname, nullstr, EXPRTYPE);
+        install(subname, nullstr, SUBTYPE);
+        install(ifname, nullstr, IFTYPE);
+        install(lenname, nullstr, LENTYPE);
+        install(chqname, nullstr, CHQTYPE);
+
+        cp := 0;
+        ap := 1;
+        ep := 1;
+        while (gettok(token, MAXTOK) ~= EOF) do begin
+                if (isletter(token(1))) then begin
+                        if (~ lookup(token, defn, toktype)) then
+                                puttok(token)
+                        else begin  % defined, put it in eval stack %
+                                cp := cp + 1;
+                                if (cp > CALLSIZE) then
+                                        error("macro: call stack overflow");
+                                callstk(cp) := ap;
+                                typestk(cp) := toktype;
+                                ap := push(ep, argstk, ap);
+                                puttok(defn); % push definition %
+                                putchr(ENDSTR);
+                                ap := push(ep, argstk, ap);
+                                puttok(token);  % stack name %
+                                putchr(ENDSTR);
+                                ap := push(ep, argstk, ap);
+                                t := gettok(token, MAXTOK);  % peek at next %
+                                pbstr(token);
+                                if (t ~= LPAREN) then begin  % add () %
+                                        putback(RPAREN);
+                                        putback(LPAREN)
+                                end;
+                                plev(cp) := 0
+                        end
+                end
+                else if (token(1) = lquote) then begin % strip quotes %
+                        nlpar := 1;
+                        while (nlpar ~= 0) do begin
+                                t := gettok(token, MAXTOK);
+                                if (t = rquote) then
+                                        nlpar := nlpar - 1
+                                else if (t = lquote) then
+                                        nlpar := nlpar + 1
+                                else if (t = EOF) then
+                                        error("macro: missing right quote");
+                                if (nlpar > 0) then
+                                        puttok(token)
+                        end
+                end
+                else if (cp = 0) then % not in a macro at all %
+                        puttok(token)
+                else if (token(1) = LPAREN) then begin
+                        if (plev(cp) > 0) then
+                                puttok(token);
+                        plev(cp) := plev(cp) + 1
+                end
+                else if (token(1) = RPAREN) then begin
+                        plev(cp) := plev(cp) - 1;
+                        if (plev(cp) > 0) then
+                                puttok(token)
+                        else begin % end of argument list %
+                                putchr(ENDSTR);
+                                eval(argstk, typestk(cp), callstk(cp), ap-1);
+                                ap := callstk(cp); % pop eval stack %
+                                ep := argstk(ap);
+                                cp := cp - 1
+                        end
+                end
+                else if (token(1)=COMMA) and (plev(cp)=1) then begin
+                        putchr(ENDSTR); % new argument %
+                        ap := push(ep, argstk, ap)
+                end
+                else
+                        puttok(token); % just stack it %
+        end; % while %
+        if (cp ~= 0) then
+                error("macro: unexpected end of input");
+end macro;
+
+
+macro;  % call main procedure %
+
+
+end; % main section %
+
+
+end; % constants section %

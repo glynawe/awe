@@ -1,0 +1,585 @@
+% stip_begin.alw -- 'Software Tools in Pascal' library for Algol W %
+
+% stip_begin.alw and stip_end.alw provide an outer block
+  for programs writen in the 'Software Tools in Pascal' style, 
+  they define string and I/O functions very like those found in C.
+  
+  Compile programs like this:
+
+        awe -o program stip_begin.alw program.alw stip_end.alw
+
+  Or use Makefiles like this:
+
+        PROGRAM        = program
+        ALGOLW_SOURCES = stip_begin.alw program.alw stip_end.alw
+        include awe.mk
+
+  Algol W I/O is line oriented (a card reader and a printer!), so getc
+  reads from a string, which is read from the card reader when required,
+  and putcf writes to strings, which are writen to the printer when full or
+  when a NEWLINE is put.
+
+  Algol W (1972 version) does not have access to a file system, 
+  so I have left out the STiP file primitives. The only two file streams are 
+  STDOUT and STDERR. (You could add file system primitives yourself using 
+  "external reference" procedures. The "C INTERFACE" section of awe.txt
+  explains how.)
+
+  Algol W uses EBCDIC internally, converting to ISO 8859-1 for I/O.
+
+  Characters are represented by EBCDIC 1047 encoded integer values.
+  The special character EOF represents the end of a file.  Strings are
+  represented by arrays of EBCDIC codes. The first index of a string
+  is 1. The end of a string is marked by the special character ENDSTR.
+%
+
+
+begin % global constants section %
+
+
+% Printer buffers for STDOUT and STDERR. These are required because 
+  Algol prints lines rather than individual characters.
+%
+record printer (
+    string(256) printer_line;  % the characters to print on the next line %
+    integer printer_index;     % position for next character on print_line %
+    integer printer_iocontrol  % iocontrol command to select printer %
+);
+
+reference(printer)
+        STDOUT, STDERR;
+
+integer % constants %
+        CARD_SIZE, PRINTER_LINE_WIDTH,
+        MAXSTR, EOF, ENDSTR, BACKSPACE, TAB, NEWLINE,
+        BLANK, EXCLAM, DQUOTE, SHARP, DOLLAR, PERCENT, AMPER, SQUOTE, ACUTE,
+        LPAREN, RPAREN, STAR, PLUS, COMMA, MINUS, DASH, PERIOD, SLASH,
+        COLON, SEMICOL, LESS, EQUALS, GREATER, QUESTION, ATSIGN, ESCAPE,
+        LBRACK, BACKSLASH, RBRACK, CARET, UNDERLINE, GRAVE,
+        LETN, LETT, LBRACE, BAR, RBRACE, TILDE, ZERO, NINE;
+
+% values %
+        MAXSTR := 255;
+        EOF := -1;
+        ENDSTR := 0;
+
+        CARD_SIZE := 256;                  % maximum chars per input line %
+        PRINTER_LINE_WIDTH := 256;         % maximum chars per output line %
+        STDOUT := printer(" ", 0, 50000);  % directed to Awe's stdout printer %
+        STDERR := printer(" ", 0, 50001);  % directed to Awe's stderr printer %
+
+        % standard definitions of characters %
+
+        BACKSPACE := 22;  % EBCDIC 1047 for ISO 8859-1 BS  %
+        TAB := 5;        % EBCDIC 1047 for ISO 8859-1 TAB %
+        NEWLINE := 37;    % EBCDIC 1047 for ISO 8859-1 LF  %
+        BLANK := decode(" ");
+        EXCLAM := decode("!");
+        DQUOTE := decode("""");
+        SHARP := decode("#");
+        DOLLAR := decode("$");
+        PERCENT := decode("%");
+        AMPER := decode("&");
+        SQUOTE := decode("'");
+        ACUTE := SQUOTE;
+        LPAREN := decode("(");
+        RPAREN := decode(")");
+        STAR := decode("*");
+        PLUS := decode("+");
+        COMMA := decode(",");
+        MINUS := decode("-");
+        DASH := decode("-");
+        PERIOD := decode(".");
+        SLASH := decode("/");
+        COLON := decode(":");
+        SEMICOL := decode(";");
+        LESS := decode("<");
+        EQUALS := decode("=");
+        GREATER := decode(">");
+        QUESTION := decode("?");
+        ATSIGN := decode("@");
+        ESCAPE := ATSIGN;
+        LBRACK := decode("[");
+        BACKSLASH := decode("\");
+        RBRACK := decode("]");
+        CARET := decode("^");
+        UNDERLINE := decode("_");
+        GRAVE := decode("`");
+        LBRACE := decode("{");
+        BAR := decode("|");
+        RBRACE := decode("}");
+        TILDE := decode("~");
+        ZERO := decode("0");
+        NINE := decode("9");
+        LETN := decode("n");
+        LETT := decode("t");
+
+
+begin % library section %
+
+
+% Algol W primitives - - - - - - - - - - - - - - - - - - - - - - - - - - - - - %
+
+
+% Card reader buffer for STDIN. This is required because 
+  Algol reads lines ("cards") rather than individual characters.
+%
+string(256) in_card;     % one line of input from STDIN %
+integer in_card_index;   % index of next character to read on in_card %
+integer in_card_length;  % length of line, excluding spaces on the right %
+logical end_of_input;    % true after last character on STDIN read %
+
+
+integer exit_code;
+
+
+% stip_initialize -- initialize 'Software Tools in Pascal' library %
+procedure stip_initialize;
+begin
+        exit_code := 0;
+        load_first_card;
+end stip_initialize;
+
+
+
+% stip_finialize -- close 'Software Tools in Pascal' library %
+procedure stip_finialize;
+begin
+        % print final lines of output, if any %
+        if (printer_index(STDOUT) > 0) then
+                write(printer_line(STDOUT));
+        if (printer_index(STDERR) > 0) then
+                write(printer_line(STDERR));
+                
+        % hack that simulates a non-zero exit code when your program fails %
+        if (exit_code ~= 0) then
+                assert false
+end stip_finialize;
+
+
+
+% load_first_card -- load first line of input for getc %
+procedure load_first_card;
+begin
+        % allow one endfile exception (see get_card) %
+        xcplimit(endfile) := 1;     
+        xcpnoted(endfile) := false;
+        xcpmark(endfile) := false;
+        
+        end_of_input := false;      
+        get_card;             
+end load_first_card;
+
+
+
+% get_card -- read a line of input for getc %
+procedure get_card;
+begin
+        in_card_index := 0;
+        in_card_length := CARD_SIZE - 1;
+        readcard(in_card);
+        end_of_input := xcpnoted(endfile);
+        in_card_length := algol_strlen(in_card);
+end get_card;
+
+
+
+% getc -- get one character from standard input %
+integer procedure getc (integer result c);
+begin
+        if end_of_input then
+                c := EOF
+        else if (in_card_index < in_card_length) then begin
+                c := decode(in_card(in_card_index|1));
+                in_card_index := in_card_index + 1
+        end
+        else begin
+                get_card;
+                if end_of_input then c := EOF
+                else c := NEWLINE
+        end;
+        c
+end getc;
+
+
+
+% putcf -- put out character on file %
+procedure putcf (integer value c; reference(printer) value fd);
+begin
+        procedure print_line;
+        begin
+                writeon(printer_line(fd));
+                printer_line(fd) := " ";  % erase %
+                printer_index(fd) := 0;
+        end print_line;
+        
+        iocontrol(printer_iocontrol(fd));  % select printer %
+        
+        if (c = NEWLINE) then begin
+                print_line;
+                iocontrol(2);  % line feed %
+        end
+        else begin
+                if (printer_index(fd) = PRINTER_LINE_WIDTH) then
+                        print_line;
+                printer_line(fd)(printer_index(fd)|1) := code(c);
+                printer_index(fd) := printer_index(fd) + 1;
+        end;
+end putcf;
+
+
+
+% puttextf -- put out Algol string constant on file %
+procedure puttextf (string(256) value text; reference(printer) value fd);
+begin
+        for i := 0 until algol_strlen(text)-1 do
+                putcf(decode(text(i|1)), fd);
+end puttextf;
+
+
+
+% exit -- end the program %
+procedure exit (integer value code);
+begin
+        exit_code := code;
+        goto EXIT_POINT
+end exit;
+
+
+
+% message -- write a warning message %
+procedure message (string(256) value text);
+begin
+        putcf(NEWLINE, STDERR);
+        puttextf(text, STDERR);
+        putcf(NEWLINE, STDERR);
+end;
+
+
+
+% error -- write an error message and halt %
+procedure error (string(256) value text);
+begin
+        message(text);
+        exit(1);
+end;
+
+
+
+% setstring -- copy Algol W string constant to string s %
+procedure setstring ( integer array s(*);
+                      string(256) value constant;
+                      integer value length );
+begin
+        for i := 1 until length do
+                s(i) := decode(constant(i-1|1));
+        s(length + 1) := ENDSTR;
+end;
+
+
+
+% algol_strlen -- length of an Algol W string, excluding right padding %
+integer procedure algol_strlen (string(256) value s);
+begin
+        integer i;
+        i := 256;
+        while (i > 0) and (s(i-1|1) = " ") do
+            i := i - 1;
+        i
+end;
+
+
+% islower -- true if c is lower case letter %
+logical procedure islower (integer value c);
+begin
+        % These are ECBDIC codes %
+        (c >= 129) and (c <= 137) or  % a..i %
+        (c >= 145) and (c <= 153) or  % j..r %
+        (c >= 162) and (c <= 169)     % s..z %
+end;
+
+
+
+% isupper -- true if c is upper case letter %
+logical procedure isupper (integer value c);
+begin
+        % These are ECBDIC codes %
+        (c >= 193) and (c <= 201) or  % A..I %
+        (c >= 209) and (c <= 217) or  % J..R %
+        (c >= 226) and (c <= 233)     % S..Z %
+end;
+
+
+
+% isdigit -- true if c is a digit %
+logical procedure isdigit (integer value c);
+begin
+        % These are ECBDIC codes %
+        (c >= 240) and (c <= 249)  % 0..9 %
+end;
+
+
+
+% tolower -- convert a character to its lowercase form %
+integer procedure tolower (integer value c);
+begin
+        % Works on ECBDIC codes %
+        if (isupper(c)) then (c - 64) else c
+end tolower;
+
+
+
+% Utilities - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  %
+
+
+% isletter -- true if c is a letter %
+logical procedure isletter (integer value c);
+begin
+        islower(c) or isupper(c)
+end;
+
+
+
+% isalphanum -- true if c is letter or digit %
+logical procedure isalphanum (integer value c);
+begin
+        isletter(c) or isdigit(c)
+end;
+
+
+
+% putc -- put one character on standard output %
+procedure putc (integer value c);
+begin
+        putcf(c, STDOUT)
+end;
+
+
+
+% putstr -- put out string on file %
+procedure putstr (integer array str (*); reference(printer) value fd);
+begin
+        integer i;
+        i := 1;
+        while (str(i) ~= ENDSTR) do begin
+                putcf(str(i), fd);
+                i := i + 1
+        end
+end;
+
+
+
+% puts -- put out string on STDOUT %
+procedure puts (integer array str (*));
+begin
+        putstr(str, STDOUT);
+end;
+
+
+
+% putdecf -- put decimal integer n in field width >= w %
+procedure putdecf (integer value n, w; reference(printer) value fd);
+begin
+        integer i, nd;
+        integer array s (1::MAXSTR);
+        nd := itoc(n, s, 1);
+        for i := nd until w do
+                putcf(BLANK, fd);
+        for i := 1 until nd-1 do
+                putcf(s(i), fd)
+end putdecf;
+
+
+
+% putdec -- put decimal integer n in field width >= w %
+procedure putdec (integer value n, w);
+begin
+        putdecf(n, w, STDOUT);
+end putdec;
+
+
+
+% getline -- get a line %
+logical procedure getline (integer array str (*);
+                           integer value size);
+begin
+        integer i;
+        logical done;
+        integer ch;
+        i := 0;
+        done := false;
+        while (~ done) do begin
+                done := true;
+                ch := getc(ch);
+                if (ch = EOF) then
+                        i := 0
+                else if (ch = NEWLINE) then begin
+                        i := i + 1;
+                        str(i) := NEWLINE
+                end
+                else if (size-2 <= i) then begin
+                        message("line too long");
+                        i := i + 1;
+                        str(i) := NEWLINE
+                end
+                else begin
+                        done := false;
+                        i := i + 1;
+                        str(i) := ch
+                end
+        end;
+        str(i + 1) := ENDSTR;
+        (0 < i)
+end;
+
+
+
+% scopy -- copy substrings, given starting addresses %
+procedure scopy (integer array src (*); integer value i;
+                 integer array dst (*); integer value j);
+begin
+        while (src(i) ~= ENDSTR) do begin
+                dst(j) := src(i);
+                i := i + 1;
+                j := j + 1
+        end;
+        dst(j) := ENDSTR
+end;
+
+
+
+% addstr -- put c in outset(j) if it fits, increment j %
+logical procedure addstr(integer value c;
+                         integer array outset (*);
+                         integer value result j;
+                         integer value maxset);
+begin
+        if (j > maxset) then
+                false
+        else begin
+                outset(j) := c;
+                j := j + 1;
+                true
+        end
+end;
+
+
+
+% equal -- test two strings for equality %
+logical procedure equal (integer array str1, str2 (*));
+begin
+        integer i;
+        i := 1;
+        while (str1(i) = str2(i)) and (str1(i) ~= ENDSTR) do
+                i := i + 1;
+        (str1(i) = str2(i))
+end;
+
+
+
+% esc -- map s(i) into escaped character, increment i %
+integer procedure esc (integer array s (*); integer value result i);
+begin
+        if (s(i) ~= ESCAPE) then
+                s(i)
+        else if (s(i+1) = ENDSTR) then  % @ not special at end %
+                ESCAPE
+        else begin
+                i := i + 1;
+                if (s(i) = LETN) then
+                        NEWLINE
+                else if (s(i) = LETT) then
+                        TAB
+                else
+                        s(i)
+        end
+end;
+
+
+
+% index -- find position of character c in string s %
+integer procedure  index (integer array s (*); integer value c);
+begin
+        integer i;
+        i := 1;
+        while (s(i) ~= c) and (s(i) ~= ENDSTR) do
+                i := i + 1;
+        if (s(i) = ENDSTR) then 0 else i
+end;
+
+
+
+% itoc - convert integer n to char xstring in s(i)..., returns end of s %
+integer procedure itoc (integer value n; integer array s(*); integer value i);
+begin
+        if (n < 0) then begin
+                s(i) := MINUS;
+                itoc(-n, s, i+1)
+        end
+        else begin
+                if (n >= 10) then
+                        i := itoc(n div 10, s, i);
+                s(i) := n rem 10 + ZERO;
+                s(i+1) := ENDSTR;
+                i + 1
+        end
+end;
+
+
+
+% length -- compute length of string %
+integer procedure length (integer array s (*));
+begin
+        integer n;
+        n := 1;
+        while (s(n) ~= ENDSTR) do
+                n := n + 1;
+        n - 1
+end;
+
+
+
+% max -- compute maximum of two integers %
+integer procedure max (integer value x, y);
+begin
+        if (x > y) then x else y
+end;
+
+
+
+% min -- compute minimum of two integers %
+integer procedure min (integer value x, y);
+begin
+        if (x < y) then x else y
+end;
+
+
+
+% ctoi -- convert string at s(i) to integer, increment i %
+integer procedure ctoi (integer array s (*); integer value result i);
+begin
+        integer n, sign;
+        while (s(i) = BLANK) or (s(i) = TAB) do
+                i := i + 1;
+        if (s(i) = MINUS) then
+                sign := -1
+        else
+                sign := 1;
+        if (s(i) = PLUS) or (s(i) = MINUS) then
+                i := i + 1;
+        n := 0;
+        while (isdigit(s(i))) do begin
+                n := 10 * n + s(i) - ZERO;
+                i := i + 1
+        end;
+        sign * n
+end;
+
+
+stip_initialize;
+
+
+begin % program section %
+
+
+% the main program starts in the following source file %

@@ -1,0 +1,20 @@
+begin
+    integer array a(1::5);
+
+    for i := 1 until 5 do
+        a(i) := i * 2;
+
+    for i := 1 until 6 do      comment Uh oh!;
+        write(a(i))
+end.
+----stdout
+             2
+             4
+             6
+             8
+            10
+----stderr
+Tests/array-range.alw:8:15: array subscript error: subscript 1 = 6, outside the range (1::5)
+----exitcode
+1
+----end  

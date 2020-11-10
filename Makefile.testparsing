@@ -1,0 +1,17 @@
+# Makefile.testP -- make for the lexer/parser tester
+
+OCAMLMAKEFILE = OCamlMakefile
+
+RESULT  = testparsing
+
+SOURCES = dynArray.mli dynArray.ml \
+	  location.mli location.ml \
+	  table.mli table.ml \
+	  tree.ml \
+	  parser.mly \
+	  lexer.mll \
+	  testparsing.mll
+
+include $(OCAMLMAKEFILE)
+
+#end

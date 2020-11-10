@@ -1,0 +1,19 @@
+begin
+   string(10) s;
+   s := "0123456789";
+   for i := 0 until 9 do
+       write(s(i|1))
+end.
+----stdout
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+----end
+      

@@ -1,0 +1,9 @@
+begin
+   string(10) s;
+   s := "0123456789";
+   s(4|3) := "abcd";
+   write(s);
+end.
+----compile
+Tests/string-substring-assignment-too-long.alw:4:4: a STRING(4) cannot be assigned to a STRING(3) variable
+----end

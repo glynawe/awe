@@ -1,0 +1,27 @@
+begin
+  procedure SCALED (integer value N);
+    begin R_FORMAT := "S"; R_W := N+7
+    end;
+  procedure ALIGNED (integer value N,D);
+    begin R_FORMAT := "A"; R_W := N+D+1; R_D := D
+    end;
+  procedure FREE_POINT (integer value N);
+    begin R_FORMAT := "F"; R_W := N+7
+    end;
+  procedure NEW_LINE; IOCONTROL(2);
+
+  FREE_POINT(5); I_W := 2; S_W := 1;
+
+  for I := -1, 0, 32 do
+    begin WRITE(S_W := 0, I, ":", NEW_LINE, I/3);
+    WRITEON("I  ", ALIGNED(3,2), I/3, "*", SCALED(12), I/3, "*")
+    end
+end.
+----stdout
+-1:
+    -0.33333I   -0.33 * -3.33333333333'-01 *
+ 0:
+           0I    0.00 *              0     *
+32:
+      10.667I   10.67 *  1.06666666667'+01 *
+----end

@@ -1,0 +1,8 @@
+begin
+    record r (integer f);
+    reference(r) array a (1 :: 5);
+    write(a(1))  %not initialised%
+end.
+----stdout
+ UNINITIALIZED
+----end  

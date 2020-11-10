@@ -1,0 +1,22 @@
+Empty arrays
+============
+
+Hendrik Boom wrote to me that the OS/360 ALGOLW compiler allowed
+"empty arrays" to be declared, with the semantics defined below, and
+that using them made some algorithms considerably clearer. Awe allows
+them also, for the sake of backward compatibility.
+
+**Definition**
+
+Replace the last sentence of 5.2.2. *Array Declarations, Semantics* with this:
+
+    In order to be valid, for every bound pair, the value of the upper
+    bound may be no lower than one less than the upper bound.  If a valid
+    array has any bound pair where the upper bound is one less than the
+    lower bound then it is an empty array.
+
+Replace the second sentence of 6.1.2. *Variables, Semantics* with this:
+
+    An array designator is invalid if its array identifier denotes an
+    empty array (Cf. 5.2.2) or if any of its subscripts lie outside
+    the declared bounds for that subscript's position.

@@ -1,0 +1,28 @@
+begin
+   assert (true  and true);
+   assert ~(true  and false);
+   assert ~(false and true);
+   assert ~(false and false);
+
+   assert (true  or true);
+   assert (true  or false);
+   assert (false or true);
+   assert ~(false or false);
+
+   assert ~~true;
+   assert ~false;
+
+   assert ~(if true then false else true);
+   assert (if false then false else true);
+
+   begin                                  comment The "shortcut" property;
+       integer i;
+       i := 0;
+       write(i > 0 and 1 div i = 1);  comment the divisions won't happen;
+       write(i = 0 or  1 div i = 1);
+   end;
+end.
+----stdout
+ FALSE
+  TRUE
+----end

@@ -1,0 +1,19 @@
+begin
+    string(5) s5;
+    string(2) s2;
+    string(1) s1, c;
+    logical b;
+
+    s2 := "ab";
+    c := "x";
+
+    s5 := if true  then s2 else "  "; assert s5 = "ab   ";
+    s5 := if false then s2 else "cd"; assert s5 = "cd   ";
+    s5 := if true  then s2 else " ";  assert s5 = "ab   ";
+    s5 := if false then s2 else "c";  assert s5 = "c    ";
+    s5 := if false then s2 else c;    assert s5 = "x    ";
+
+    s1 := if true  then "t" else s2(0|1); assert s1 = "t";
+    s1 := if false then "c" else s2(0|1); assert s1 = "a";
+    s1 := if true  then c   else s2(0|1); assert s1 = "x";
+end.

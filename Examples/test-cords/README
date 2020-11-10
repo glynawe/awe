@@ -1,0 +1,8 @@
+This is an example of interfacing an Algol program to an existing C
+library: Hans Boehm's Cord data type.
+
+(I've made the lazy assumption that 'char', 'size_t' are represented
+by the same type as 'int'. It works on my 32-bit 686 system. I suspect
+the interface would have to be defined more strictly on others.)
+
+--Glyn

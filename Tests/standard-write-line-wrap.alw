@@ -1,0 +1,45 @@
+comment this tests the lower extreme of line/page breaking;
+begin
+  iocontrol(5);        comment Hard page breaks are not on by default (Awe behaviour);
+  iocontrol(40005);    comment Pretty page breaks = on;
+
+  s_w := 0;            comment Write one digit at a time;
+  i_w := 1;
+
+  iocontrol(10001);    comment Page width = 1;
+  iocontrol(20001);    comment Page height  = 1;
+
+  for i := 1 until 4 do 
+        writeon(i);
+
+  iocontrol(2);        comment Line break;
+
+  iocontrol(10002);
+  iocontrol(20002);
+
+  for i := 1 until 8 do 
+        writeon(i);
+
+  iocontrol(2);
+  iocontrol(20003);
+  writeon("ab");
+  writeon("cd");
+end.
+----stdout
+1
+~
+2
+~
+3
+~
+4
+~
+12
+34
+~~
+56
+78
+~~
+ab
+cd
+----end

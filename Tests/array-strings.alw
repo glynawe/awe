@@ -1,0 +1,9 @@
+begin
+   string(5) array a (1::6, 1::6);
+
+   a(3,4) := "abcbe";
+   a(3,5) := "ABCBE";
+
+   assert a(3,4) = "abcbe";
+   assert a(3,5) = "ABCBE";
+end.

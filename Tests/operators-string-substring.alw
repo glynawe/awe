@@ -1,0 +1,13 @@
+begin
+   string(6) s;
+   string(6) array A (1::2);
+
+   A(1) := "abcdef";
+   assert A(1)(0|3) = "abc";
+   s := "012345";
+   s(2|3) := A(1)(0|3);
+   assert s = "01abc5";
+   
+   A(1)(0|2) := s(4|2);
+   assert A(1) = "c5cdef"
+end.

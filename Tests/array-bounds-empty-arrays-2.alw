@@ -1,0 +1,9 @@
+begin
+   integer array a (1::2, 2::1);
+   a(1,0) := 1;
+end.
+----stderr
+Tests/array-bounds-empty-arrays-2.alw:3:4: array subscript error: subscript 2 = 0, outside the range (2::1)
+----exitcode
+1
+----end  

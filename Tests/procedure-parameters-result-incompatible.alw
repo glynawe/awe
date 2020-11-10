@@ -1,0 +1,8 @@
+begin
+   integer i;
+   procedure p(real value okay; real result not_okay); begin end;
+   p(i, i)
+end.
+----compile
+Tests/procedure-parameters-result-incompatible.alw:4:9: a REAL cannot be assigned to an INTEGER variable
+----end

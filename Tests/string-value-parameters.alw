@@ -1,0 +1,26 @@
+begin
+    string(12) s;
+    string(40) d;
+
+    procedure p(string(40) value u);
+       write("""", u, """");
+
+    procedure q(string(20) value v);
+       write("""", v, """");
+
+    s := "Hello world!";
+    write(s);
+
+    d := s;
+    write(d);
+    p(s);
+    p(d);
+    q(s);
+end.
+----stdout
+Hello world!
+Hello world!
+"Hello world!                            "
+"Hello world!                            "
+"Hello world!        "
+----end

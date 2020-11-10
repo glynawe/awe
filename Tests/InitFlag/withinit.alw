@@ -1,0 +1,48 @@
+comment Tests that initializations
+begin
+   integer i, j;
+   real r;
+   logical l;
+   bits b;
+   string(1) c;
+   string(4) s;
+
+   record rec (integer field_i; real field_i; string(4) field_i);
+   reference(rec) ref_rec;
+   record ext;
+   reference(ext) ref_ext;
+   
+   integer array (1::10) a;
+   integer array (1::10, 1::10) a2;
+   string(4) array (1::10) sa;
+
+   procedure p (integer result x); assert(x = 0);
+
+   assert(i = 0);
+   assert(j = 0);
+   assert(r = 0.0);
+   assert(b = #0);
+   assert(c = " ");
+   assert(s = "    ");
+
+   assert(ref_rec = null);
+   ref_rec := rec;
+   assert(field_i(rec) = 0);
+   assert(field_r(rec) = 0.0);
+   assert(field_s(rec) = "    ");
+
+   assert(ext_ref = null);
+
+   for i := 1 until 10 do
+       assert(a(i) = 0);
+
+    for i := 1 until 10 do
+       for j := 1 until 10 do
+           assert(a(i,j) = 0);
+
+   for i := 1 until 10 do
+       assert(s(i) = 0);
+
+   i := 1;
+   p(i)
+end.

@@ -1,0 +1,8 @@
+begin
+   logical x;
+   procedure p(integer result i); begin end;
+   p(x)
+end.
+----compile
+Tests/procedure-parameters-result-incompatible-2.alw:4:6: an INTEGER cannot be assigned to a LOGICAL variable
+----end

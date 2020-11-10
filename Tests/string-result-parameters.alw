@@ -1,0 +1,24 @@
+begin
+   string(4) procedure p ( string(4) value v; 
+                           string(4) result r;
+                           string(4) value result vr; 
+                           string(4) n );
+   begin
+      r(0|2) := v(0|2);
+      r(2|2) := vr(0|2);
+      n(0|2) := v(0|2);
+      vr := n;
+      vr
+   end;
+   
+   string(4) s, r0, vr0, n0;
+   vr0 := "VVVV";
+   n0  := "nnnn";
+   s := p("vvvv", r0, vr0, n0);
+   write(s, r0, vr0, n0)
+end.
+----compile
+Tests/string-result-parameters.alw:5:28: Note, this is a call-by-name formal parameter.
+----stdout
+vvnnvvVVvvnnvvnn
+----end

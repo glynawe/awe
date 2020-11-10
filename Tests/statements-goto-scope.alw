@@ -1,0 +1,35 @@
+begin
+   integer i;
+   i := 1;
+top:
+
+   begin
+      integer j, k;
+      j := 1;
+   top: 
+      k := 10 * i + j;
+      write(k);
+      j := j + 1;
+      if j = 4 then goto bottom;
+      if k = 32 then goto exit;
+      go to top;
+   bottom:
+   end;
+
+   i := i + 1;
+   if i = 4 then goto bottom;
+   go to top;
+bottom:
+exit:
+end.
+----stdout
+            11
+            12
+            13
+            21
+            22
+            23
+            31
+            32
+----end
+      

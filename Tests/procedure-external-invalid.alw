@@ -1,0 +1,8 @@
+begin
+   procedure p1 (integer value result i); 
+     algol "{bluh}";
+   assert(true)
+end.
+----compiler
+Tests/procedure-external-invalid.alw:3:6: the external reference "{bluh}" is not a valid C identifier
+----end

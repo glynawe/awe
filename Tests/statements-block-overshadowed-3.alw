@@ -1,0 +1,10 @@
+comment Labels and declarations share scope, 
+        declarations are added to the scope first
+        to make the error messages more sensible;
+begin
+   integer x;
+   x: ;
+end.
+----compile
+Tests/statements-block-overshadowed-3.alw:6:4: 'x' is already defined here, as an INTEGER variable
+----end

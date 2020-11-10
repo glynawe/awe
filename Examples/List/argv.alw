@@ -1,0 +1,3 @@
+integer procedure argc; algol "get_argc";
+string(100) procedure argv (integer value index); algol "get_argv";
+integer procedure argv_length (integer value index); algol "get_argv_length";

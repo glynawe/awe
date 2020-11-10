@@ -1,0 +1,28 @@
+comment Knuth's "Man or boy?" test;
+comment (Uses expressions in Name parameters, and gets away with it);
+begin
+   integer procedure A (integer value k; integer x1, x2, x3, x4, x5);
+   begin
+      integer procedure B;
+      begin
+         k := k - 1;
+         A(k, B, x1, x2, x3, x4)
+      end B;
+
+      if k <= 0 then 
+         x4 + x5 
+      else 
+         B 
+   end A;
+
+   assert A(10, 1, -1, -1 , 1 , 0) = -67
+end.
+----compiler
+Tests/procedure-parameters-name-manorboy.alw:4:42: Note, this is a call-by-name formal parameter.
+Tests/procedure-parameters-name-manorboy.alw:9:15: Note, this call-by-name parameter is an expression.
+Tests/procedure-parameters-name-manorboy.alw:18:17: Note, this call-by-name parameter is an expression.
+Tests/procedure-parameters-name-manorboy.alw:18:20: Note, this call-by-name parameter is an expression.
+Tests/procedure-parameters-name-manorboy.alw:18:24: Note, this call-by-name parameter is an expression.
+Tests/procedure-parameters-name-manorboy.alw:18:29: Note, this call-by-name parameter is an expression.
+Tests/procedure-parameters-name-manorboy.alw:18:33: Note, this call-by-name parameter is an expression.
+----end

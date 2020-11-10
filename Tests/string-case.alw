@@ -1,0 +1,28 @@
+begin
+   string(6) a1, a2, a3, s;
+
+   procedure p (string(6) value x);
+   begin
+      x(0|1) := code(decode(x(0|1)) + 64);
+      write(x);
+   end;
+
+   a1 := "a";
+   a2 := "b123";
+   a3 := "c12345";
+   for i := 1 until 3 do p(case i of (a1, a2, a3));
+
+   assert a1 = "a";
+   assert a2 = "b123";
+   assert a3 = "c12345";
+
+   for i := 1 until 3 do p(case i of ("a", "b123", "c12345"));
+end.
+----stdout
+A
+B123
+C12345
+A
+B123
+C12345
+----end

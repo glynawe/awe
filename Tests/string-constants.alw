@@ -1,0 +1,32 @@
+begin
+    comment All Latin-1/IBM1047 characters are allowed in string 
+            constants, as an Awe extension to Algol W;
+    write(" âäàáãåçñ¢.<(+");
+    write("éêëèíîïìß!$*);^");
+    write("-/ÂÄÀÁÃÅÇÑ¦,%_>?");
+    write("øÉÊËÈÍÎÏÌ:#@'=");
+    write("""");
+    write("Øabcdefghi«»ğış±");
+    write("°jklmnopqrªºæ¸Æ¤");
+    write("µ~stuvwxyz¡¿Ğ[Ş®");
+    write("¬£¥·©§¶¼½¾İ¨¯]´×");
+    write("{ABCDEFGHI­ôöòóõ");
+    write("}JKLMNOPQR¹ûüùúÿ");
+    write("÷STUVWXYZ²ÔÖÒÓÕ");
+    write("0123456789³ÛÜÙÚ")
+end.
+----stdout
+ âäàáãåçñ¢.<(+
+éêëèíîïìß!$*);^
+-/ÂÄÀÁÃÅÇÑ¦,%_>?
+øÉÊËÈÍÎÏÌ:#@'=
+"
+Øabcdefghi«»ğış±
+°jklmnopqrªºæ¸Æ¤
+µ~stuvwxyz¡¿Ğ[Ş®
+¬£¥·©§¶¼½¾İ¨¯]´×
+{ABCDEFGHI­ôöòóõ
+}JKLMNOPQR¹ûüùúÿ
+÷STUVWXYZ²ÔÖÒÓÕ
+0123456789³ÛÜÙÚ
+----end

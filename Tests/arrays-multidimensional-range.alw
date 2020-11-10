@@ -1,0 +1,16 @@
+begin
+    integer array a(1::10, 1::10);
+
+    for i := 1 until 10 do
+        for j := 1 until 10 do
+            a(i,j) := i * 10 + j;
+    assert(a(1,1) = 11);
+    assert(a(5,4) = 54);
+    assert(a(6,3) = 63);
+    assert(a(3,11) = 0);  comment Uh oh;
+end.
+----stderr
+Tests/arrays-multidimensional-range.alw:10:12: array subscript error: subscript 2 = 11, outside the range (1::10)
+----exitcode
+1
+----end  

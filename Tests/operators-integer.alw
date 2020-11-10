@@ -1,0 +1,24 @@
+begin
+
+assert +1 = 1;
+assert -1 = -1;
+
+assert 2 + 2 = 4;
+assert 2 - 3 = -1;
+assert 2 * 3 = 6;
+assert 8 div 2 = 4;
+assert 9 div 2 = 4;
+assert 9 rem 2 = 1;
+assert 8 rem 2 = 0;
+
+assert (if true then 2 else 3) + 2 = 4;
+assert case 2 of (1,2,3,4,5) + 2 = 4;
+
+assert entier(32.4) = 32;
+assert entier(32.7) = 32;
+
+assert abs -42 = 42;
+assert abs  42 = 42;
+assert long 3 = 3.0L;
+
+end.

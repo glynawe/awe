@@ -1,0 +1,10 @@
+begin
+   string(10) s;
+   s := "0123456789";
+   s(8|3) := "abc";
+end.
+----stderr
+Tests/string-substring-assignment-off-end.alw:4:4: Substring (8|3) of a string of length 10.
+----exitcode
+1
+----end

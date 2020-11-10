@@ -1,0 +1,11 @@
+% Test argc/argv access. %
+begin
+   integer procedure argc; algol "get_argc";
+
+   string(100) procedure argv (integer value index); algol "get_argv";
+
+   integer procedure argv_length (integer value index); algol "get_argv_length";
+
+   for i := 0 until argc - 1 do
+     write(i_w := 2, i, argv_length(i), argv(i))
+end.

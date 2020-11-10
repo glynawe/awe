@@ -1,0 +1,76 @@
+begin
+   procedure p(integer array A(*,*); integer value m, n);
+   begin
+      i_w := 2;
+      for i := 1 until m do
+      begin 
+         for j := 1 until n do
+            writeon(A(i,j));
+         iocontrol(2)
+      end
+   end p;
+
+   procedure q(integer array A(*); integer value n);
+   begin
+      i_w := 2;
+      for i := 1 until n do
+         writeon(A(i));
+   end;
+
+   procedure r(integer array A(*,*); integer value m, n);
+   begin
+      i_w := 2;
+      for i := 1 until m do
+      begin 
+         q(A(i,*), n);
+         iocontrol(2)
+      end
+   end;
+
+
+   procedure break; begin write("*"); iocontrol(2) end;
+
+   begin
+      integer array A(1::3, 1::4);
+      integer array B(1::4, 1::3);
+      integer n;
+      n := 1;
+      for i := 1 until 3 do
+         for j := 1 until 4 do
+            begin 
+               A(i,j) := n; 
+               B(j,i) := n; 
+               n := n + 1 
+            end;
+
+      p(A,      3, 4); break;
+      p(A(*,*), 3, 4); break;
+      p(B,      4, 3); break;
+      q(A(1,*), 4);    break;
+      q(A(*,1), 3);    break;
+      r(B,      4, 3)
+   end
+end.
+----stdout
+ 1   2   3   4
+ 5   6   7   8
+ 9  10  11  12
+*
+ 1   2   3   4
+ 5   6   7   8
+ 9  10  11  12
+*
+ 1   5   9
+ 2   6  10
+ 3   7  11
+ 4   8  12
+*
+ 1   2   3   4
+*
+ 1   5   9
+*
+ 1   5   9
+ 2   6  10
+ 3   7  11
+ 4   8  12
+----end

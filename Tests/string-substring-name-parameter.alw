@@ -1,0 +1,22 @@
+begin
+   string(8) s;
+   integer i;
+
+   procedure p (string(4) x);
+   begin
+      assert(x = "0123");
+      i := 1;
+      assert(x = "1234");
+      i := 2;
+      x := "abcd";
+      assert(x = "abcd");
+      assert(s = "01abcd67")   comment Eerie isn't it;
+   end;
+
+   s := "01234567";
+   i := 0;
+   p(s(i|4))
+end.
+----compiler
+Tests/string-substring-name-parameter.alw:5:17: Note, this is a call-by-name formal parameter.
+----end

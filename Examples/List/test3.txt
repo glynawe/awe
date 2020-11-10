@@ -1,0 +1,4 @@
+Therefore, we usually write the makefile so that the first rule is the
+one for compiling the entire program or all the programs described by
+the makefile (often with a target called `all'). See section Arguments
+to Specify the Goals.

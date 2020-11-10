@@ -1,0 +1,57 @@
+
+inc(abc)  --->  inc(abc)
+define(inc,$1:=$1+1) inc(abc)  --->   abc:=abc+1
+define(incr,$1 := $1 + $2) incr(x,3)  --->   x := x + 3
+incr  --->   :=  +
+incr()  --->   :=  +
+incr(x)  --->  x := x +
+incr(x,`6')  --->  x := x + 6
+define(`dbl',(($1) * 2)) dbl(42)  --->   ((42) * 2)
+incr(x,dbl(3))  --->  x := x + ((3) * 2)
+
+
+define(def,`define($1,$2)')
+def(a,xyz) a  --->   xyz
+
+substr(123456789,1,1)  --->  1
+substr(123456789,9,1)  --->  9
+substr(123456789,9,2)  --->  9
+substr(123456789,3,5)  --->  34567
+substr(123456789,3,1)  --->  3
+substr(123456789,3,0)  --->
+substr(123456789,0,1)  --->
+substr(,1,1)  --->
+
+len(xyz)  --->  3
+len()  --->  0
+len  --->  0
+len(len(a))  --->  1
+len(len(abcdeABCDE))  --->  2
+
+ifelse(123,123,a,b)  --->  a
+ifelse(123,,a,b)  --->  b
+ifelse(123,456,a,b)  --->  b
+ifelse(,,a,b)  --->  a
+ifelse(test,,a,b)  --->  b
+define(test,`')
+ifelse(test,,a,b)  --->  a
+
+expr(100)  --->  100
+expr(20+30)  --->  50
+expr(2*5+10)  --->  20
+expr(10+2*5)  --->  20
+expr((10+2)*5)  --->  60
+expr(5*(10+2))  --->  60
+expr(2*5+10/5)  --->  12
+expr(10+2*10/5)  --->  14
+expr((10+2)*(10/5))  --->  24
+expr(x)  --->  0
+expr(1x)  --->  1
+expr(1+1x)  --->  2
+expr(x1)  --->  0
+expr(1&1)  --->  1
+expr(1&)  --->  1
+expr  --->  0
+
+changeq({}) {ab} `ab' --->  ab `ab'
+changeq() `ab' {ab}   --->  ab {ab}

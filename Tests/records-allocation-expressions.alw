@@ -1,0 +1,25 @@
+begin
+    record C (
+      reference(C) r;
+      string(5) s;
+      string(8) t;
+      integer i
+      ); 
+    reference(C) a, b;
+    
+    a := C(null, "AAA", "BBB", 1);
+    assert(r(a)=null and s(a)="AAA" and t(a)="BBB" and i(a)=1);
+
+    b := C(a, , "XXX", 2);
+    assert(r(b)=a and t(b)="XXX" and i(b)=2);
+
+    a := b;
+    b := C(b, "XXX", , 3);      
+    assert(r(b)=a and r(b)~=b); %i.e. the 'b' from before the assignment% 
+    assert(s(b)="XXX");
+    assert(i(b)=3);
+
+    b := C( , , , );
+
+    b := C;
+end.

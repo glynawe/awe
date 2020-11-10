@@ -1,0 +1,22 @@
+begin
+   string(3) s;
+   while true do
+      begin
+          readon(s);
+          write("'", s, "' ")
+      end
+end.
+----stdin
+"abc" "a"  "" """" """a" "a""" "abcd"
+----stdout
+'abc'
+'a  '
+'   '
+'"" '
+'""a'
+'a""'
+----stderr
+Tests/standard-read-strings.alw:5:11: String too long on line 1 of the standard input.
+----exitcode
+1
+----end

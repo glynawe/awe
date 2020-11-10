@@ -1,0 +1,18 @@
+begin
+   procedure p1 (integer value result i); 
+     algol "p1";
+
+   integer procedure p2 (real value r);
+     fortran "P2";
+
+   comment We just want to look at the C code of the above;
+   assert(true)
+end.
+----messages
+/* PROCEDURE p1 (INTEGER VALUE RESULT i); ALGOL "p1"; */
+void p1 (int *i);
+
+/* INTEGER PROCEDURE p2 (REAL VALUE r); ALGOL "P2"; */
+int P2 (double r);
+
+----end

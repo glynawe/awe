@@ -1,0 +1,27 @@
+begin
+
+comment Equality;
+assert(#1 =  #1);
+assert(#2 =  #2);
+assert(#1 ~= #0);
+
+comment Bit operators;
+assert((#88888888 shl 1) = #11111110);
+assert((#11111111 shl 0) = #11111111);
+assert((#88888888 shl 7) = #44444400);
+assert((#88888888 shr 0) = #88888888);
+assert((#11111111 shr 1) = #08888888);
+assert((#11111111 shr 7) = #00222222);
+
+assert((#88888888 shl -1) = #11111110);
+assert((#88888888 shl -7) = #44444400);
+assert((#11111111 shr -1) = #08888888);
+assert((#11111111 shr -7) = #00222222);
+
+assert((#11 or  #11) = #11);
+assert((#11 or  #22) = #33);
+assert((#ee and #77) = #66);
+
+assert((~ #1001)= #ffffeffe);
+
+end.

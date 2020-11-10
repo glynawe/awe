@@ -1,0 +1,9 @@
+begin
+    for i := 1 step 0 until 8 do
+        write(i);
+end.
+----stderr
+Tests/statements-for-step-0.alw:2:5: FOR step of 0
+----exitcode
+1
+----end

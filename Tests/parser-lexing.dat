@@ -1,0 +1,186 @@
+algolw
+algolw
+
+ALGOLW
+algolw
+
+AlgolW
+algolw
+
+Algol_W
+algol_w
+
+_Algol_W
+^Unexpected character '_'
+
+$ This gets lexed as an integer followed by a constant, but that isn't allowed anyway.
+5algolW
+ ^Syntax Error
+
+algol68
+algol68
+
+COMMENT blah blah; AlgolW
+algolw
+
+Comment blah blah; AlgolW
+algolw
+
+comment blah blah; AlgolW
+algolw
+
+comment blah blah AlgolW
+^This comment is not closed with a semicolon
+
+% blah blah; AlgolW
+algolw
+
+% blah blah % AlgolW
+algolw
+
+% blah blah AlgolW
+^This comment is not closed with a semicolon
+
+1200
+1200
+
+0
+0
+
+$too big, but lexically correct:
+  100000000000000000
+100000000000000000
+
+"String"
+"String"
+
+#00000000
+#00000000
+
+#0000BEEF
+#0000BEEF
+
+#FFFFFFFF
+#FFFFFFFF
+
+$too big, but lexically correct:
+#FFFFFFFFF
+#FFFFFFFFF
+
+#
+^Unexpected character '#'
+
+'
+^Unexpected character '\''
+
+0.1
+0.1
+
+1.
+1.0
+
+1.0'3
+1.0'3
+
+0.1
+0.1
+
+.1
+0.1
+
+1.'3
+1.0'3
+
+1'3
+1.0'3
+
+1.'3
+1.0'3
+
+'3
+1.0'3
+
+0.1I
+0.1I
+
+1.I
+1.0I
+
+1.0'3I
+1.0'3I
+
+0.1I
+0.1I
+
+1I
+1.0I
+
+1.'3I
+1.0'3I
+
+1.'3I
+1.0'3I
+
+'3I
+1.0'3I
+
+0.1L
+0.1L
+
+1.L
+1.0L
+
+1.0'3L
+1.0'3L
+
+0.1L
+0.1L
+
+1L
+1.0L
+
+1.'3L
+1.0'3L
+
+1.'3L
+1.0'3L
+
+'3L
+1.0'3L
+
+0.1IL
+0.1IL
+
+1IL
+1.0IL
+
+1.0'3IL
+1.0'3IL
+
+0.1IL
+0.1IL
+
+1.IL
+1.0IL
+
+1.'3IL
+1.0'3IL
+
+1.'3IL
+1.0'3IL
+
+'3IL
+1.0'3IL
+
+"String"
+"String"
+
+"String
+^This string is not closed with a double quote
+
+"String\"
+"String\"
+
+"String""
+^This string is not closed with a double quote
+

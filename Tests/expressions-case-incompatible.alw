@@ -1,0 +1,7 @@
+begin
+   for i := 1, 6, 0, 4 do
+      write(case i of (1,2,true,4,5,6))
+end.
+----compile
+Tests/expressions-case-incompatible.alw:3:13: This CASE expression's branch expressions have incompatible types.
+----end

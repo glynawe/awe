@@ -1,0 +1,68 @@
+begin
+  assert truncate(+2.3) = +2;
+  assert truncate(+2.5) = +2;
+  assert truncate(+2.7) = +2;
+  assert truncate(-2.3) = -2;
+  assert truncate(-2.5) = -2;
+  assert truncate(-2.7) = -2;
+   
+  assert entier(+2.3) = +2;
+  assert entier(+2.5) = +2;
+  assert entier(+2.7) = +2;
+  assert entier(-2.3) = -3;
+  assert entier(-2.5) = -3;
+  assert entier(-2.7) = -3;
+   
+  assert round(+2.3) = +2;
+  assert round(+2.5) = +3;
+  assert round(+2.7) = +3;
+  assert round(-2.3) = -2;
+  assert round(-2.5) = -3;
+  assert round(-2.7) = -3;
+
+  assert roundtoreal(+2.3) = +2.0;
+  assert roundtoreal(+2.5) = +3.0;
+  assert roundtoreal(+2.7) = +3.0;
+  assert roundtoreal(-2.3) = -2.0;
+  assert roundtoreal(-2.5) = -3.0;
+  assert roundtoreal(-2.7) = -3.0;
+
+  assert odd(3);
+  assert ~odd(2);
+  assert odd(1);
+  assert ~odd(0);
+  assert odd(-1);
+
+  assert number(#0) = 0;
+  assert number(#1) = 1;
+  assert number(#7FFFFFFF) = 2147483647;
+  assert number(#7FFFFFFF) = maxinteger;
+  assert number(#FFFFFFFF) = -1;
+
+  assert bitstring(0) = #0;
+  assert bitstring(1) = #1;
+  assert bitstring(-1) = #FFFFFFFF;
+  assert bitstring(2147483647) = #7FFFFFFF;
+  assert bitstring(maxinteger) = #7FFFFFFF;
+
+  assert decode(" ")  = 64;    COMMENT these are EBCDIC codes;
+  assert decode("""") = 127;
+  assert decode("~")  = 161;
+  assert code(64)  = " ";
+  assert code(127) = """";
+  assert code(161) = "~";
+
+  assert intbase10(0)           = " +0000000000";
+  assert intbase10(1)           = " +0000000001";
+  assert intbase10(-1)          = " -0000000001";
+  assert intbase10(2147483647)  = " +2147483647";
+  assert intbase10(-2147483647) = " -2147483647";
+
+  comment   C itself doesn't like to see -2147483648;
+
+  assert intbase16(0)           = "    00000000";
+  assert intbase16(1)           = "    00000001";
+  assert intbase16(-1)          = "    FFFFFFFF";
+  assert intbase16(2147483647)  = "    7FFFFFFF";
+  assert intbase16(-2147483647) = "    80000001";
+end.

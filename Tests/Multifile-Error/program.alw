@@ -1,0 +1,3 @@
+for i := 0 until argc - 1 do
+    write(i_w := 2, i, argv_length(i), argv(i))syntax error
+

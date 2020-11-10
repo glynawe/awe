@@ -1,0 +1,25 @@
+comment Writing references;
+begin
+   record x (integer i);
+   record y (integer j);
+   reference(x) a;
+   reference(y) b;
+   reference(x,y) c;
+   reference(x,y) d, e;
+   reference(x,y) f;
+   a := x;
+   b := y;
+   c := y;
+   d := c;
+   e := null;
+   write("These should be different: ", a, b);
+   write("These should be the same:  ", c, d);
+   write("This should be ""null"":     ", e);
+   write("This should be ""UNINITIALIZED"":", f);
+end.
+----stdout
+These should be different:            x.1             y.2
+These should be the same:             y.3             y.3
+This should be "null":               null
+This should be "UNINITIALIZED": UNINITIALIZED
+----end

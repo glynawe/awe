@@ -1,0 +1,5 @@
+procedure separate (string(10) value message);
+begin
+   write("separate says:");
+   write(message);
+end.

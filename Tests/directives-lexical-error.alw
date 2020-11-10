@@ -1,0 +1,7 @@
+comment This compiler directive does not start in column 1;
+begin
+  @I'm a bad directive
+end.
+----compiler
+Tests/directives-lexical-error.alw:3:3: Misplaced directive "@I'm a bad directive"
+----end

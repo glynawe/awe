@@ -1,0 +1,27 @@
+begin
+
+comment Section 6.3.2.3;
+
+integer procedure SGN(integer value A);
+   if A < 0 then -1 else 1;
+
+integer procedure D(integer value A, B);
+   if A < B then 0 else D(A-B, B) + 1;
+
+for a := 91, 10,  0, -13, -10 do
+   for b := 43, 5, -5, -10 do
+      assert A div B = SGN(A * B) * D(abs A, abs B);
+
+
+comment Section 6.3.2.4;
+
+for a := 91, 10,  0, -13, -10 do
+   for b := 43, 5, -5, -10 do
+      assert a rem b  = a - (a div b) * b;
+
+
+comment Section 6.3.2.1;
+
+assert 5 / 2 = 2.5;
+
+end.

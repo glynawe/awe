@@ -1,0 +1,18 @@
+begin
+   record rec(string(5) s);
+   string(5) t, u;
+   reference(rec) r;
+
+   r := rec("012");
+   u := "012";
+
+   t := u;
+   assert t = "012  ";
+   assert t = "012";
+
+   t := s(r);
+   assert t = "012  ";
+   assert t = "012";
+   assert s(r) = "012";
+   assert s(r) = "012  ";
+end.

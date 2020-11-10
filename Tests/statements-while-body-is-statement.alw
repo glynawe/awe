@@ -1,0 +1,7 @@
+begin
+    while true do
+        1
+end.
+----compile
+Tests/statements-while-body-is-statement.alw:3:9: expected a statement here, got an INTEGER
+----end

@@ -1,0 +1,15 @@
+begin
+    integer i;
+    i := 42;
+    for i := 1 until 4 do
+        write(i);
+    for i := 4 until 1 do
+        write(i);
+    assert(i = 42)
+end.
+----stdout
+             1
+             2
+             3
+             4
+----end

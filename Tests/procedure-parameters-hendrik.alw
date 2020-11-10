@@ -1,0 +1,32 @@
+COMMENT 
+   Q: "Trivia question: What's the defined semantics for a VALUE
+      RESULT parameter when the actual parameter is an array element
+      A(i) and i changes during execution of the procedure?"
+
+   A: The designator expression 'A(i)' is evaluated once at the
+      beginning of the call, to copy a value into the VALUE RESULT
+      parameter, and once again at the end of the call, to copy the
+      VALUE RESULT parameter back out. ;
+begin
+   integer array A(1::2);
+   integer i;
+
+   procedure p(integer value result ai);
+
+   begin            comment  ai = A(i) = A(1) here;
+      ai := ai + 1;
+
+      i := 2;       comment <--- Oh no! What have you done?;
+
+   end p;           comment  ai = A(i) = A(2) here;
+
+   A(1) := 2;
+   A(2) := 4;
+
+   i := 1;
+
+   p(A(i));
+
+   assert A(1) = 2;
+   assert A(2) = 3
+end.

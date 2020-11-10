@@ -1,0 +1,18 @@
+comment A reference type for a record can be made anywhere it is in scope, including in its own definition;
+comment nested field designators work;
+begin
+   record rec1(reference(rec1,rec2) f1);
+   record rec2(reference(rec1,rec2) f2);
+   begin
+      record rec3(reference(rec1,rec2,rec3) f3);
+
+      reference(rec1,rec2,rec3) r;
+
+      r := rec3(rec2(rec1(null)));
+
+      assert r is rec3;
+      assert f3(r) is rec2;
+      assert f2(f3(r)) is rec1;
+      assert f1(f2(f3(r))) = null;
+   end
+end.

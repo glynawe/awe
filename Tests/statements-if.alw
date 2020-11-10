@@ -1,0 +1,23 @@
+begin
+    % this is okay %
+    if true then
+       if true then
+           assert true;
+
+    % this is okay %
+    if true then
+       if true then
+           assert true
+       else
+           assert true;
+
+    % this SHOULD not be okay (THEN followed by non <simple statement>, c.f. 7.5.1) %
+    % but we are allowing it %
+    if true then
+       if true then
+           assert true
+       else
+           assert true
+    else
+       assert true;
+end.

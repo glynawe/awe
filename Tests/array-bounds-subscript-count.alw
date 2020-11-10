@@ -1,0 +1,7 @@
+begin
+   integer array a (1::2, 1::2);
+   a(0) := 1;
+end.
+----compile
+Tests/array-bounds-subscript-count.alw:3:4: Array 'a' requires 2 parameters
+----end  

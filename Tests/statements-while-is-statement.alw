@@ -1,0 +1,7 @@
+begin
+    integer i;
+    i := while true do 1
+end.
+----compile
+Tests/statements-while-is-statement.alw:3:24: expected a statement here, got an INTEGER
+----end

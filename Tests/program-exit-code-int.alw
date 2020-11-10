@@ -1,0 +1,14 @@
+begin 
+   procedure exit(integer value code); algol "exit"; %use C's exit function%
+   write(2 + 2); 
+   exit(3);
+end.
+----messages
+/* PROCEDURE exit (INTEGER VALUE code); ALGOL "exit"; */
+void exit (int code);
+
+----stdout
+             4
+----exitcode
+3
+----end

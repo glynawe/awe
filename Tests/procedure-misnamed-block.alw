@@ -1,0 +1,18 @@
+begin
+   procedure p;
+   begin
+   end p;
+
+   procedure q;
+   begin
+   end r;
+
+   procedure r;
+   begin
+   end;
+
+   ;
+end
+----compiler
+Tests/procedure-misnamed-block.alw:6:4: Note, this procedure is named q, but its block ends with r.
+----end

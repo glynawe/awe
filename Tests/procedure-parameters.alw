@@ -1,0 +1,31 @@
+begin
+   procedure a;
+   begin
+      write("BING!");
+   end a;
+
+   procedure p (procedure w);
+   begin
+      for i := 1 until 3 do
+         w;
+   end p;
+
+   integer i;
+
+   p(a);
+   p(write("BONG!"));
+
+   p( );
+
+   i := 0;
+   p(i := i + 1);
+   assert i = 3
+end.
+----stdout
+BING!
+BING!
+BING!
+BONG!
+BONG!
+BONG!
+----end

@@ -1,0 +1,33 @@
+begin
+  complex x;
+
+  assert ~xcpnoted(divzero);
+  assert xcplimit(divzero) = 0;
+  assert xcpaction(divzero) = 0;
+  assert xcpmark(divzero);
+
+  xcplimit(divzero) := 3;
+
+  xcpaction(divzero) := 0;
+  x := 10 / 0;
+  assert(x = 10);
+
+  xcpaction(divzero) := 1;
+  x := 10 / 0;
+  assert(x = maxreal);
+
+  xcpaction(divzero) := 2;
+  x := 10 / 0;
+  assert(x = 0);
+  
+  divzero := null;  comment Returns the divdend and ignores the error;
+  x := 10 / 0;
+  assert(x = 10);
+end.
+----stderr
+Tests/exceptions-divzero-complex.alw:12:11: Floating-point division by zero.
+Tests/exceptions-divzero-complex.alw:16:11: Floating-point division by zero.
+Tests/exceptions-divzero-complex.alw:20:11: Floating-point division by zero.
+----exitcode
+0
+----end

@@ -1,0 +1,6 @@
+begin
+  write(#fffffffff);
+end.
+----compiler
+Tests/constants-range-bits-too-big.alw:2:9: BITS constant #FFFFFFFFF will not fit in a 32 bit word
+----end

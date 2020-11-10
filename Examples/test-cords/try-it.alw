@@ -1,0 +1,20 @@
+comment cord.alw -- test Boehm's CORD library;
+
+begin
+    reference(cord) a, b, c, space;
+    integer i;
+
+    space := cord_of_string(" ", 1, 1);
+   
+    a := cord_of_text("Now we see");
+    b := cord_of_text("if this works.");
+
+    c := cord_cat(cord_cat(a, space), b);
+
+    assert(string_of_cord(c) = "Now we see if this works.");
+    assert(cord_cmp(c, cord_of_text("Now we see if this works.")) = 0);
+    assert(cord_len(c) = text_len("Now we see if this works."));
+
+    i := cord_chr(c, 0, "e");
+    assert(i = 5)
+end

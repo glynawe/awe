@@ -1,0 +1,99 @@
+# algolw.ssh -- `a2ps' style sheet for Algol W
+
+# a2ps --line-numbers=1 --pretty-print=./algolw.ssh -o <output.ps> <input>
+# a2ps --line-numbers=1 --highlight-level=heavy --pretty-print=./algolw.ssh -o <output.ps> <input>
+
+style AlgolW is
+requires a2ps 4.13
+written by "Glyn Webster"
+version is 1.0
+documentation is
+   "This style highlights Algol W. Keywords are always printed in"
+   "lowercase. Heavy pretty-printing gives you the mathematical symbols"
+   "used in 'A Contribution to the Development of Algol' (except for the"
+   "subscript 10 symbol)."
+end documentation
+
+first alphabet is "abcdefghijklmnopqrstuvwxyz"
+second alphabet is "abcdefghijklmnopqrstuvwxyz0123456789_"
+case insensitive
+
+keywords in Keyword_strong are
+"algol" "algol",
+"and" "and",
+"array" "array",
+"assert" "assert",
+"begin" "begin",
+"bits" "bits",
+"case" "case",
+"complex" "complex",
+"div" "div",
+"do" "do",
+"else" "else",
+"end" "end",
+"false" "false",
+"for" "for",
+"fortran" "fortran",
+"goto" "goto",
+"if" "if",
+"integer" "integer",
+"is" "is",
+"logical" "logical",
+"long" "long",
+"null" "null",
+"of" "of",
+"or" "or",
+"procedure" "procedure",
+"real" "real",
+"record" "record",
+"reference" "reference",
+"rem" "rem",
+"result" "result",
+"shl" "shl",
+"short" "short",
+"shr" "shr",
+"step" "step",
+"string" "string",
+"then" "then",
+"true" "true",
+"until" "until",
+"value" "value",
+"while" "while",
+/(go[\\t ]*to)/
+end keywords
+
+operators are
+   (~=   \not,"="),
+   ~    \not
+end operators
+
+optional keywords are
+   "and"   \wedge,
+   "or"    \vee,
+   "shl"   \uparrow,
+   "shr"   \downarrow,
+   "div"   \div
+end keywords
+
+optional operators are
+#   *    \times,
+   **   \uparrow,
+   <=   \leq,
+   >=   \geq,
+   ~=   \neq
+end operators
+
+sequences are
+   "comment" Comment Comment ";" Plain,
+   "%" Comment Comment ";" Plain,
+   "%" Comment Comment "%" Plain,
+   "@" Comment Comment /$/ Plain,
+
+   # String and character constants (Quotes are escaped by doubling them):
+   "\"" Plain
+      Plain
+   "\"" Plain
+   exceptions are "\"\"" end exceptions
+end sequences
+
+end style

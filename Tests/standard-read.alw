@@ -1,0 +1,102 @@
+begin
+   string(3) s;
+   logical a,b;
+   bits x;
+   integer n;
+   real r;
+   complex c;
+
+   for i := 1 until 6 do
+      begin
+          readon(s);
+          write("'", s, "' ")
+      end;
+   read(a,b);
+   write(a,b);
+   for i := 1 until 4 do
+      begin
+          readon(x);
+          write(x)
+      end;
+   for i := 1 until 5 do
+      begin
+          readon(n);
+          write(n)
+      end;
+   for i := 1 until 8 do
+      begin
+          readon(r);
+          write(r)
+      end;
+   for i := 1 until 2 do
+     for i := 1 until 8 do
+        begin
+            readon(c);
+            write(c)
+        end;
+end.
+----stdin
+"abc" "a"  "" """" """a" "a"""
+TRUE FALSE
+#0 #1 #ffffffff #FFFFFFFF
++10 -10 10 00010 -000010 
+10.   .1   0.1   1'-1   10'0   +10'2   +10'+2   10
+10.i   
+.1i
+0.1i
+1'-1i
+10'0i
++10'2i
++10'+2i
+10i
+10.+2i   
+.1+2i   
+0.1+0.2i  
+1'-1+2'-2i 
+10'0-2.0i
++10'2-.2i 
++10'+2  
+10+2i
+
+----stdout
+'abc'
+'a  '
+'   '
+'"" '
+'""a'
+'a""'
+  TRUE   FALSE
+             0
+             1
+      FFFFFFFF
+      FFFFFFFF
+            10
+           -10
+            10
+            10
+           -10
+            10
+           0.1
+           0.1
+           0.1
+            10
+          1000
+          1000
+            10
+             0             10I
+             0            0.1I
+             0            0.1I
+             0            0.1I
+             0             10I
+             0           1000I
+             0           1000I
+             0             10I
+            10              2I
+           0.1              2I
+           0.1            0.2I
+           0.1           0.02I
+            10             -2I
+          1000           -0.2I
+          1000              0I
+            10              2I
+----end

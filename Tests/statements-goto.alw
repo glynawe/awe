@@ -1,0 +1,17 @@
+begin
+   integer i;
+   i := 8;
+ top:
+   write(i);
+   i := i + 1;
+   if i = 12 then goto bottom;
+   go to top;
+ bottom:
+end.
+----stdout
+             8
+             9
+            10
+            11
+----end
+      

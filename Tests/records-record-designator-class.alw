@@ -1,0 +1,19 @@
+comment Record designators: return a reference of the correct class;
+begin
+   record rec1(integer f1);
+   record rec2(integer f2);
+   reference(rec1, rec2) r0;
+   reference(rec1) r1;
+   reference(rec2) r2;
+
+   r0 := rec1;
+   r0 := rec2;
+
+   r1 := rec1;
+   r2 := rec2;
+
+   r1 := rec2    comment It won't like that;
+end.
+----compiler
+Tests/records-record-designator-class.alw:15:4: a REFERENCE(rec2) cannot be assigned to a REFERENCE(rec1) variable
+----end

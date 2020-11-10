@@ -1,0 +1,12 @@
+begin
+   for i := 1, 6, 7 do
+      write(case i of (1,2,3,4,5,6))
+end.
+----stdout
+             1
+             6
+----stderr
+Tests/expressions-case-too-high.alw:3:13: CASE range error: selector is 7
+----exitcode
+1
+----end

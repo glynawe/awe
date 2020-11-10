@@ -1,0 +1,29 @@
+% Note that an array with bounds (1::0) is allowed here, 
+  it is an array with no elements that must not be accessed.
+  This is an AWE extension to Algol W.
+  %
+begin
+    integer i;
+    i := 5;
+    while i >= -1 do                 comment Uh oh!;
+        begin
+            integer array a(1 :: i); comment Uh oh!;
+            if i > 0 then
+                begin
+                    a(1) := i;
+                    write(a(1));
+                end;
+            i := i - 1
+        end;
+end.
+----stdout
+             5
+             4
+             3
+             2
+             1
+----stderr
+Tests/array-bounds.alw:10:13: array dimension error: dimension 1 is (1::-1)
+----exitcode
+1
+----end  

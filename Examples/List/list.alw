@@ -1,0 +1,32 @@
+% list -- list the files named in this program's arguments %
+
+% This program requires io.alw amd argv.alw %
+
+begin
+    iocontrol(11000); % ignore line widths %
+    for i := 1 until argc - 1 do
+    begin
+        reference(file_handle) file;
+        string(256) path;
+        path := argv(i);
+        file := open(path, "r");
+        if file = null then
+            write("Cannot open ", path)
+        else
+        begin
+            logical continue;
+            string(256) line;
+            integer linenum;
+            linenum := 0;
+            write(path);
+            continue := true;
+            while continue do
+            begin
+                readline(file, line, continue);
+                if continue then 
+                    write(i_w := 3, linenum, "|", line);
+                linenum := linenum + 1
+            end
+        end
+    end
+end

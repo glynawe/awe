@@ -1,0 +1,12 @@
+begin
+   integer procedure a;
+     1;
+
+   procedure p (logical procedure x);
+     write(x);
+
+   p(a)
+end.
+----compile
+Tests/procedure-parameters-incompatable.alw:8:6: expected a LOGICAL PROCEDURE parameter, this is an INTEGER
+----end

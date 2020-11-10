@@ -1,0 +1,967 @@
+@TITLE "Records"
+BEGIN
+RECORD STATE(
+   REFERENCE(TRANSITION) OUT;
+      COMMENT a TNEXT list of all transitions leading from
+         this state;
+   REFERENCE(TRANSITION) IN;
+      COMMENT a single transition leading to this state.
+         Following 'IN' will eventually lead to the start state;
+   REFERENCE(CONFLIST) CONF;
+   REFERENCE(STATE) SNEXT;
+      COMMENT the next state in a linked list of all
+         states accessed by the same symbol;
+   REFERENCE(STATE) SLINK;
+      COMMENT 'SLINK' is used by 'GROWFSM' and 'MAKESTATE';
+   INTEGER STATENUMBER
+   );
+
+RECORD TRANSITION(
+   REFERENCE(STATE) FROM;
+   REFERENCE(SYMBOL, PRODUCTION) TSYMBOL;
+   REFERENCE(STATE) TO;
+   REFERENCE(TRANSITION) TNEXT;
+   INTEGER TRANSITIONNUMBER
+   );
+
+RECORD PRODUCTION(
+   REFERENCE(SYMBOL) LEFT; COMMENT non-terminal on left;
+   REFERENCE(CONFIGURATION,PRODUCTION) RIGHT; COMMENT string on right;
+   REFERENCE(PRODUCTION) PNEXT;
+   INTEGER PRODUCTIONNUMBER
+   );
+
+RECORD SYMBOL(
+   STRING(8) NAME;
+   INTEGER SYMNUM;
+   REFERENCE(PRODUCTION) DEFINITIONS;
+      COMMENT productions with non-terminal on left;
+   REFERENCE(SYMBOL) NEXTSYMBOL;
+   LOGICAL ISTERMINAL;
+   REFERENCE(CONFLIST) ATTACHMENT;
+   REFERENCE(STATE) STATES
+      COMMENT states accessed by the symbol;
+   );
+
+RECORD CONFIGURATION(
+   REFERENCE(SYMBOL) SYM;
+   REFERENCE(CONFIGURATION, PRODUCTION) PROMOTE
+   );
+
+RECORD CONFLIST(
+   REFERENCE(CONFIGURATION, PRODUCTION) THIS;
+   REFERENCE(CONFLIST) REST
+   );
+@TITLE "Read grammar"
+REFERENCE(SYMBOL) SYMBOLS, TERMINALS, NONTERMINALS;
+INTEGER NTERMS, LOWNT, HIGHNT, NSYMBOLS, NPRODUCTIONS;
+REFERENCE(PRODUCTION) STARTPRODUCTION;
+REFERENCE(SYMBOL) SUPERSTART, ENDOFFILE;
+
+PROCEDURE READGRAMMAR;
+   BEGIN
+   STRING(256) LINE, BLANK;
+   INTEGER PN, J;
+   REFERENCE(CONFIGURATION, PRODUCTION) C;
+   REFERENCE(PRODUCTION) P;
+   SYMBOLS := TERMINALS := NONTERMINALS := NULL;
+   READCARD(BLANK);
+   WRITE(BLANK);
+   READCARD(LINE);
+   SUPERSTART := FINDSYMBOL("* start ");
+   ENDOFFILE := FINDSYMBOL("end file");
+
+   PN := 0; STARTPRODUCTION := NULL;
+   WHILE LINE ~= BLANK
+   DO BEGIN
+      PN := PN + 1;
+      WRITE(PN, LINE);
+      P := PRODUCTION(NULL, NULL, NULL, PN);
+      J := ((256 - 10) DIV 9) * 9 + 11 - 9;
+      FOR I := 11 STEP 9 UNTIL J
+      DO IF LINE(I|8) = "        "
+         THEN BEGIN J := I - 9; GO TO ENDLOOP END;
+ENDLOOP:
+      C := P;
+      FOR I := J STEP -9 UNTIL 11
+      DO C := CONFIGURATION(FINDSYMBOL(LINE(I|8)), C);
+      RIGHT(P) := C;
+      LEFT(P) := FINDSYMBOL(LINE(0|8));
+      PNEXT(P) := DEFINITIONS(LEFT(P));
+      DEFINITIONS(LEFT(P)) := P;
+      ISTERMINAL(LEFT(P)) := FALSE;
+      IF DEFINITIONS(SUPERSTART) = NULL
+      THEN BEGIN
+         STARTPRODUCTION := PRODUCTION(NULL, NULL, NULL, 0);
+         LEFT(STARTPRODUCTION) := SUPERSTART;
+         RIGHT(STARTPRODUCTION) :=
+            CONFIGURATION(
+               LEFT(P),
+               CONFIGURATION(ENDOFFILE, STARTPRODUCTION)
+            );
+         DEFINITIONS(SUPERSTART) := STARTPRODUCTION;
+         ISTERMINAL(SUPERSTART) := FALSE
+         END;
+      READCARD(LINE)
+      END;
+   WRITE(LINE);
+   NPRODUCTIONS := PN
+   END READGRAMMAR;
+
+REFERENCE(SYMBOL) PROCEDURE FINDSYMBOL(STRING(8) VALUE S);
+   BEGIN
+   REFERENCE(SYMBOL) T;
+   T := SYMBOLS;
+   WHILE (T ~= NULL) AND (NAME(T) ~= S)
+   DO T := NEXTSYMBOL(T);
+   IF T = NULL
+   THEN T := SYMBOLS :=
+         SYMBOL(S, 0, NULL, SYMBOLS, TRUE, NULL, NULL);
+   T
+   END FINDSYMBOL;
+
+PROCEDURE SORTSYMBOLS;
+   BEGIN
+   REFERENCE(SYMBOL) S, T, N, U;
+   INTEGER I;
+   T := N := NULL;
+   S := SYMBOLS;
+   WHILE S ~= NULL
+   DO BEGIN
+      U := NEXTSYMBOL(S);
+      IF ISTERMINAL(S)
+      THEN BEGIN NEXTSYMBOL(S) := T; T := S END
+      ELSE BEGIN NEXTSYMBOL(S) := N; N := S END;
+      S := U;
+      END;
+   IF T = NULL
+   THEN BEGIN
+      NTERMS := 0; LOWNT := 1; I := 0;
+      S := N;
+      WHILE S ~= NULL
+      DO BEGIN
+         I := I + 1;
+         SYMNUM(S) := I;
+         S := NEXTSYMBOL(S)
+         END
+      END
+   ELSE BEGIN
+      S := T; U := NULL; I := 0;
+      WHILE (S ~= NULL) AND (NEXTSYMBOL(S) ~= NULL)
+      DO BEGIN
+         I := I + 1;
+         SYMNUM(S) := I;
+         S := NEXTSYMBOL(S)
+         END;
+      NEXTSYMBOL(S) := N;
+      NTERMS := I + 1;
+      LOWNT := NTERMS + 1;
+      WHILE S ~= NULL
+      DO BEGIN
+         I := I + 1;
+         SYMNUM(S) := I;
+         S := NEXTSYMBOL(S)
+         END
+      END;
+   SYMBOLS := TERMINALS := T;
+   NONTERMINALS := N;
+   HIGHNT := I;
+   NSYMBOLS := I
+   END SORTSYMBOLS;
+
+PROCEDURE PRINTSYMBOLS;
+   BEGIN
+   REFERENCE(SYMBOL) S;
+   S := SYMBOLS;
+   WRITE("Terminals");
+   WHILE S ~= NULL
+   DO BEGIN
+      IF S = NONTERMINALS
+      THEN WRITE("Non-terminals ");
+      WRITE(SYMNUM(S), NAME(S));
+      S := NEXTSYMBOL(S)
+      END
+   END;
+
+INTEGER NSYMBOLS32, LOWNT32, HIGHNT32;
+
+WRITE("Time: ", TIME(2) / 38400, " seconds.");
+READGRAMMAR;
+WRITE("Time: ", TIME(2) / 38400, " seconds.");
+SORTSYMBOLS;
+WRITE("Time: ", TIME(2) / 38400, " seconds.");
+PRINTSYMBOLS;
+WRITE("Time: ", TIME(2) / 38400, " seconds.");
+
+NSYMBOLS32 := NSYMBOLS DIV 32;
+LOWNT32 := LOWNT DIV 32;
+HIGHNT32 := HIGHNT DIV 32;
+
+BEGIN
+
+REFERENCE(SYMBOL) ARRAY SYMBOLARRAY(1 :: NSYMBOLS);
+
+PROCEDURE MAKESYMBOLARRAY;
+   BEGIN
+   REFERENCE(SYMBOL) S;
+   S := SYMBOLS;
+   WHILE S ~= NULL
+   DO BEGIN
+      SYMBOLARRAY(SYMNUM(S)) := S;
+      S := NEXTSYMBOL(S)
+      END
+   END MAKESYMBOLARRAY;
+@TITLE "Bit arrays"
+BITS ARRAY PLNONEMPTY(LOWNT32 :: HIGHNT32, 1 :: NSYMBOLS);
+BITS(32) ARRAY F(0 :: NSYMBOLS32, 1 :: NSYMBOLS);
+
+LOGICAL PROCEDURE BIT(
+      BITS ARRAY A(*, *);
+      INTEGER VALUE I, J);
+   BEGIN
+   BITS ELEMENT;
+   INTEGER SHIFT;
+   ELEMENT := A(I DIV 32, J);
+   SHIFT := I REM 32;
+   (ELEMENT SHL SHIFT SHR 31) = #1
+   END BIT;
+
+PROCEDURE SETBIT(
+      BITS ARRAY A(*, *);
+      INTEGER VALUE I, J);
+   BEGIN
+   INTEGER IDIV32;
+   IDIV32 := I DIV 32;
+   A(IDIV32, J) := A(IDIV32, J) OR
+      (#80000000 SHR (I REM 32))
+   END SETBIT;
+
+PROCEDURE CREATEBITARRAYS;
+   COMMENT compute F and PLNONEMPTY. The desired arrays
+      satasfy
+         PL(i, j) iff i =>* j... .
+         PR(i, j) iff i =>* ...j .
+         PLNONEMPTY(i, j) iff i =>* j... using no productions
+            of the form A => empty.
+         F(i, j) if S =>* ...ij... ;
+   BEGIN
+   LOGICAL ARRAY EMPTY(1 :: NSYMBOLS);
+   BITS(32) ARRAY PR, PL(LOWNT32 :: HIGHNT32, 1 :: NSYMBOLS);
+   BITS(32) ARRAY ADJT, TEMP(0 :: NSYMBOLS32, 1 :: NSYMBOLS);
+@TITLE "Bit arrays"
+   COMMENT find which nonterminals can produce the empty string;
+
+      BEGIN
+      REFERENCE(SYMBOL) N;
+      REFERENCE(PRODUCTION) P;
+      REFERENCE(CONFIGURATION,PRODUCTION) C;
+      LOGICAL ANYE, E;
+      LOGICAL REPEAT;
+
+      FOR I := 1 UNTIL NSYMBOLS
+      DO EMPTY(I) := FALSE;
+
+      FOR I := LOWNT32 UNTIL HIGHNT32
+      DO FOR J := 1 UNTIL NSYMBOLS
+         DO PR(I, J) := PL(I, J) := PLNONEMPTY(I, J) := #0;
+
+      FOR I := 0 UNTIL NSYMBOLS32
+      DO FOR J := 1 UNTIL NSYMBOLS
+         DO ADJT(I, J) := TEMP(I, J) := F(I, J) := #0;
+
+      REPEAT := TRUE;
+      WHILE REPEAT
+      DO BEGIN
+         REPEAT := FALSE;
+         N := NONTERMINALS;
+         WHILE N ~= NULL
+         DO BEGIN
+            IF ~ EMPTY(SYMNUM(N))
+            THEN BEGIN
+               P := DEFINITIONS(N);
+               ANYE := FALSE;
+               WHILE (P ~= NULL) AND ~ ANYE
+               DO BEGIN
+                  C := RIGHT(P);
+                  E := TRUE;
+                  WHILE (C IS CONFIGURATION) AND E
+                  DO BEGIN
+                     E := E AND EMPTY(SYMNUM(SYM(C)));
+                     C := PROMOTE(C)
+                     END;
+                  ANYE := ANYE OR E;
+                  P := PNEXT(P)
+                  END;
+               IF ANYE AND ~ EMPTY(SYMNUM(N))
+               THEN BEGIN
+                  REPEAT := TRUE;
+                  EMPTY(SYMNUM(N)) := TRUE
+                  END
+               END;
+            N := NEXTSYMBOL(N)
+            END
+         END
+
+      END;
+
+   COMMENT At this point, EMPTY(i) iff i =>* empty;
+
+      BEGIN REFERENCE(SYMBOL) N;
+      WRITE(" ");
+      WRITE("The empty string can be derived from the ",
+         "following non-terminals: ");
+      N := NONTERMINALS;
+      WHILE N ~= NULL
+      DO BEGIN
+         IF EMPTY(SYMNUM(N))
+         THEN WRITE(NAME(N));
+         N := NEXTSYMBOL(N)
+         END
+      END;
+@TITLE "Bit arrays"
+   COMMENT compute PL, PR, and ADJ.
+         PL(i, j) iff i => xxxj... and xxx =>* empty.
+         PR(i, j) iff i => ...jxxx and xxx =>* empty.
+         ADJ(i, j) IFF x => ...ixxxj... and xxx =>* empty;
+
+      BEGIN
+      REFERENCE(SYMBOL) N;
+      REFERENCE(PRODUCTION) P;
+      REFERENCE(CONFIGURATION, PRODUCTION) C, CF, PREV, CTEST;
+      N := NONTERMINALS;
+      WHILE N ~= NULL
+      DO BEGIN
+         P := DEFINITIONS(N);
+         WHILE P ~= NULL
+         DO BEGIN
+            C := RIGHT(P);
+            IF C IS CONFIGURATION
+            THEN BEGIN
+               SETBIT(PLNONEMPTY, SYMNUM(N), SYMNUM(SYM(C)));
+               PREV := P;
+               WHILE C ~= NULL
+               DO BEGIN
+                  CF := C;
+                  WHILE (BEGIN
+                     IF PREV IS PRODUCTION
+                     THEN BEGIN
+                        IF CF IS PRODUCTION
+                        THEN
+                        ELSE SETBIT(PL, SYMNUM(N),
+                              SYMNUM(SYM(CF)))
+                        END
+                     ELSE IF CF IS PRODUCTION
+                        THEN SETBIT(PR, SYMNUM(N),
+                              SYMNUM(SYM(PREV)))
+                        ELSE SETBIT(ADJT, SYMNUM(SYM(CF)),
+                           SYMNUM(SYM(PREV)));
+
+                     (CF IS CONFIGURATION)
+                     AND EMPTY(SYMNUM(SYM(CF)))
+                     END)
+                  DO CF := PROMOTE(CF);
+
+                  PREV := C;
+                  C := IF C IS CONFIGURATION
+                     THEN PROMOTE(C) ELSE NULL
+                  END
+               END;
+            P := PNEXT(P)
+            END;
+         N := NEXTSYMBOL(N)
+         END
+      END;
+
+   COMMENT At this point,
+         PL(i, j) iff i => xxxj... and xxx =>* empty.
+         PR(i, j) iff i => ...jxxx and xxx =>* empty.
+         ADJ(i, j) IFF x => ...ixxxj... and xxx =>* empty;
+
+@TITLE "Bit arrays"
+   COMMENT compute the symmetric transitive closures
+                    of PL, PR, and PLNONEMPTY;
+
+      FOR J := LOWNT UNTIL HIGHNT
+      DO FOR K := 1 UNTIL NSYMBOLS
+         DO BEGIN
+            IF BIT(PR, J, K)
+            THEN FOR I := LOWNT32 UNTIL HIGHNT32
+               DO PR(I, K) := PR(I, K) OR PR(I, J);
+
+            IF BIT(PL, J, K)
+            THEN FOR I := LOWNT32 UNTIL HIGHNT32
+               DO PL(I, K) := PL(I, K) OR PL(I, J);
+
+            IF BIT(PLNONEMPTY, J, K)
+            THEN FOR I := LOWNT32 UNTIL HIGHNT32
+               DO PLNONEMPTY(I, K) := PLNONEMPTY(I, K)
+                  OR PLNONEMPTY(I, J);
+            END;
+
+      FOR I := LOWNT UNTIL HIGHNT
+      DO BEGIN
+         SETBIT(PR, I, I);
+         SETBIT(PL, I, I);
+         SETBIT(PLNONEMPTY, I, I);
+         END;
+
+
+   COMMENT at this point,
+         PL(i, j) iff i =>* j... .
+         PR(i, j) iff i =>* ...j .
+         PLNONEMPTY(i, j) iff i =>* j... using no productions
+            of the form A => empty;
+
+   COMMENT Now compute F, the 'follows' matrix
+      F = transpose(PR*) * ADJ * PL*
+        = transpose(PR) * (transpose(ADJT) * PL);
+
+   BEGIN
+   BITS(32) L;
+
+   FOR I := 1 UNTIL NSYMBOLS
+   DO FOR J := 1 UNTIL NSYMBOLS
+      DO BEGIN
+         L := #0;
+         FOR K := LOWNT32 UNTIL HIGHNT32
+         DO L := L OR (ADJT(K, I) AND PL(K, J));
+         IF (L ~= #0) OR BIT(ADJT, J, I)
+         THEN SETBIT(TEMP, I, J)
+         END;
+
+   FOR I := 1 UNTIL NSYMBOLS
+   DO FOR J := 1 UNTIL NSYMBOLS
+      DO BEGIN
+         L := #0;
+         FOR K := LOWNT32 UNTIL HIGHNT32
+         DO L := L OR (PR(K, I) AND TEMP(K, J));
+         IF (L ~= #0) OR BIT(TEMP, I, J)
+         THEN SETBIT(F, I, J)
+         END
+   END;
+
+   PRINTMATRIX(PR, LOWNT, HIGHNT, 1, NSYMBOLS, "R");
+   PRINTMATRIX(PL, LOWNT, HIGHNT, 1, NSYMBOLS, "L");
+   PRINTMATRIX(PLNONEMPTY, LOWNT, HIGHNT, 1, NSYMBOLS, ">");
+   PRINTMATRIX(F, 1, NSYMBOLS, 1, NSYMBOLS, "F");
+
+   END CREATEBITARRAYS;
+@TITLE "Print bit matrix"
+PROCEDURE PRINTMATRIX(
+   BITS(32) ARRAY A(*, *);
+   INTEGER VALUE I, J, K, L;
+   STRING(1) VALUE MARK);
+   BEGIN
+   STRING(100) LINE;
+   INTEGER Q, S;
+   STRING(2) BACKGROUND;
+
+   FOR P := I STEP 50 UNTIL J
+   DO BEGIN
+      Q := IF J > P+49 THEN P+49 ELSE J;
+      FOR R := K STEP 100 UNTIL L
+      DO BEGIN
+         S := IF L > R+99 THEN R+99 ELSE L;
+         IOCONTROL(3);
+         FOR Z := 0 UNTIL 7
+         DO BEGIN
+            LINE := " ";
+            FOR U := R UNTIL S
+            DO LINE(U - R| 1 ) := NAME(SYMBOLARRAY(U))(Z|1);
+            WRITE("                        ", LINE)
+            END Z;
+         FOR T := P UNTIL Q
+         DO BEGIN
+            BACKGROUND := IF T REM 5 = 0 THEN "-+" ELSE " |";
+            LINE := " ";
+            FOR U := R UNTIL S
+            DO BEGIN
+               LINE(U - R | 1) :=
+                  IF BIT(A, T , U) THEN MARK
+                  ELSE IF U REM 5 = 0 THEN BACKGROUND(1|1)
+                  ELSE BACKGROUND(0|1)
+               END U;
+            WRITE(T, NAME(SYMBOLARRAY(T)), LINE)
+            END T;
+         END R
+      END P
+   END PRINTARRAY;
+@TITLE "FSM states"
+INTEGER NSTATES, NTRANSITIONS;
+
+REFERENCE(STATE) STARTSTATE,
+                 NEWSTATES;
+
+REFERENCE(STATE) PROCEDURE MAKESTATE(
+      REFERENCE(CONFLIST) VALUE C;
+      REFERENCE(SYMBOL) VALUE ACCESS);
+
+   BEGIN REFERENCE(STATE) THESESTATES, S;
+
+   IF ACCESS = NULL
+   THEN THESESTATES := NULL
+      COMMENT 'makestates' is called only once
+         with 'access' = 'null';
+   ELSE THESESTATES := STATES(ACCESS);
+
+   COMMENT search for an equivalent state;
+
+   S := THESESTATES;
+   WHILE (S ~= NULL) AND ~ EQUAL(CONF(S), C)
+   DO S := SNEXT(S);
+
+   IF S = NULL
+
+   THEN BEGIN
+      COMMENT make a new state;
+
+      NSTATES := NSTATES + 1;
+      S := NEWSTATES := THESESTATES :=
+         STATE(NULL, NULL, C, THESESTATES, NEWSTATES, NSTATES);
+
+      END;
+
+   IF ACCESS = NULL
+   THEN STARTSTATE := THESESTATES
+   ELSE STATES(ACCESS) := THESESTATES;
+
+   S
+   END MAKESTATE;
+@TITLE "FSM states"
+PROCEDURE ATTACH(
+      REFERENCE(PRODUCTION, CONFIGURATION) VALUE C;
+      REFERENCE(SYMBOL) VALUE S);
+   BEGIN
+   REFERENCE(CONFLIST) CL;
+   CL := ATTACHMENT(S);
+   WHILE (CL ~= NULL) AND (THIS(CL) ~= C)
+   DO CL := REST(CL);
+   IF CL = NULL
+   THEN ATTACHMENT(S) := CONFLIST(C, ATTACHMENT(S))
+   END ATTACH;
+
+PROCEDURE MAKETRANSITION(
+      REFERENCE(STATE) VALUE FROOM;
+      REFERENCE(SYMBOL, PRODUCTION) VALUE S;
+      REFERENCE(STATE) VALUE TOO);
+   BEGIN
+   REFERENCE(TRANSITION) T;
+   T := OUT(FROOM);
+   WHILE (T ~= NULL)
+      AND ((FROM(T) ~= FROOM) OR (TSYMBOL(T) ~= S)
+         OR (TO(T) ~= TOO))
+   DO T := TNEXT(T);
+   IF T = NULL
+   THEN BEGIN
+      NTRANSITIONS := NTRANSITIONS + 1;
+      OUT(FROOM) := TRANSITION(FROOM, S, TOO,
+         OUT(FROOM), NTRANSITIONS);
+      IF (TOO ~= NULL) AND (IN(TOO) = NULL)
+      THEN IN(TOO) := OUT(FROOM)
+      END
+   END MAKETRANSITION;
+
+LOGICAL PROCEDURE EQUAL(
+      REFERENCE(CONFLIST) VALUE C, D);
+   SUBSET(C, D) AND SUBSET(D, C);
+
+LOGICAL PROCEDURE SUBSET(REFERENCE(CONFLIST) VALUE C, D);
+   BEGIN
+   REFERENCE(CONFLIST) L, M;
+   L := C;
+   WHILE (L ~= NULL)
+      AND (BEGIN
+         M := D;
+         WHILE (M ~= NULL) AND (THIS(L) ~= THIS(M))
+         DO M := REST(M);
+         M ~= NULL
+         END)
+   DO L := REST(L);
+   L = NULL
+   END SUBSET;
+@TITLE "FSM states"
+PROCEDURE FORALLSTATES(
+      REFERENCE(STATE) S; COMMENT by name;
+      PROCEDURE X);
+   BEGIN
+   REFERENCE(SYMBOL) AC;
+   REFERENCE(STATE) ST;
+
+   S := STARTSTATE;
+   X;
+   AC := SYMBOLS;
+   WHILE AC ~= NULL
+   DO BEGIN
+      ST := STATES(AC);
+      WHILE ST ~= NULL
+      DO BEGIN
+         S := ST;
+         X;
+         ST := SNEXT(ST)
+         END;
+      AC := NEXTSYMBOL(AC)
+      END;
+   END FORALLSTATES;
+@TITLE "Grow FSM"
+PROCEDURE GROWFSM;
+   BEGIN
+   REFERENCE(STATE) CURRENTSTATE;
+
+   NSTATES := NTRANSITIONS := 0;
+   NEWSTATES := NULL;
+
+   CURRENTSTATE := MAKESTATE(
+         CONFLIST(RIGHT(STARTPRODUCTION), NULL),
+         NULL
+         );
+
+   NEWSTATES := CURRENTSTATE;
+   WHILE NEWSTATES ~= NULL
+   DO BEGIN
+
+      REFERENCE(CONFLIST) CL;
+      REFERENCE(CONFIGURATION, PRODUCTION) C, RP;
+      REFERENCE(SYMBOL) S, T;
+      INTEGER SN;
+      REFERENCE(PRODUCTION) P;
+
+      CURRENTSTATE := NEWSTATES;
+      NEWSTATES := SLINK(NEWSTATES);
+
+      CL := CONF(CURRENTSTATE);
+      WHILE CL ~= NULL
+      DO BEGIN
+         C := THIS(CL);
+         IF C IS PRODUCTION
+         THEN COMMENT a reduce transition is wanted;
+              MAKETRANSITION(CURRENTSTATE, C, NULL)
+         ELSE IF C IS CONFIGURATION
+         THEN COMMENT promotion transitions are wanted,
+               but they must be sorted by symbol;
+            BEGIN
+            S := SYM(C);
+            SN := SYMNUM(S);
+            ATTACH(PROMOTE(C), S);
+            IF SN > NTERMS
+            THEN COMMENT a non-terminal;
+               BEGIN
+               T := SYMBOLS;
+               WHILE T ~= NULL
+               DO BEGIN
+                  IF BIT(PLNONEMPTY, SN, SYMNUM(T))
+                  THEN BEGIN
+                     P := DEFINITIONS(T);
+                     WHILE P ~= NULL
+                     DO BEGIN RP := RIGHT(P);
+                        IF RP IS PRODUCTION
+                        THEN MAKETRANSITION(CURRENTSTATE, P, NULL)
+                        ELSE ATTACH(PROMOTE(RP), SYM(RP));
+                        P := PNEXT(P)
+                        END
+                     END;
+                  T := NEXTSYMBOL(T)
+                  END
+               END
+            END;
+         CL := REST(CL)
+         END;
+
+      COMMENT new states have been considered as sets of
+         configurations. Now make them into real states;
+
+      S := SYMBOLS;
+      WHILE S ~= NULL
+      DO BEGIN
+         IF ATTACHMENT(S) ~= NULL
+         THEN BEGIN REFERENCE(STATE) Q;
+            Q := MAKESTATE(ATTACHMENT(S), S);
+            MAKETRANSITION(CURRENTSTATE, S, Q);
+            END;
+         ATTACHMENT(S) := NULL;
+         S := NEXTSYMBOL(S)
+         END
+      END;
+   END GROWFSM;
+@TITLE "Lookahead"
+PROCEDURE CHECKLOOKAHEAD;
+   BEGIN
+
+   PROCEDURE INADEQUACY(
+         REFERENCE(STATE) VALUE S);
+      BEGIN
+
+      PROCEDURE OUTOUT(REFERENCE(STATE) VALUE S);
+         IF (S ~= NULL) AND (IN(S) ~= NULL)
+         THEN BEGIN
+            OUTOUT(FROM(IN(S)));
+            WRITE(" ", NAME(TSYMBOL(IN(S))))
+            END;
+
+      REFERENCE(TRANSITION) T;
+
+      WRITE("An inadequate state can be reached by reading");
+      OUTOUT(S);
+      WRITE("Possible actions are: ");
+      T := OUT(S);
+      WHILE T ~= NULL
+      DO BEGIN
+         IF (TSYMBOL(T) IS SYMBOL)
+            AND (ISTERMINAL(TSYMBOL(T)))
+         THEN WRITE("   Read ", NAME(TSYMBOL(T)))
+         ELSE IF TSYMBOL(T) IS PRODUCTION
+         THEN BEGIN
+            WRITE("   Apply production ",
+               PRODUCTIONNUMBER(TSYMBOL(T)),
+               " with lookaheads ");
+
+            FOR L := SYMNUM(LEFT(TSYMBOL(T)))
+            DO FOR I := 1 UNTIL NTERMS
+               DO BEGIN
+                  IF BIT(F, L, I)
+
+                  THEN WRITEON(" ", NAME(SYMBOLARRAY(I)))
+                  END
+            END;
+         T := TNEXT(T)
+         END;
+      ERROR := TRUE
+      END INADEQUACY;
+
+   REFERENCE(STATE) S;
+   REFERENCE(TRANSITION) T;
+   LOGICAL ARRAY B, C(1 :: NTERMS);
+   INTEGER L;
+   LOGICAL ERROR;
+
+   ERROR := FALSE;
+   FORALLSTATES(S,
+      BEGIN
+      T := OUT(S);
+      FOR I := 1 UNTIL NTERMS
+      DO B(I) := FALSE;
+
+      WHILE (T ~= NULL)
+         AND (COMMENT no conflict;
+            IF (TSYMBOL(T) IS SYMBOL) AND ISTERMINAL(TSYMBOL(T))
+            THEN IF B(SYMNUM(TSYMBOL(T)))
+               THEN FALSE
+               ELSE (BEGIN
+                  B(SYMNUM(TSYMBOL(T))) := TRUE;
+                  TRUE
+                  END)
+            ELSE IF TSYMBOL(T) IS PRODUCTION
+            THEN (BEGIN
+               INTEGER L;
+               LOGICAL CONFLICT;
+               L := SYMNUM(LEFT(TSYMBOL(T)));
+               CONFLICT := FALSE;
+               FOR I := 1 UNTIL NTERMS
+               DO IF B(I) AND BIT(F, L, I)
+                  THEN CONFLICT := TRUE
+                  ELSE B(I) := B(I) OR BIT(F, L, I);
+               ~ CONFLICT
+               END)
+            ELSE TRUE
+            )
+      DO T := TNEXT(T);
+
+      IF T ~= NULL
+      THEN INADEQUACY(S);
+      END)
+   END CHECKLOOKAHEAD;
+@TITLE "Punch integers"
+STRING(80) L;
+INTEGER LPT;
+
+PROCEDURE STARTOUT;
+   BEGIN
+   L := " ";
+   LPT := -1
+   END;
+
+PROCEDURE ENDOUT;
+   IF LPT >= 0
+   THEN WRITE(L);
+
+PROCEDURE OUTINTEGER(INTEGER VALUE I);
+   BEGIN
+   IF (LPT <= 0) OR (L(LPT|1) ~= " ")
+   THEN OUTCHAR(" ");
+   IF LPT >= 66
+   THEN BEGIN ENDOUT; STARTOUT END;
+   OUTINT(I)
+   END OUTINTEGER;
+
+PROCEDURE OUTINT(
+      INTEGER VALUE I);
+   IF I < 0
+   THEN BEGIN
+      OUTCHAR("-");
+      OUTINT(- I)
+      END
+   ELSE IF I >= 10
+   THEN BEGIN
+      STRING(10) S;
+      OUTINT(I DIV 10);
+      OUTINT(I REM 10)
+      END
+   ELSE BEGIN
+      STRING(10) S;
+      S := "0123456789";
+      OUTCHAR(S(I|1))
+      END;
+
+PROCEDURE OUTCHAR(STRING(1) VALUE C);
+   BEGIN
+   LPT := LPT + 1;
+   IF LPT >= 72
+   THEN BEGIN
+      WRITE(L);
+      LPT := 0
+      END;
+   L(LPT|1) := C
+   END OUTCHAR;
+
+@TITLE "Punch tables"
+PROCEDURE PUNCHTABLES;
+   BEGIN
+
+   PROCEDURE ROWPRINT(
+         INTEGER I;
+         INTEGER VALUE FROM, BY, TO;
+         PROCEDURE X);
+      BEGIN
+      IOCONTROL(2);
+      FOR J := FROM STEP BY UNTIL TO
+      DO BEGIN
+         FOR K := J STEP 1 UNTIL J + BY - 1
+         DO BEGIN
+            I := K;
+            IF K <= TO THEN X
+            END;
+         IOCONTROL(2)
+         END;
+      WRITE(" ");
+      IOCONTROL(2)
+
+      END ROWPRINT;
+
+   PROCEDURE QUOTEDSYMBOLNAME(
+         STRING(8) VALUE S);
+      BEGIN
+      WRITEON(" """);
+      FOR I := 0 UNTIL 7
+      DO BEGIN
+         IF S(I|1) = """"
+         THEN WRITEON("""""")
+         ELSE WRITEON(S(I|1))
+         END;
+      WRITEON(""" ")
+      END QUOTEDSYMBOLNAME;
+
+   INTEGER ARRAY A(1 :: NSTATES, 1 :: NSYMBOLS);
+   INTEGER ARRAY ACCESS(1 :: NSTATES);
+   INTEGER ARRAY PRODUCTIONLENGTH,
+                 TARGET (0 :: NPRODUCTIONS);
+
+   REFERENCE(STATE) ST;
+   INTEGER STN;
+   REFERENCE(TRANSITION) TR;
+   REFERENCE(SYMBOL, PRODUCTION) SY;
+   INTEGER OLDINTFIELDSIZE;
+   INTEGER I, J;
+
+   OLDINTFIELDSIZE := I_W;
+   I_W := 7;
+   FORALLSTATES(ST,
+      BEGIN
+      STN := STATENUMBER(ST);
+      ACCESS(STN) :=
+         IF (IN(ST) ~= NULL)
+            AND (TSYMBOL(IN(ST)) ~= NULL)
+         THEN SYMNUM(TSYMBOL(IN(ST)))
+         ELSE 0;
+
+      FOR I := 1 UNTIL NSYMBOLS
+      DO A(STN, I) := 0;
+      TR := OUT(ST);
+      WHILE TR ~= NULL
+      DO BEGIN
+         SY := TSYMBOL(TR);
+         IF SY IS PRODUCTION
+         THEN BEGIN
+            INTEGER PN, L, LEN;
+            PN := PRODUCTIONNUMBER(SY);
+            L := SYMNUM(LEFT(SY));
+
+            TARGET(PN) := L;
+            PRODUCTIONLENGTH(PN) :=
+               (BEGIN
+                INTEGER LEN;
+                REFERENCE(CONFIGURATION, PRODUCTION) V;
+                LEN := 0;
+                V := RIGHT(SY);
+                WHILE V IS CONFIGURATION
+                DO BEGIN
+                   LEN := LEN + 1;
+                   V := PROMOTE(V)
+                   END;
+                LEN
+                END);
+
+            FOR I := 1 UNTIL NSYMBOLS
+            DO IF BIT(F, L, I)
+               THEN A(STN, I) := - PN
+            END
+         ELSE A(STN, SYMNUM(SY)) := STATENUMBER(TO(TR));
+         TR := TNEXT(TR)
+         END;
+      END);
+
+   IOCONTROL(3);
+   WRITEON("Machine-readable tables");
+   WRITE(NSTATES, NSYMBOLS, NPRODUCTIONS);
+
+   STARTOUT;
+
+   FOR I := 1 UNTIL NSTATES
+   DO FOR J := 1 UNTIL NSYMBOLS
+      DO OUTINTEGER(A(I, J));
+   FOR I := 1 UNTIL NSTATES
+   DO OUTINTEGER(ACCESS(I));
+
+   ENDOUT;
+
+   ROWPRINT(I, 1, 5, NSYMBOLS,
+         QUOTEDSYMBOLNAME(NAME(SYMBOLARRAY(I))));
+
+   STARTOUT;
+
+   FOR I := 1 UNTIL NPRODUCTIONS
+   DO BEGIN
+      OUTINTEGER(TARGET(I));
+      OUTINTEGER(PRODUCTIONLENGTH(I))
+      END;
+
+   ENDOUT;
+
+   WRITE(" "); WRITE(" "); IOCONTROL(2);
+
+
+   WRITE(" ");
+
+   I_W := OLDINTFIELDSIZE
+   END PUNCHTABLES;
+@TITLE "Process grammar"
+MAKESYMBOLARRAY;
+WRITE("Time: ", TIME(2) / 38400, " seconds.");
+CREATEBITARRAYS;
+WRITE("Time: ", TIME(2) / 38400, " seconds.");
+GROWFSM;
+WRITE("Time: ", TIME(2) / 38400, " seconds.");
+CHECKLOOKAHEAD;
+WRITE("Time: ", TIME(2) / 38400, " seconds.");
+PUNCHTABLES;
+WRITE("Time: ", TIME(2) / 38400, " seconds.");
+END
+END.

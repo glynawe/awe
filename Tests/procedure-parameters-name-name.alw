@@ -1,0 +1,33 @@
+begin
+   integer array a(1::2);
+
+   integer i;
+
+   procedure p (integer ai);
+   begin
+      assert ai = 1;
+      ai := ai * 2;
+      q(ai)
+   end;
+
+   procedure q (integer ai);
+   begin
+      i := i + 1;
+      assert ai = 2;
+      ai := ai * 2;
+      assert ai = 4;
+   end;
+
+   a(1) := 1;
+   a(2) := 2;
+   i := 1;
+
+   p(a(i));
+
+   assert a(1) = 2;
+   assert a(2) = 4
+end.
+----compile
+Tests/procedure-parameters-name-name.alw:6:17: Note, this is a call-by-name formal parameter.
+Tests/procedure-parameters-name-name.alw:13:17: Note, this is a call-by-name formal parameter.
+----end

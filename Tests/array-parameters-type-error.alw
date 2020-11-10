@@ -1,0 +1,15 @@
+begin
+   procedure p(integer array A(*); integer value n);
+      for i := 1 until n do
+         writeon(A(i));
+
+   logical array L(1::2);
+
+   L(1) := true;
+   L(2) := false;
+
+   p(L, 2)
+end.
+----compile
+Tests/array-parameters-type-error.alw:11:6: expected a 1 dimensional INTEGER ARRAY parameter here, this is a 1 dimensional LOGICAL ARRAY
+----end

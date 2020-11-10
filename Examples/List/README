@@ -1,0 +1,12 @@
+This program lists files to the standard output with line numbers:
+
+     list [files]...
+
+It's nothing fancy.
+
+But the code demonstrates how to use multiple Algol W source files as
+a primitive module system, how to write and use external procedures in
+C, and shows you a general-purpose Makefile for Algol W programs,
+which you can reuse.
+
+--Glyn

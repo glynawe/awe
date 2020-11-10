@@ -1,0 +1,34 @@
+comment Awe will output a compiler note for each Name paramter,
+        the linemarker directives should ensure that they are
+        reported as coming from different files;
+begin
+    procedure p (integer i);  % Tests/directives-source-position.alw:5:18 %
+    begin
+    end;
+
+# 1 "here.alw"
+    procedure q (integer i);  % here.alw:1:18 %
+    begin
+    end;
+
+    procedure r (integer i);  % here.alw:5:18 %
+    begin
+    end;
+
+# 4 "there.alw"
+    procedure s (integer i);  % there.alw:4:18 %
+    begin
+    end;
+
+# 10 "here.alw" 1
+    procedure t (integer i);  % here.alw:10:18 %
+    begin
+    end;
+end.
+----compiler
+Tests/directives-source-position.alw:5:18: Note, this is a call-by-name formal parameter.
+here.alw:1:18: Note, this is a call-by-name formal parameter.
+here.alw:5:18: Note, this is a call-by-name formal parameter.
+there.alw:4:18: Note, this is a call-by-name formal parameter.
+here.alw:10:18: Note, this is a call-by-name formal parameter.
+----end

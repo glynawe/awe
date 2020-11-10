@@ -1,0 +1,136 @@
+a
+a
+
+a(b)
+a(b)
+
+a(b,c)
+a(b, c)
+
+a(b,c)(d|1)
+a(b, c)(d | 1)
+
+a(b,c)(d|e)
+         ^Syntax Error
+
+$ // is a synonym for |
+
+a(b,c)(d//1)
+a(b, c)(d | 1)
+
+a(b / c // 1)
+a((b / c) | 1)
+
+$ Empty statements may be actual parameters
+
+a()
+a((*empty*))
+
+a(, b)
+a((*empty*), b)
+
+a(b,)
+a(b, (*empty*))
+
+a(b,,c)
+a(b, (*empty*), c)
+
+a + b
+(a + b)
+
+a * b
+(a * b)
+
+a + b + c
+((a + b) + c)
+
+a / b / c
+((a / b) / c)
+
+$ looks wrong, but is correct:
+a ** b ** c
+((a ** b) ** c)
+
+a + b * c
+(a + (b * c))
+
+a * b + c
+((a * b) + c)
+
+(a + b) * c
+((a + b) * c)
+
+a * (b + c)
+(a * (b + c))
+
+a = b OR c
+((a = b) OR c)
+
+~ a = b OR c
+((~ (a = b)) OR c)
+
+$This is the proper symbol for "not":
+¬ a
+(~ a)
+
+a AND b OR c
+((a AND b) OR c)
+
+IF a THEN b ELSE c
+(IF a THEN b ELSE c)
+
+a + IF b THEN c ELSE d
+(a + (IF b THEN c ELSE d))
+
+IF a THEN b ELSE c + d
+(IF a THEN b ELSE (c + d))
+
+IF IF a THEN b ELSE c THEN d ELSE e
+(IF (IF a THEN b ELSE c) THEN d ELSE e)
+
+IF a THEN IF b THEN c ELSE d ELSE e
+(IF a THEN (IF b THEN c ELSE d) ELSE e)
+
+IF a THEN b ELSE IF c THEN d ELSE e
+(IF a THEN b ELSE (IF c THEN d ELSE e))
+
+$ The precedence of unary minus is up with binary minus, which is a little odd:
+
+-a
+(- a)
+
+-a - b
+((- a) - b)
+
+$ This looks odd, but is correct:
+- a * b
+(- (a * b))
+
+$ This looks odd, but is correct:
+- a ** b
+(- (a ** b))
+
+- IF a THEN b ELSE c
+(- (IF a THEN b ELSE c))
+
+$ Other unary operators are where you'd expect them to be:
+
+~ a AND b
+((~ a) AND b)
+
+$ I though this would be a syntax error,
+$ because negation is non-associative,
+$ but it is accepted:
+- - a
+(- (- a))
+
+x := a + b
+(x := (a + b))
+
+$ This is not really allowed. Maybe it can be a type error (:= returns VOID).
+x := y := a + b
+(x := (y := (a + b)))
+
+ASSERT a > b
+(ASSERT (a > b))
+

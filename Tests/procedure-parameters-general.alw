@@ -1,0 +1,25 @@
+begin
+   integer procedure p ( integer value v; 
+                         integer result r;
+                         integer value result vr; 
+                         integer n );
+   begin
+      v  := v + 1;
+      r  := v + vr;
+      vr := r + v;
+      n  := n + v;
+      v
+   end;
+   
+   integer i, r0, vr0, n0;
+
+   vr0 := 2;
+   n0 := 6;
+   i := p(1, r0, vr0, n0);
+   write(i, r0, vr0, n0);
+end.
+----compiler
+Tests/procedure-parameters-general.alw:5:26: Note, this is a call-by-name formal parameter.
+----stdout
+             2               4               6               8
+----end

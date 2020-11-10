@@ -1,0 +1,33 @@
+begin
+  real r;
+
+  assert ~xcpnoted(divzero);
+  assert xcplimit(divzero) = 0;
+  assert xcpaction(divzero) = 0;
+  assert xcpmark(divzero);
+
+  xcplimit(divzero) := 3;
+
+  xcpaction(divzero) := 0;
+  r := 10 / 0;
+  assert(r = 10);
+
+  xcpaction(divzero) := 1;
+  r := 10 / 0;
+  assert(r = maxreal);
+
+  xcpaction(divzero) := 2;
+  r := 10 / 0;
+  assert(r = 0);
+  
+  divzero := null;  comment Returns the divdend and ignores the error;
+  r := 10 / 0;
+  assert(r = 10);
+end.
+----stderr
+Tests/exceptions-divzero.alw:12:11: Floating-point division by zero.
+Tests/exceptions-divzero.alw:16:11: Floating-point division by zero.
+Tests/exceptions-divzero.alw:20:11: Floating-point division by zero.
+----exitcode
+0
+----end

@@ -1,0 +1,10 @@
+begin
+    record rec(reference(rec) f);
+    reference(rec) array a (1::2);
+    f(a(1)) := null
+end.
+----stderr
+Tests/records-uninitialized-element.alw:4:5: reference error: tried to find field f of an uninitialized reference
+----exitcode
+1
+----end

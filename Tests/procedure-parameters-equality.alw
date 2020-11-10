@@ -1,0 +1,28 @@
+begin
+    record c1 (integer i1);
+    record c2 (integer i2);
+    record c3 (integer i3);
+
+    reference(c1)    r1;
+    reference(c1,c2) r2;
+    reference(c3)    r3;
+
+    reference(c1) procedure a (reference(c1) value b);
+       null;
+
+    procedure b ( reference(c1,c2) value a;
+                  reference(c1,c2) b;
+                  integer value c; 
+                  reference(c1,c2) procedure d (reference(c1,c2) value a) );
+       begin end;
+
+    b(r1, r2, 1, a);
+    b(null, null, 1, a);
+    b(r2, r1, 1, a);
+    b(r2, r3, 1, a);  comment should fail;
+end.
+----compile
+Tests/procedure-parameters-equality.alw:14:19: Note, this is a call-by-name formal parameter.
+Tests/procedure-parameters-equality.alw:20:13: Note, this call-by-name parameter is an expression.
+Tests/procedure-parameters-equality.alw:22:11: a REFERENCE(c3) variable is not compatible with a REFERENCE(c1, c2) name parameter
+----end

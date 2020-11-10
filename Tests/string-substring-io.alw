@@ -1,0 +1,12 @@
+begin
+   string(8) s;
+   s := "01234567";
+   readcard(s(2|4));
+   assert(s = "01abcd67");
+   write(s(1|6));
+end.
+----stdin
+abcd
+----stdout
+1abcd6
+----end

@@ -1,0 +1,10 @@
+begin
+   integer i, j;
+   real r;
+
+   i := j := 42;
+   assert i = 42 and j = 42;
+
+   r := j := 42;
+   assert r = 42.0 and j = 42
+end.

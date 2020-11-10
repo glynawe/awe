@@ -1,0 +1,31 @@
+$ parser-lexing-operators.dat -- some operator lexing peculiarities
+
+$ "NOT" was introduced as an operator after 1972
+
+a NOT= b
+(a ~= b)
+
+a NOT = b
+(a ~= b)
+
+a Not= b
+(a ~= b)
+
+a not = b
+(a ~= b)
+
+(not a)
+(~ a)
+
+$ Spaces are allowed between the two characters of an operator
+$ (Any whitespace is, but I haven't allowed newlines)
+
+a >= b
+(a >= b)
+
+a > = b
+(a >= b)
+
+a >  = b
+(a >= b)
+

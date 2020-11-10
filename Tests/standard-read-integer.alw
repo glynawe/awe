@@ -1,0 +1,17 @@
+begin
+   integer i, j, k;
+   read(i, j, k);
+   write(i, j, k);
+   read(i, j);
+   write(i, j);
+   readon(i);
+   write(i)
+end.
+----stdin
+1  123  -42 -9999
+2  3 -9999
+----stdout
+             1             123             -42
+             2               3
+         -9999
+----end

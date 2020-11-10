@@ -1,0 +1,4 @@
+begin
+   integer array a(1::9, 3::4);
+   comment do nothing;
+end.

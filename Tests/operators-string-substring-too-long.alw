@@ -1,0 +1,9 @@
+begin
+    string(3) s3;
+
+    s3 := "012";
+    s3 := s3(0|4);
+end.
+----compile
+Tests/operators-string-substring-too-long.alw:5:11: a STRING(3) can never contain 4 character substrings
+----end

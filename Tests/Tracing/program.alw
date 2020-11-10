@@ -1,0 +1,17 @@
+begin
+    procedure a;
+    begin
+    end;
+
+    procedure b;
+    begin
+       for i := 1 until 3 do c
+    end;
+
+    procedure c;
+    begin
+    end;
+
+    a;
+    b
+end.

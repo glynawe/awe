@@ -1,0 +1,31 @@
+comment number.alw --- read a decimal number out of a string;
+
+procedure number (string(256) value s; integer result r; logical result okay);
+    begin
+        integer i;
+        logical negative;
+        logical procedure inside; i < 256;
+        procedure spaces; while inside and s(i|1) = " " do i := i + 1;
+        r := 0;
+        i := 0;
+        negative := false;
+        okay := true;
+        spaces;
+        if inside and s(i|1) = "+" then 
+            i := i + 1
+        else if inside and s(i|1) = "-" then 
+            begin negative := true; i := i + 1 end;
+        spaces;
+        if ~inside then okay := false;
+        while okay and inside and s(i|1) >= "0" and s(i|1) <= "9" do
+            begin
+                integer r0;
+                r0 := r;
+                r := r * 10 + (decode(s(i|1)) - decode("0"));
+                if r < r0 then okay := false;  % overflow %
+                i := i + 1;
+            end;
+        spaces;
+        if inside then okay := false;  % there is something after the spaces %
+        if negative then r := -r
+    end number;

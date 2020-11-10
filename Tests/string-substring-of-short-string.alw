@@ -1,0 +1,15 @@
+comment In A2WC generated code Algol strings can be represented by C
+        strings shorter than the string length. This happens when
+        string variables are assigned constants. Let's see if the
+        substring operators can handle that;
+begin
+  string(6) a;
+  string(6) b;
+
+  a := "01";
+  assert(a(2|2) = "  ");
+
+  b := "01";
+  b(3|2) := "xx";
+  assert(b = "01 xx ")
+end.

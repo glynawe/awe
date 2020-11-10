@@ -1,0 +1,11 @@
+begin
+    real x, y;
+    x := 0.0;
+    y := 1.0 / x;
+    write(y);
+end.
+----stderr
+Tests/operators-real-divide-by-0.alw:4:14: Floating-point division by zero.
+----exitcode
+1
+----end

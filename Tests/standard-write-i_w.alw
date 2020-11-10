@@ -1,0 +1,29 @@
+begin
+   write(i_w := 0,  1);
+   write(i_w := 1,  2);
+   write(i_w := 2,  3);
+   write(i_w := 3,  4);
+   write(5);
+   i_w := 3;
+   write(6);
+   i_w := 1;
+   write(7, 8, 9);
+   s_w := 0;
+   i_w := 3;
+   write(10, 11, 12);
+   write(i_w := -5, 13, 14, 15);  comment C allows this, maybe Algol W shouldn't;
+   write(16, 17, 18);
+   writeon(19);
+end.
+----stdout
+1
+2
+ 3
+  4 
+             5
+  6
+7  8  9
+ 10 11 12
+13   14   15
+ 16 17 18 19
+----end

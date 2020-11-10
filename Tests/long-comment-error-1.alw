@@ -1,0 +1,8 @@
+begin
+   write("1");
+@awe_text
+   write("2");
+end.
+----compiler
+Tests/long-comment-error-1.alw:3:1: This @AWE_TEXT directive is not closed with an @AWE_CODE directive
+----end

@@ -1,0 +1,41 @@
+BEGIN
+    RECORD file (INTEGER dummy);
+
+    REFERENCE(file) PROCEDURE open ( STRING(256) VALUE path; STRING(2) VALUE mode ); 
+       ALGOL "algolw_open";
+
+    PROCEDURE readline ( REFERENCE(file) VALUE handle; 
+                         STRING(256) RESULT line; LOGICAL RESULT success ); 
+       ALGOL "algolw_readline";
+
+    PROCEDURE writeline ( REFERENCE(file) VALUE handle; STRING(256) VALUE line ); 
+       ALGOL "algolw_writeline";
+
+    PROCEDURE close ( REFERENCE(file) VALUE handle ); 
+       ALGOL "algolw_close";
+
+    STRING(256) path;
+    REFERENCE(file) f;
+    STRING(256) s;
+    LOGICAL continue;
+    INTEGER n;
+
+    iocontrol(11000);  % 1000-column pages (no enforced linebreaks) %
+    path := "external.txt";
+    f := open(path, "r");
+    IF f = NULL THEN
+         write("could not open ", path)
+    ELSE  
+    BEGIN
+        n := 1;
+        continue := TRUE;
+        WHILE continue DO
+        BEGIN
+           readline(f, s, continue);
+           IF continue THEN 
+               write(i_w := 3, n, "|", s);
+           n := n + 1;
+        END;
+    close(f);
+    END
+END.

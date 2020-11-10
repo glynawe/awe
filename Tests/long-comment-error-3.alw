@@ -1,0 +1,10 @@
+begin
+   write("1");
+@awe_text
+   write(x);  %we shouldn't see this error%
+@awe_code
+   write(x);  %error message should point to the right place%
+end.
+----compiler
+Tests/long-comment-error-3.alw:6:10: 'x' is undefined here
+----end

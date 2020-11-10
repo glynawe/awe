@@ -1,0 +1,10 @@
+begin
+   record rec1 (integer f1);
+   record rec2 (integer f2);
+   reference(rec1) r1;
+   r1 := rec1;
+   f2(r1) := 1;
+end.
+----compiler
+Tests/records-fields-wrong-class-compile-time.alw:6:7: a REFERENCE(rec1) can never have the field f2
+----end

@@ -1,0 +1,8 @@
+comment
+     A "begin" to let the contents of a following 
+     sequence of source files exist in the same scope,
+     which gives you a primitive module system.
+     The idea is that you do something like this: 
+         
+              awe BEGIN defs1.alw defs1.alw prog.alw END -o prog.c   ;
+BEGIN

@@ -1,0 +1,10 @@
+begin
+    for i := 1 until 4 do
+      begin
+          uh_oh: write(i);
+      end; 
+    goto uh_oh
+end.
+----compile
+Tests/statements-goto-wrong-direction.alw:6:5: 'uh_oh' is undefined here      
+----end

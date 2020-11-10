@@ -1,0 +1,10 @@
+begin
+    begin
+       integer i;
+       i := 1;
+    end;
+    assert i = 1;
+end.
+----compile
+Tests/statements-block-out-of-scope.alw:6:12: 'i' is undefined here
+----end

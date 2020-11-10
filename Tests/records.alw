@@ -1,0 +1,13 @@
+begin
+   record r (integer i; real n);
+   reference(r) x;
+
+   x := r(1, 1.0);
+   assert i(x) = 1;
+   assert n(x) = 1.0;
+
+   i(x) := 2;
+   n(x) := 2.0;
+   assert i(x) = 2;
+   assert n(x) = 2.0
+end.

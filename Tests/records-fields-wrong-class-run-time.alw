@@ -1,0 +1,12 @@
+begin
+   record rec1 (integer f1);
+   record rec2 (integer f2);
+   reference(rec1,rec2) r;
+   r := rec1;
+   f2(r) := 1;
+end.
+----stderr
+Tests/records-fields-wrong-class-run-time.alw:6:4: reference error: tried to find field f2 of a REFERENCE(rec1)
+----exitcode
+1
+----end

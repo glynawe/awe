@@ -1,0 +1,50 @@
+begin
+  assert ~xcpnoted(intdivzero);
+  assert xcplimit(intdivzero) = 0;
+  assert xcpaction(intdivzero) = 0;
+  assert xcpmark(intdivzero);
+  assert xcpmsg(intdivzero) = "Integer division by zero.";
+
+  intdivzero := exception(false, 4, 1, true, "Divide by zero.");
+
+  assert ~xcpnoted(intdivzero);             comment No exceptions seen yet;
+  assert xcplimit(intdivzero) = 4;          comment Only 5 exceptions are allowed to occur;
+  assert xcpaction(intdivzero) = 1;         comment Action to take (all are the same for intdivzero);
+  assert xcpmark(intdivzero);               comment Give warning messages on exceptions;
+  assert xcpmsg(intdivzero) = "Divide by zero.";
+
+  ASSERT 42 DIV 0 = 42;                     comment <--- line 12; 
+
+  assert xcpnoted(intdivzero);              comment We've seen one!;
+  assert xcplimit(intdivzero) = 3;          comment 4 to go...;
+
+  xcpnoted(intdivzero) := false;            comment Will this become true again?;
+  xcpmark(intdivzero) := false;             comment No warning for the next one;
+  ASSERT 42 DIV 0 = 42;
+
+  assert xcpnoted(intdivzero);              comment It did become true!;
+  assert xcplimit(intdivzero) = 2;
+
+  xcpmsg(intdivzero) := "DIVIDE BY ZERO!";  comment A new warning message this time;
+  xcpmark(intdivzero) := true;
+  ASSERT 42 DIV 0 = 42;                     comment <--- line 26;
+
+  assert xcplimit(intdivzero) = 1;          comment Same message again;
+
+  ASSERT 42 DIV 0 = 42;                     comment <--- line 30;
+
+  assert xcplimit(intdivzero) = 0;          comment That's our lot, the next exception will be the last;
+
+  xcpmsg(intdivzero) := "DIVIDE BY ZERO!!!";
+  ASSERT 42 DIV 0 = 42;                     comment <--- line 35;
+
+  write("I shouldn't happen.")
+end.
+----stderr
+Tests/exceptions-intdivzero.alw:16:13: Divide by zero.
+Tests/exceptions-intdivzero.alw:30:13: DIVIDE BY ZERO!
+Tests/exceptions-intdivzero.alw:34:13: DIVIDE BY ZERO!
+Tests/exceptions-intdivzero.alw:39:13: DIVIDE BY ZERO!!!
+----exitcode
+1
+----end

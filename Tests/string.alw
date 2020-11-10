@@ -1,0 +1,8 @@
+begin
+    string(12) s;
+    s := "Hello world!";
+    write(s)
+end.
+----stdout
+Hello world!
+----end

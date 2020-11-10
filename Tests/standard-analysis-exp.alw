@@ -1,0 +1,21 @@
+begin
+   for i := 700 until 710 do
+      write(i, exp(i))
+end.
+----stdout
+           700   1.014232'+304
+           701   2.756969'+304
+           702   7.494218'+304
+           703    2.03714'+305
+           704   5.537519'+305
+           705   1.505254'+306
+           706   4.091704'+306
+           707   1.112241'+307
+           708   3.023383'+307
+           709   8.218407'+307
+           710
+----stderr
+Tests/standard-analysis-exp.alw:3:16: Argument of EXP or LONGEXP out of domain.
+----exitcode
+1
+----end

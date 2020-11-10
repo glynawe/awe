@@ -1,0 +1,14 @@
+begin
+   integer i0;
+   procedure p(integer result i1);
+      begin
+          i1 := 2;
+          assert i0 = 1;
+          i0 := 3;
+          assert i0 = 3;
+          assert i1 = 2;
+      end;
+   i0 := 1;
+   p(i0);
+   assert i0 = 2
+end.

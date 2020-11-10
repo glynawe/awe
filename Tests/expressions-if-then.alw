@@ -1,0 +1,14 @@
+begin
+  write(if false then 1.0 else 3);
+  write(if false then 4 else 3.2);
+  write(if false then 4 else 3);
+  write(if false then false else true);
+  write(if false then #0FF else #f67e);
+end.
+----stdout
+             3
+           3.2
+             3
+  TRUE
+          F67E
+----end

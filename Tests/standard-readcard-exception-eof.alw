@@ -1,0 +1,29 @@
+begin
+  string(5) s;
+
+  xcplimit(endfile) := 1;
+  xcpmark(endfile) := false;
+  while
+     begin
+         readcard(s);
+         ~xcpnoted(endfile)
+     end
+  do
+     write("""", s, """");
+
+  write("(eof)")   
+end.
+----stdin
+one
+two
+three
+four
+five
+----stdout
+"one  "
+"two  "
+"three"
+"four "
+"five "
+(eof)
+----end

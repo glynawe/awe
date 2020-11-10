@@ -1,0 +1,46 @@
+% cord.alw -- cord string datatype %
+
+record CORD (integer cord_dummy);   % NULL is the empty string %
+
+% transfer functions ------------------------------------------------------------------------------------ 
+
+    CORD_OF_TEXT(s)          copies all of the string except the padding on the right.
+    CORD_OF_STRING(s,i,n)    copies n characters of string s starting at position i (where 0 < i+n <= 256)
+    STRING_OF_CORD(x)        copies cord into the string, (where 0 < cord_len(x) <= 256)
+
+    To create a space:  space := cord_of_string(" ",1,1)
+%
+
+reference(cord) procedure CORD_OF_TEXT (string(256) value S); algol "CORD_of_text";
+reference(cord) procedure CORD_OF_STRING (string(256) value S; integer value I, N); algol "CORD_of_string";
+reference(cord) procedure CORD_OF_CHARS (string(1) value C; integer value N); algol "CORD_of_chars";
+string(256) procedure STRING_OF_CORD (reference(cord) value SRC); algol "string_of_CORD";
+
+% string functions. ------------------------------------------------------------------------------------- %
+
+integer procedure CHR (string(1) value S); algol "chr";   % returns Latin-1 code of s %
+string(1) procedure ORD (integer value I); algol "ord";  % returns character with Latin-1 code of i %
+                                                         % Note: CODE and DECODE work on EBCDIC codes. %
+
+integer procedure TEXT_LEN (string(256) value S); algol "text_len"; % length of s, ignoring its padding %
+
+% Cord functions. --------------------------------------------------------------------------------------- %
+
+reference(cord) procedure CORD_CAT (reference(cord) value X, Y); algol "CORD_cat";
+integer procedure CORD_LEN (reference(cord) value X); algol "CORD_len";
+reference(cord) procedure CORD_SUBSTR (reference(cord) value X; integer value I, N); algol "CORD_substr";
+integer procedure CORD_CMP (reference(cord) value X, Y); algol "CORD_cmp";
+
+integer procedure CORD_CHR (reference(cord) value X; integer value I; string(1) value C); algol "CORD_chr";
+integer procedure CORD_RCHR (reference(cord) value X; integer value I; string(1) value C); algol "CORD_rchr";
+
+% (I've made the wild and wrong assumption that size_t int and char are interchangeable above.) %
+
+
+% I/O functions. ---------------------------------------------------------------------------------------- %
+
+integer procedure CORD_PUT (reference(cord) value X; reference(file) value F); algol "CORD_put";
+reference(cord) procedure CORD_FROM_FILE (reference(file) value F); algol "CORD_from_file";
+reference(cord) procedure CORD_FROM_FILE_EAGER (reference(file) value F); algol "CORD_from_file_eager";
+
+% end %

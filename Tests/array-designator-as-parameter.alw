@@ -1,0 +1,11 @@
+begin
+    procedure p(integer array A(*));
+        ;
+    integer i;
+    integer array B(1::3);
+    i := 0;
+    p(B(i+2))
+end.
+----compiler
+Tests/array-designator-as-parameter.alw:7:7: expected a 1 dimensional INTEGER ARRAY parameter here
+----end

@@ -1,0 +1,19 @@
+begin
+    integer array a(1::10, 1::10);
+    integer array b(1::10, 1::10, 1::10);
+
+    for i := 1 until 10 do
+        for j := 1 until 10 do
+            a(i,j) := i * 10 + j;
+    assert(a(1,1) = 11);
+    assert(a(5,4) = 54);
+    assert(a(6,3) = 63);
+
+    for i := 1 until 10 do
+        for j := 1 until 10 do
+            for k := 1 until 10 do
+                b(i,j,k) := i * 100 + j * 10 + k;
+    assert(b(1,1,1) = 111);
+    assert(b(5,4,6) = 546);
+    assert(b(6,3,9) = 639);
+end.

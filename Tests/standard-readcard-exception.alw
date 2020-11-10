@@ -1,0 +1,32 @@
+begin
+  string(5) s;
+  xcplimit(endfile) := 3;
+  xcpmark(endfile) := false;
+  xcpmsg(endfile) := "Expected more lines on the input.";
+  for i := 1 until 10 do
+     begin
+         readcard(s);
+         write("""", s, """")        
+     end;
+  write("You shouldn't see this.")   
+end.
+----stdin
+one
+two
+three
+four
+five
+----stdout
+"one  "
+"two  "
+"three"
+"four "
+"five "
+"     "
+"     "
+"     "
+----stderr
+Tests/standard-readcard-exception.alw:8:10: Expected more lines on the input.
+----exitcode
+1
+----end

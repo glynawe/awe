@@ -1,0 +1,10 @@
+begin
+        record a (integer i);
+        record b (integer j);
+        record c (integer k);
+        reference(a, b) x;
+        assert(x is c)
+end.
+----compiler
+Tests/records-is-never-of-class.alw:6:18: a REFERENCE(a, b) will never refer to a RECORD c
+----end

@@ -1,0 +1,14 @@
+begin
+   write(3 / 7);    comment INTEGER / INTEGER -> LONG REAL (special case);
+   write(3 / 7.0);  comment INTEGER / REAL -> REAL;
+   write(3.0 / 7);  comment REAL / INTEGER -> REAL;
+   write(3I / 7);   comment COMPLEX / INTEGER -> COMPLEX;
+   write(3I / 7.0); comment COMPLEX / REAL -> COMPLEX;
+end.
+----stdout
+     0.4285714
+     0.4285714
+     0.4285714
+             0      0.4285714I
+             0      0.4285714I
+----end

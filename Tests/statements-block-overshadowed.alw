@@ -1,0 +1,9 @@
+begin
+x:  begin
+       integer x;
+       goto x;
+    end;
+end.
+----compile
+Tests/statements-block-overshadowed.alw:4:8: 'x' should be a label here, it is an INTEGER variable
+----end

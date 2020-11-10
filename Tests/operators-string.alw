@@ -1,0 +1,30 @@
+begin
+   string(3) s3;
+   string(6) s6, s6_2;
+     
+   assert "aaa"  <  "zzz";
+   assert "zzz"  >  "aaa";
+   assert "aaa"  <= "zzz";
+   assert "zzz"  >= "aaa";
+   assert "zzz"  ~= "aaa";
+   assert "aaa"  =  "aaa";
+   assert "aaa"  >= "aaa";
+   assert "aaa"  <= "aaa";
+   assert "aaa"  <  "aaaa";
+   assert "aaaa" >  "aaa";
+   assert "aaaa" ~= "aaa";
+
+
+   s6 := "012345";
+   s3 := s6(0|3);  assert s3 = "012";
+   s3 := s6(1|3);  assert s3 = "123";
+   s3 := s6(2|3);  assert s3 = "234";
+   s3 := s6(3|3);  assert s3 = "345";
+
+   s6 := s6(4|2);  assert s6 = "45    ";
+
+   s6   := "12";
+   s6_2 := "12    ";
+   assert s6 = s6_2;
+   assert s6_2 = s6;
+end.

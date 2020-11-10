@@ -1,0 +1,19 @@
+begin
+    record node (integer label; reference(node) next);
+    reference(node) node1,  node2, node3, ptr;
+    node3 := node(3, null);
+    node2 := node(2, node3);
+    node1 := node(1, node2);
+    ptr := node1;
+    while ptr is node do begin
+        write(label(ptr));
+        ptr := next(ptr)
+    end;
+    write("done");
+end.
+----stdout
+             1
+             2
+             3
+done
+----end

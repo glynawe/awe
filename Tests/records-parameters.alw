@@ -1,0 +1,21 @@
+begin
+   record rec1(integer f1);
+   record rec2(integer f2);
+   record rec3(integer f3);
+
+
+   procedure p(reference(rec1, rec2) v);
+   begin
+      if v ~= null then v := rec2;
+   end;
+
+   reference(rec1, rec2) r;
+   reference(rec2) r2;
+   
+   r := rec1;
+   p(r);
+   assert(r is rec2);
+end.
+----compile
+Tests/records-parameters.alw:7:16: Note, this is a call-by-name formal parameter.
+----end

@@ -1,0 +1,42 @@
+begin
+   string(5) s;
+   string(1) c;
+   procedure p(string(3) value x);
+      x := "xxx";
+
+   string(5) procedure z;
+      " ";
+
+   string(1) procedure q(string(5) value x);
+      begin x := "x"; x(0|1) end;
+       
+   string(1) procedure r(string(1) value x);
+      begin x := "x"; x(0|1) end;
+       
+
+   s := "01234";
+   p(s(0|3));
+   assert(s = "01234");
+
+   c := "a";
+   s := c;
+   s := q(c);
+   s := q(s);
+   s := q(s(0|1));
+   s := q(c(0|1));
+   s := q(" ");
+   s := q(" ");
+
+   c := r(c(0|1));
+   c := r(c);
+   c := r(" ");
+   s := r(c(0|1));
+   s := r(c);
+   s := r(" ");
+
+   c := " ";
+   s := " ";
+   s := c;
+   s := z;
+   s := begin s := z; " " end
+end.

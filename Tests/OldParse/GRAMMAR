@@ -1,0 +1,170 @@
+
+PROGRAM    CLOSURE
+PROGRAM    LOOP
+PROGRAM    BOUNDU   :        CLOSURE
+PROGRAM    BOUNDU   :        LOOP
+CLOSURE    (        CHOICE   )
+CLOSURE    (        COLL     )
+CLOSURE    PAR      (        COLL     )
+CLOSURE    (        SERIAL   )
+CLOSURE    (        BOUNDE   )
+CHOICE     SERIAL   |        SERIAL   ELSE
+CHOICE     SERIAL   |        COLL     ELSE
+CHOICE     SERIAL   |        CONFS    ELSE
+ELSE
+ELSE       |        SERIAL
+ELSE       |:       CHOICE
+CONFS      CONF
+CONFS      CONFS    ,        CONF
+CONF       (        DECL     )        :        UNIT
+CONF       (        DECER    )        :        UNIT
+SERIAL     PRELUDE  BOUNDU
+SERIAL     BOUNDU
+PRELUDE    BOUNDU   .
+PRELUDE    BOUNDU   ;
+PRELUDE    DECL     ;
+PRELUDE    PRELUDE  BOUNDU   .
+PRELUDE    PRELUDE  BOUNDU   ;
+PRELUDE    PRELUDE  DECL     ;
+COLL       BOUNDE   ,        BOUNDE
+COLL       BOUNDE   ,        BOUNDU
+COLL       BOUNDU   ,        BOUNDE
+COLL       BOUNDU   ,        BOUNDU
+COLL       COLL     ,        BOUNDE
+COLL       COLL     ,        BOUNDU
+BOUNDU     UNIT
+BOUNDU     BOUNDU   :        UNIT
+BOUNDE     BOUNDE   :        UNIT
+BOUNDE
+BOUNDE     BOUNDE   :
+BOUNDE     BOUNDU   :
+BOUNDE     BOUNDE   @        UNIT
+BOUNDE     BOUNDU   @        UNIT
+UNIT       TERTIARY
+UNIT       TERTIARY :=       UNIT
+UNIT       TERTIARY IS       TERTIARY
+UNIT       TERTIARY ISNT     TERTIARY
+UNIT       TEXT
+UNIT       LOOP
+TEXT       (        DECL     )        DECER    :        UNIT
+TEXT       DECER    :        UNIT
+LOOP       FORETY   FROMETY  BYETY    TOETY    WHILETY  DOCLAUSE
+FORETY     FOR      ID
+FORETY
+FROMETY    FROM     SERIAL
+FROMETY
+BYETY      BY       SERIAL
+BYETY
+TOETY      TO       SERIAL
+TOETY
+WHILETY    WHILE    SERIAL
+WHILETY
+DOCLAUSE   DO       SERIAL   OD
+TERTIARY   TERTIARY ATOR1    FORM2
+TERTIARY   FORM2
+FORM2      FORM2    ATOR2    FORM3
+FORM2      FORM3
+FORM3      FORM3    ATOR3    FORM4
+FORM3      FORM4
+FORM4      FORM4    ATOR4    FORM5
+FORM4      FORM5
+FORM5      FORM5    ATOR5    FORM6
+FORM5      FORM6
+FORM6      FORM6    ATOR6    FORM7
+FORM6      FORM7
+FORM7      FORM7    ATOR7    FORM8
+FORM7      FORM8
+FORM8      FORM8    ATOR8    FORM9
+FORM8      FORM9
+FORM9      FORM9    ATOR9    FORM10
+FORM9      FORM10
+FORM10     ATOR     FORM10
+FORM10     SECONDAR
+ATOR       ATOR1
+ATOR       ATOR2
+ATOR       ATOR3
+ATOR       ATOR4
+ATOR       ATOR5
+ATOR       ATOR6
+ATOR       ATOR7
+ATOR       ATOR8
+ATOR       ATOR9
+ATOR       MON
+SECONDAR   LOC      DECER
+SECONDAR   HEAP     DECER
+SECONDAR   ID       OF       SECONDAR
+SECONDAR   PRIMARY
+SECONDAR   PRIMARY  CLOSURES
+SECONDAR   CLOSURES
+SECONDAR   DECER    CLOSURES
+PRIMARY    DENOT
+PRIMARY    TRUE
+PRIMARY    FALSE
+PRIMARY    EMPTY
+PRIMARY    ID
+PRIMARY    GOTO     ID
+PRIMARY    SKIP
+PRIMARY    NIL
+CLOSURES   CLOSURE  CLOSURES
+CLOSURES   CLOSURE
+PRIMARY    $        FORMAT   $
+FORMAT
+FORMAT     FORMAT   FID
+FORMAT     FORMAT   DENOT
+FORMAT     FORMAT   ,
+FORMAT     FORMAT   (
+FORMAT     FORMAT   )
+FORMAT     FORMAT   GID      CLOSURE
+FORMAT     FORMAT   +-
+DECL       OPDEC1
+DECL       OPDEC1   ,        DECL
+DECL       OPDEC2
+DECL       OPDEC2   ,        DECL
+DECL       PRIODEC
+DECL       PRIODEC  ,        DECL
+DECL       IDDEC
+DECL       IDDEC    ,        DECL
+DECL       VARDEC
+DECL       VARDEC   ,        DECL
+DECL       MODEC
+DECL       MODEC    ,        DECL
+DECL       PROCDEC
+DECL       PROCDEC  ,        DECL
+DECL       PVARDEC
+DECL       PVARDEC  ,        DECL
+OPDEC1     OP       ATOR     =        TEXT
+OPDEC1     OPDEC1   ,        ATOR     =        TEXT
+OPDEC2     OP       (        DECERLIS )        DECER    OPDEF
+OPDEC2     OPDEC2   ,        OPDEF
+OPDEF      ATOR     =        UNIT
+PRIODEC    PRIO     ATOR     =        DENOT
+PRIODEC    PRIODEC  ,        ATOR     =        DENOT
+IDDEC      DECER    ID       =        UNIT
+IDDEC      IDDEC    ,        ID       =        UNIT
+VARDEC     DECER    ID
+VARDEC     LOC      DECER    ID
+VARDEC     HEAP     DECER    ID
+VARDEC     DECER    ID       :=       UNIT
+VARDEC     LOC      DECER    ID       :=       UNIT
+VARDEC     HEAP     DECER    ID       :=       UNIT
+VARDEC     VARDEC   ,        ID
+VARDEC     VARDEC   ,        ID       :=       UNIT
+MODEC      MODE     DECER    =        DECER
+MODEC      MODEC    ,        DECER    =        DECER
+PROCDEC    PROC     ID       =        TEXT
+PROCDEC    PROCDEC  ,        ID       =        TEXT
+PVARDEC    PROC     ID       :=       TEXT
+PVARDEC    LOC      PROC     ID       :=       TEXT
+PVARDEC    HEAP     PROC     ID       :=       TEXT
+PVARDEC    PVARDEC  ,        ID       :=       TEXT
+DECER      STRUCT   (        DECL     )
+DECER      UNION    (        DECERLIS )
+DECERLIS   DECER
+DECERLIS   DECERLIS ,        DECER
+DECER      REF      DECER
+DECER      CLOSURE  DECER
+DECER      FLEX     CLOSURE  DECER
+DECER      PROC     (        DECERLIS )        DECER
+DECER      PROC     DECER
+DECER      MODEIND
+

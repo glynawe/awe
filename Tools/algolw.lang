@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Syntax highlighting file for Algol W.
+
+This is for Gnome Gedit or any program that uses GtkSourceView.
+
+Copy this to ~/.local/share/gtksourceview-3.0/language-specs/algolw.lang
+-->
+<language id="algolw" _name="Algol W" version="2.0" _section="Source">
+  <metadata>
+    <property name="mimetypes">text/x-algolw</property>
+    <property name="globs">*.alw</property>
+    <property name="line-comment-start">@</property>
+  </metadata>
+
+  <styles>
+    <style id="comment"      _name="Comment"       map-to="def:comment"/>
+    <style id="string"       _name="String"        map-to="def:string"/>
+    <style id="reserved"      _name="Reserved"      map-to="def:keyword"/>
+    <style id="predeclared"  _name="Predeclared"   map-to="def:builtin"/>
+    <style id="number"       _name="Number"        map-to="def:decimal"/>
+    <style id="preprocessor" _name="Preprocessor"  map-to="def:preprocessor"/>
+  </styles>
+
+  <default-regex-options case-sensitive="false"/>
+
+  <definitions>
+
+    <context id="keyword-comment" style-ref="comment" class="comment" class-disabled="no-spell-check">
+      <start>comment\b</start>
+      <end>;</end>
+      <include>
+        <context ref="def:in-comment"/>
+      </include>
+    </context>
+
+    <context id="percent-sign-comment" style-ref="comment" class="comment" class-disabled="no-spell-check">
+      <start>%</start>
+      <end>[%;]</end>
+      <include>
+        <context ref="def:in-comment"/>
+      </include>
+    </context>
+
+    <context id="c-comment" style-ref="comment" class="comment" class-disabled="no-spell-check">
+      <start>/*</start>
+      <end>*/</end>
+      <include>
+        <context ref="def:in-comment"/>
+      </include>
+    </context>
+
+    <context id="compiler-directive-comment" style-ref="comment" class="comment" class-disabled="no-spell-check">
+      <start>^@awe_text</start>
+      <end>^@awe_code</end>
+      <include>
+        <context ref="def:in-comment"/>
+      </include>
+    </context>
+
+    <context id="compiler-directive" style-ref="preprocessor" end-at-line-end="true" class="comment">
+      <start>^[@#]</start>
+      <include>
+        <context ref="def:in-comment"/>
+      </include>
+    </context>
+
+    <context id="reserved-words" style-ref="reserved">
+      <keyword>abs</keyword>
+      <keyword>algol</keyword>
+      <keyword>and</keyword>
+      <keyword>array</keyword>
+      <keyword>assert</keyword>
+      <keyword>begin</keyword>
+      <keyword>bits</keyword>
+      <keyword>case</keyword>
+      <keyword>complex</keyword>
+      <keyword>div</keyword>
+      <keyword>do</keyword>
+      <keyword>else</keyword>
+      <keyword>end</keyword>
+      <keyword>false</keyword>
+      <keyword>for</keyword>
+      <keyword>fortran</keyword>
+      <keyword>goto</keyword>
+      <keyword>go to</keyword>
+      <keyword>if</keyword>
+      <keyword>integer</keyword>
+      <keyword>is</keyword>
+      <keyword>logical</keyword>
+      <keyword>long</keyword>
+      <keyword>longcomplex</keyword>
+      <keyword>longreal</keyword>
+      <keyword>null</keyword>
+      <keyword>of</keyword>
+      <keyword>or</keyword>
+      <keyword>procedure</keyword>
+      <keyword>real</keyword>
+      <keyword>record</keyword>
+      <keyword>reference</keyword>
+      <keyword>rem</keyword>
+      <keyword>result</keyword>
+      <keyword>shl</keyword>
+      <keyword>short</keyword>
+      <keyword>shr</keyword>
+      <keyword>step</keyword>
+      <keyword>string</keyword>
+      <keyword>then</keyword>
+      <keyword>true</keyword>
+      <keyword>until</keyword>
+      <keyword>value</keyword>
+      <keyword>while</keyword>
+    </context>
+
+    <context id="predeclared" style-ref="predeclared">
+      <keyword>time</keyword>
+      <keyword>s_w</keyword>
+      <keyword>i_w</keyword>
+      <keyword>r_w</keyword>
+      <keyword>r_d</keyword>
+      <keyword>r_format</keyword>
+      <keyword>write</keyword>
+      <keyword>writeon</keyword>
+      <keyword>writecard</keyword>
+      <keyword>read</keyword>
+      <keyword>readon</keyword>
+      <keyword>readcard</keyword>
+      <keyword>iocontrol</keyword>
+      <keyword>entier</keyword>
+      <keyword>truncate</keyword>
+      <keyword>round</keyword>
+      <keyword>roundtoreal</keyword>
+      <keyword>realpart</keyword>
+      <keyword>imagpart</keyword>
+      <keyword>longrealpart</keyword>
+      <keyword>longimagpart</keyword>
+      <keyword>imag</keyword>
+      <keyword>longimag</keyword>
+      <keyword>odd</keyword>
+      <keyword>bitstring</keyword>
+      <keyword>number</keyword>
+      <keyword>decode</keyword>
+      <keyword>code</keyword>
+      <keyword>base10</keyword>
+      <keyword>longbase10</keyword>
+      <keyword>intbase10</keyword>
+      <keyword>intbase16</keyword>
+      <keyword>sqrt</keyword>
+      <keyword>exp</keyword>
+      <keyword>ln</keyword>
+      <keyword>log</keyword>
+      <keyword>sin</keyword>
+      <keyword>cos</keyword>
+      <keyword>arctan</keyword>
+      <keyword>longsqrt</keyword>
+      <keyword>longexp</keyword>
+      <keyword>longln</keyword>
+      <keyword>longlog</keyword>
+      <keyword>longsin</keyword>
+      <keyword>longcos</keyword>
+      <keyword>longarctan</keyword>
+      <keyword>maxinteger</keyword>
+      <keyword>pi</keyword>
+      <keyword>epsilon</keyword>
+      <keyword>longepsilon</keyword>
+      <keyword>maxreal</keyword>
+      <keyword>exception</keyword>
+      <keyword>xcpnoted</keyword>
+      <keyword>xcpaction</keyword>
+      <keyword>xcplimit</keyword>
+      <keyword>xcpmark</keyword>
+      <keyword>xcpmsg</keyword>
+      <keyword>divzero</keyword>
+      <keyword>intdivzero</keyword>
+      <keyword>sqrterr</keyword>
+      <keyword>experr</keyword>
+      <keyword>lnlogerr</keyword>
+      <keyword>sincoserr</keyword>
+      <keyword>endfile</keyword>
+    </context>
+
+    <context id="numeric-constant" style-ref="number">
+      <match extended="true">
+        (?&lt;![\w\.])
+        (([0-9]+([.][0-9]*)?|[.][0-9]+)([e'][0-9]+)?I?L?)
+        (?![\w\.])
+      </match>
+    </context>
+
+    <context id="bits-constant" style-ref="number">
+      <match extended="true">
+        (?&lt;![\w\.])
+        [#][0-9a-fA-F]*
+        (?![\w\.])
+      </match>
+    </context>
+
+    <context id="string" style-ref="string" class="string" class-disabled="no-spell-check">
+      <start>"</start>
+      <end>"</end>
+    </context>
+
+    <context id="algolw" class="no-spell-check">
+      <include>
+        <context ref="keyword-comment"/>
+        <context ref="percent-sign-comment"/>
+        <context ref="c-comment"/>
+        <context ref="compiler-directive-comment"/>
+        <context ref="compiler-directive"/>
+        <context ref="reserved-words"/>
+        <context ref="predeclared"/>
+        <context ref="numeric-constant"/>
+        <context ref="bits-constant"/>
+        <context ref="string"/>
+      </include>
+    </context>
+    
+  </definitions>
+</language>

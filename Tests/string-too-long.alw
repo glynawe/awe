@@ -1,0 +1,11 @@
+begin
+   string(3) s;
+   s := " ";
+   s := "1";
+   s := "12";
+   s := "123";
+   s := "1234"
+end.
+----compiler
+Tests/string-too-long.alw:7:4: a STRING(4) cannot be assigned to a STRING(3) variable
+----end

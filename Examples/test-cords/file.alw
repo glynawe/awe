@@ -1,0 +1,7 @@
+% io.alw -- simple file I/O procedures %
+
+record file (integer file_dummy);
+
+reference(file) procedure file_open (string(256) value path; string(2) value mode); algol "file_open";
+
+procedure file_close (reference(file) value handle); algol "file_close";

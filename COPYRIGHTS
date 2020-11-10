@@ -1,0 +1,33 @@
+──────────────────────────────────────────────────────────────────────
+AWE COPYRIGHTS
+──────────────────────────────────────────────────────────────────────
+
+The Awe test suite contains 'parser.alw', a parser generator by
+Hendrik Boom, it remains copyright to its author, but is used here
+with permission.
+
+An Awe example program uses Hans Boehm's Cords library, it is
+copyright to Xerox Corporation, under an open source licence.
+
+The example program "macro" is derived from the source code
+provided for the book Software Tools in Pascal by Brian W. Kernighan
+and P. J. Plauger, Copyright (C) 1981 by Bell Laboratories, Inc.
+and Whitesmiths Ltd.
+
+The Awe makefile uses OCamlMakefile, copyright Markus Mottl, 
+under the GPL licence.
+
+Otherwise, Copyright 2012, 2020 by Glyn Webster.
+
+Awe is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public and Lesser GNU General
+Public licenses as published by the Free Software Foundation, either
+version 3 of the License, or (at your option) any later version.
+
+Awe is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public
+License along with Awe.  If not, see <http://www.gnu.org/licenses/>.

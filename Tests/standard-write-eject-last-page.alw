@@ -1,0 +1,22 @@
+begin
+   iocontrol(10014); % 14 character lines %
+   iocontrol(20005); % 5 line pages %
+   iocontrol(40005); % pretty_page_breaks %
+   iocontrol(40011); % eject last page %
+   for i := 1 until 6 do
+      write(i)
+end.
+----stdout
+             1
+             2
+             3
+             4
+             5
+~~~~~~~~~~~~~~
+             6
+
+
+
+
+~~~~~~~~~~~~~~
+----end

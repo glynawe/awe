@@ -1,0 +1,7 @@
+begin
+   write("This non-printing character should not be accepted: ");
+end.
+----compiler
+Tests/string-constants-non-printing.alw:2:10: This string contains a non-printing or non ISO 8859-1 character code
+----end
+

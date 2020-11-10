@@ -1,0 +1,11 @@
+comment Can an Exceptional Condition record be set and read?;
+begin
+   DIVZERO := EXCEPTION(false, 10, 1, true, "DIVISION BY ZERO");
+
+   assert DIVZERO is EXCEPTION;
+   assert ~XCPNOTED(DIVZERO);
+   assert XCPLIMIT(DIVZERO) = 10;
+   assert XCPACTION(DIVZERO) = 1; 
+   assert XCPMARK(DIVZERO);
+   assert XCPMSG(DIVZERO) = "DIVISION BY ZERO"
+end.

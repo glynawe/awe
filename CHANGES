@@ -1,0 +1,59 @@
+Saturday, August 8 2020:
+
+* Changed array indexing to a more conventional system that uses
+  array descriptor records rather than look up functions.
+* Updated the Ocaml code to compile under Ocaml 4.05.0 
+* Python scripts are explicitly run by Python 2
+
+* Bugfix: NULL is now correctly recognised as not belonging to a record class
+
+Thursday, June 20 2017:
+
+Minor language changes:
+
+* Added the operator "//" as a synonym for "|". (Rosettacode examples use it)
+* "External class reference" extension removed.  (Wasn't necessary after all)
+* Added a second printer directed at stderr. (Non-standard but useful)
+* Algol W source files can now be run through GCC's standalone C preprocessor
+
+Quietened compiler warnings:
+
+* Made compiler code fully compatible with Ocaml 4.02.3
+* Made runtime library fully compatible with glibc 2.24
+* Added headers for call tracing functions to awe.h
+
+Bugfixes:
+
+* IOCONTROL(19999) did not give unlimited page width
+* dividing integers with "/" was returning a integer not a real
+* simply-typed array designators supplied as array actual parameters
+  were not causing type errors and made Awe generate bad C code.
+
+Tools:
+
+* new Algol W syntax highlighting file for Gnome text editors in Tools/algolw.lang
+* bugfix: logic symbols were wrong in Tools/algolw.ssh stylesheet for a2ps
+* New example program: "macro", from Software Tools in Pascal
+
+
+Thursday, Jun 15 2012: This revision of Aw2c to Awe has some minor changes, mostly removal of misfeatures:
+
+ * Closer to the Algol W standard.
+ * Minor bug fixes.
+ * Improved command line. Awe calls gcc for itself.
+ * A general-purpose Makefile is included.
+ * Awe accepts multiple source files, which allows a primitive module system.
+ * "External class" references, for returning pointers from external procedures.
+ * Ocaml source code carefully revised.  (The comments were drivel.)
+ * Manual is gone for now.  (Revising it.)
+ * Variables are now never initialized.  (Dijkstra says no)
+ * Only OS/360 and MTS Algol comments are allowed now.  (Was non-standard)
+ * The procedure call tracing code hooks are gone.  (Wasn't satisfactory)
+ * "Ref" is now never a keyword.  (Non-standard)
+ * There are no mechanisms for mixing C and Algol at the source level.  (Was non-standard) (Wasn't satisfactory)
+ * Only "ALGOL" and "FORTRAN" are valid external procedure references now.  (Was non-standard)
+ * Programs must always be statements now.  (Was non-standard)
+ * "Windows Funpak" distribution is gone.  (Couldn't be linked to a garbage collector)
+ * Records are now allowed as parameters to external procedures.
+
+Glyn Webster  

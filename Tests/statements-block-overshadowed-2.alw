@@ -1,0 +1,10 @@
+begin
+   logical x;
+   begin
+       integer x;
+       write(x and true);
+   end;
+end.
+----compile
+Tests/statements-block-overshadowed-2.alw:5:16: Incorrect operand types: INTEGER AND LOGICAL
+----end

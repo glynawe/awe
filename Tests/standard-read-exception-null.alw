@@ -1,0 +1,29 @@
+begin
+  string(5) s;
+  integer i;
+  real r;
+  complex c;
+  logical l;
+  bits b;
+
+  endfile := null;
+  for counter := 1 until 6 do
+     begin
+         read(s, i, r, c, l, b);
+         write(s, i, r, c, l, b)
+     end;
+  write("(end)")   
+end.
+----stdin
+"aaaaa" 1 1.0 1.0+1.0i true  #1
+"bbbbb" 2 2.0 2.0+2.0i true  #2
+"ccccc" 3 3.0 3.0+3.0i true  #3
+----stdout
+aaaaa             1               1               1              1I    TRUE               1
+bbbbb             2               2               2              2I    TRUE               2
+ccccc             3               3               3              3I    TRUE               3
+                  0               0               0              0I   FALSE               0
+                  0               0               0              0I   FALSE               0
+                  0               0               0              0I   FALSE               0
+(end)
+----end

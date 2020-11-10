@@ -1,0 +1,25 @@
+# Makefile.awe -- Make the 'awe' compiler executable.
+
+OCAMLMAKEFILE = OCamlMakefile
+
+RESULT = awe
+
+LIBS = unix
+
+ML = options.ml \
+     dynArray.mli dynArray.ml \
+     location.mli location.ml \
+     table.mli table.ml \
+     class.mli class.ml \
+     type.mli type.ml \
+     scope.mli scope.ml \
+     tree.mli tree.ml \
+     code.mli code.ml \
+     predeclared.ml \
+     compiler.ml
+
+SOURCES = $(ML) parser.mly lexer.mll awe.ml
+
+DEP_MODULES = $(ML) parser.mli parser.ml lexer.ml awe.ml
+
+include $(OCAMLMAKEFILE)

@@ -1,0 +1,6 @@
+begin
+  writecard(1)
+end.
+----compiler
+Tests/standard-writecard-error.alw:2:13: Expected a statement or string expression, this is an INTEGER expression
+----end

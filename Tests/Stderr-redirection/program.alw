@@ -1,0 +1,10 @@
+% Test stderr/stdout redirection. %
+begin
+    write("Some text, ");
+    
+    iocontrol(50001);
+    write("Whoops, didn't expect this! ;-)");
+    iocontrol(50000);
+    
+    writeon("and some more text.");
+end.

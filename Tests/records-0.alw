@@ -1,0 +1,14 @@
+begin
+    record R1 (integer f1);
+    record R2 (integer f2);
+    record R3 (integer f3);
+
+    reference (R1,R2,R3) x1;
+    reference (   R2,R3) x2;
+    reference (R1,R2   ) x3;
+
+    x1 := R1(1);
+    x2 := R2(3);
+    x3 := x2;
+
+end.

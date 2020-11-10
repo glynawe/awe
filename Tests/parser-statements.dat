@@ -1,0 +1,157 @@
+IF a THEN
+(IF a THEN (*empty*))
+
+IF a THEN ELSE b
+(IF a THEN (*empty*) ELSE b)
+
+IF a THEN b ELSE
+(IF a THEN b ELSE (*empty*))
+
+IF a THEN b
+(IF a THEN b)
+
+IF a THEN b ELSE c
+(IF a THEN b ELSE c)
+
+IF a THEN b ELSE IF c THEN d
+(IF a THEN b ELSE (IF c THEN d))
+
+IF a THEN b ELSE IF c THEN d ELSE e
+(IF a THEN b ELSE (IF c THEN d ELSE e))
+
+IF a THEN IF b THEN c ELSE d
+(IF a THEN (IF b THEN c ELSE d))
+
+$ This is wrong, but will can only detected by the compiler pass
+IF a THEN IF b THEN c ELSE d ELSE e
+(IF a THEN (IF b THEN c ELSE d) ELSE e)
+
+IF a THEN WHILE b DO IF c THEN d ELSE e
+(IF a THEN (WHILE b DO (IF c THEN d ELSE e)))
+
+IF IF a THEN b ELSE c THEN d
+(IF (IF a THEN b ELSE c) THEN d)
+
+IF a THEN ELSE b
+(IF a THEN (*empty*) ELSE b)
+
+IF a THEN b ELSE 
+(IF a THEN b ELSE (*empty*))
+
+$ This is a type error not a syntax error (VOID where LOGICAL should be)
+IF IF a THEN b THEN c
+(IF (IF a THEN b) THEN c)
+
+WHILE a DO b
+(WHILE a DO b)
+
+WHILE a DO WHILE b DO c
+(WHILE a DO (WHILE b DO c))
+
+WHILE a DO
+(WHILE a DO (*empty*))
+
+IF a THEN WHILE b DO ELSE c
+(IF a THEN (WHILE b DO (*empty*)) ELSE c)
+
+BEGIN a END
+BEGIN a END
+
+BEGIN a; b END
+BEGIN a; b END
+
+BEGIN a; b; c END
+BEGIN a; b; c END
+
+BEGIN END
+BEGIN (*empty*) END
+
+BEGIN a; END
+BEGIN a; (*empty*) END
+
+BEGIN ; END
+BEGIN (*empty*); (*empty*) END
+
+BEGIN a: END
+BEGIN a: (*empty*) END
+
+BEGIN a: b END
+BEGIN a: b END
+
+BEGIN a: b; c: d END
+BEGIN a: b; c: d END
+
+BEGIN a: b: c END
+BEGIN a: b: c END
+
+BEGIN a: ; END
+BEGIN a: (*empty*); (*empty*) END
+
+BEGIN ; a: END
+BEGIN (*empty*); a: (*empty*) END
+
+BEGIN a; BEGIN b END END  
+BEGIN a; BEGIN b END END
+
+BEGIN BEGIN a END; b END  
+BEGIN BEGIN a END; b END   
+
+BEGIN a; BEGIN b END blockb END blocka
+BEGIN a; BEGIN b END blockb END blocka
+
+BEGIN BEGIN a END blocka; b END blockb
+BEGIN BEGIN a END blocka; b END blockb
+
+BEGIN INTEGER a; b END
+BEGIN INTEGER a; b END
+
+BEGIN INTEGER a, b; c END
+BEGIN INTEGER a, b; c END
+
+BEGIN INTEGER a; INTEGER b; c END
+BEGIN INTEGER a; INTEGER b; c END
+
+BEGIN INTEGER a; END
+BEGIN INTEGER a; (*empty*) END
+
+CASE x OF ()
+           ^Syntax Error
+
+CASE x OF (a)
+CASE x OF (a)
+
+CASE x OF (a,b)
+CASE x OF (a, b)
+
+CASE x OF BEGIN END
+CASE x OF BEGIN (*empty*) END
+
+CASE x OF BEGIN ; END
+CASE x OF BEGIN (*empty*); (*empty*) END
+
+CASE x OF BEGIN a ; ; b END
+CASE x OF BEGIN a; (*empty*); b END
+
+CASE x OF BEGIN a END
+CASE x OF BEGIN a END
+
+CASE x OF BEGIN a; b END
+CASE x OF BEGIN a; b END
+
+CASE x OF BEGIN a; b; END
+CASE x OF BEGIN a; b; (*empty*) END
+
+CASE x OF BEGIN INTEGER a; b; c END
+                ^Syntax Error
+
+FOR i := a UNTIL b DO c
+(FOR i := a UNTIL b DO c)
+
+FOR i := a STEP b UNTIL c DO d
+(FOR i := a STEP b UNTIL c DO d)
+
+FOR i := a, b, c DO d
+(FOR i := a, b, c DO d)
+
+
+

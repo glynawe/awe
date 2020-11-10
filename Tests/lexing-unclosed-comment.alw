@@ -1,0 +1,9 @@
+begin
+    integer i;
+    i := 0;
+    comment
+        now we are in trouble -->:
+end.
+----compiler
+Tests/lexing-unclosed-comment.alw:4:5: This comment is not closed with a semicolon
+----end

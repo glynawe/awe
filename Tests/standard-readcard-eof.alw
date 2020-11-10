@@ -1,0 +1,21 @@
+begin
+   string(80) card;
+   for i := 1 until 4 do
+      begin
+         readcard(card);
+         write(card);
+      end
+end.
+----stdin
+line 1
+line 2
+line 3
+----stdout
+line 1
+line 2
+line 3
+----stderr
+Tests/standard-readcard-eof.alw:5:10: Unexpected end of input.
+----exitcode
+1
+----end

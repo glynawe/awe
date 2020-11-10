@@ -1,0 +1,50 @@
+begin
+   real procedure f (real value i);
+      i + i / 3;
+
+   real procedure g (real value i);
+      i + i / 2;
+      
+   real procedure sum (integer value first, last; real procedure f (real value x));
+   begin
+      real total;
+      total := 0;
+      for i := first until last do
+         total := total + f(i);
+      total
+   end sum;
+
+   real procedure sum2 (integer value first, last; real procedure f, g (real value x));
+   begin
+      real total;
+      total := 0;
+      for i := first until last do
+         total := total + f(g(i));
+      total
+   end sum2;
+
+   real procedure c (real procedure a, b (real value x); real value x);
+      a(b(x));
+
+   real procedure sum3 ( integer value first, last; 
+                         real procedure c (real procedure a, b (real value x); real value x);
+                         real procedure f, g (real value x) );
+   begin
+      real total;
+      total := 0;
+      for i := first until last do
+         total := total + c(f, g, i);
+      total
+   end sum3;
+
+   write(sum(1, 10, f));
+   write(sum(1, 10, g));
+   write(sum2(1, 10, f, g));
+   write(sum3(1, 10, c, f, g));
+end.
+----stdout
+      73.33333
+          82.5
+           110
+           110
+----end

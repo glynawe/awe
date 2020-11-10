@@ -1,0 +1,14 @@
+begin
+    procedure p (procedure q (integer i));
+       q(0);
+
+    procedure q0 (integer result i);
+       i := 1;
+    
+    p(q0)
+end.
+----compile
+Tests/procedure-parameters-procedure-incompatible.alw:2:31: Note, this is a call-by-name formal parameter.
+Tests/procedure-parameters-procedure-incompatible.alw:3:10: Note, this call-by-name parameter is an expression.
+Tests/procedure-parameters-procedure-incompatible.alw:8:7: expected PROCEDURE (INTEGER) here, this is PROCEDURE (INTEGER RESULT)
+----end

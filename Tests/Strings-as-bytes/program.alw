@@ -1,0 +1,35 @@
+BEGIN
+    INTEGER PROCEDURE CODE (STRING(1) VALUE S); ALGOL "byte";
+
+    STRING(1) PROCEDURE DECODE (INTEGER VALUE X); ALGOL "debyte";
+
+    STRING(13) S;
+
+    S(0|1) := DECODE(123);  comment ASCII codes ;
+    S(1|1) := DECODE(72);
+    S(2|1) := DECODE(111);   
+    S(3|1) := DECODE(119);
+    S(4|1) := DECODE(39);
+    S(5|1) := DECODE(115);
+    S(6|1) := DECODE(32);
+    S(7|1) := DECODE(116);
+    S(8|1) := DECODE(104);
+    S(9|1) := DECODE(105);
+    S(10|1) := DECODE(115);
+    S(11|1) := DECODE(63);
+    S(12|1) := DECODE(125);
+    ASSERT(S = "{How's this?}");
+    
+    S := "{And this?}";
+    ASSERT(CODE(S(0|1)) = 123);
+    ASSERT(CODE(S(1|1)) = 65);
+    ASSERT(CODE(S(2|1)) = 110);
+    ASSERT(CODE(S(3|1)) = 100);
+    ASSERT(CODE(S(4|1)) = 32);
+    ASSERT(CODE(S(5|1)) = 116);
+    ASSERT(CODE(S(6|1)) = 104);
+    ASSERT(CODE(S(7|1)) = 105);
+    ASSERT(CODE(S(8|1)) = 115);
+    ASSERT(CODE(S(9|1)) = 63);
+    ASSERT(CODE(S(10|1)) = 125)
+END.

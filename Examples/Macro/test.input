@@ -1,0 +1,57 @@
+
+`inc(abc)'  --->  inc(abc)
+`define(inc,$1:=$1+1) inc(abc)'  --->  define(inc,$1:=$1+1) inc(abc)
+`define(incr,$1 := $1 + $2) incr(x,3)'  --->  define(incr,$1 := $1 + $2) incr(x,3)
+`incr'  --->  incr
+`incr()'  --->  incr()
+`incr(x)'  --->  incr(x)
+`incr(x,`6')'  --->  incr(x,`6')
+`define(`dbl',(($1) * 2)) dbl(42)'  --->  define(`dbl',(($1) * 2)) dbl(42)
+`incr(x,dbl(3))'  --->  incr(x,dbl(3))
+
+
+`define(def,`define($1,$2)')' define(def,`define($1,$2)')
+`def(a,xyz) a'  --->  def(c,xyz) c
+
+`substr(123456789,1,1)'  --->  substr(123456789,1,1)
+`substr(123456789,9,1)'  --->  substr(123456789,9,1)
+`substr(123456789,9,2)'  --->  substr(123456789,9,2)
+`substr(123456789,3,5)'  --->  substr(123456789,3,5)
+`substr(123456789,3,1)'  --->  substr(123456789,3,1)
+`substr(123456789,3,0)'  --->  substr(123456789,3,0)
+`substr(123456789,0,1)'  ---> substr(123456789,0,1)
+`substr(,1,1)'  --->  substr(,1,1)
+
+`len(xyz)'  --->  len(xyz)
+`len()'  --->  len()
+`len'  --->  len
+`len(len(a))'  --->  len(len(a))
+`len(len(abcdeABCDE))'  --->  len(len(abcdeABCDEabcde))
+
+`ifelse(123,123,a,b)'  --->  ifelse(123,123,a,b)
+`ifelse(123,,a,b)'  --->  ifelse(123,,a,b)
+`ifelse(123,456,a,b)'  --->  ifelse(123,456,a,b)
+`ifelse(,,a,b)'  --->  ifelse(,,a,b)
+`ifelse(test,,a,b)'  --->  ifelse(test,,a,b)
+`define(test,`')' define(test,`')
+`ifelse(test,,a,b)'  --->  ifelse(test,,a,b)
+
+`expr(100)'  --->  expr(100)
+`expr(20+30)'  --->  expr(20+30)
+`expr(2*5+10)'  --->  expr(2*5+10)
+`expr(10+2*5)'  --->  expr(10+2*5)
+`expr((10+2)*5)'  --->  expr((10+2)*5)
+`expr(5*(10+2))'  --->  expr(5*(10+2))
+`expr(2*5+10/5)'  --->  expr(2*5+10/5)
+`expr(10+2*10/5)'  --->  expr(10+2*10/5)
+`expr((10+2)*(10/5))'  --->  expr((10+2)*(10/5))
+`expr(x)'  --->  expr(x)
+`expr(1x)'  --->  expr(1x)
+`expr(1+1x)'  --->  expr(1+1x)
+`expr(x1)'  --->  expr(x1)
+`expr(1&1)'  --->  expr(1&1)
+`expr(1&)'  --->  expr(1&)
+`expr'  --->  expr
+
+`changeq({}) {ab} `ab'' ---> changeq({}) {ab} `ab'
+{changeq() `ab' {ab}}   ---> changeq() `ab' {ab}

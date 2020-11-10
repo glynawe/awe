@@ -1,0 +1,32 @@
+begin
+   record rec1(integer f1);
+   record rec2(integer f2);
+   record rec3(integer f3);
+
+   reference(rec1, rec2, rec3) r;
+
+   r := null;
+   assert(r = null);
+   assert(~ r is rec1);
+   assert(~ r is rec2);
+   assert(~ r is rec3);
+
+   r := rec1;
+   assert(r ~= null);
+   assert(  r is rec1);
+   assert(~ r is rec2);
+   assert(~ r is rec3);
+
+   r := rec2;
+   assert(r ~= null);
+   assert(~ r is rec1);
+   assert(  r is rec2);
+   assert(~ r is rec3);
+   
+   r := rec3;
+   assert(r ~= null);
+   assert(~ r is rec1);
+   assert(~ r is rec2);
+   assert(  r is rec3);
+end.
+

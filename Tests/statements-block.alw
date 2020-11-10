@@ -1,0 +1,15 @@
+begin
+    integer i, j;
+    i := 1;
+    j := 1;
+    begin
+       integer i;
+       assert j = 1;
+       i := 2;
+       j := 2;
+       assert i = 2;
+       assert j = 2;
+    end;
+    assert i = 1;
+    assert j = 2;
+end.

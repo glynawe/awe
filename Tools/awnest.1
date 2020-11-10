@@ -1,0 +1,25 @@
+.TH awnest 1 "2012-06-01" "awnest" "Algol W source code lister"
+.SH "NAME"
+awnest \- line number and block-level lister for the Algol W language
+.SH "SYNOPSIS"
+\fBawnest\fR < \fIsource.alw\fR > \fIlisting.text\fR
+.SH "DESCRIPTION"
+This produces a source code listing of an Algol W program with 
+line numbers and block levels in columns on left.
+(The block level is the number of unclosed BEGINs that preceed the line.)
+.PP
+Legacy code source can be quite densely packed (perhaps to save punch cards)
+so this kind of listing can be very useful.
+.SH "VERSION"
+1.0
+.SH "COPYRIGHTS"
+Copyright 2012 by Glyn Webster.
+.PP
+alnest is free software: you can redistribute it and/or modify it under
+the terms of the GNU General Public License and Lesser GNU General 
+Public License as published by the Free Software Foundation, either 
+version 3 of the License, or (at your option) any later version.
+.SH "SEE ALSO"
+.PP
+ \fIawe\fR\|(1)
+ \fIAlgol W Language Description, June 1972\fR
