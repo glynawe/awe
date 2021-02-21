@@ -290,7 +290,7 @@ _awe_str_cmp ( const _awe_str str1, int str1len,
 int 
 _awe_str_cmp_sc ( const _awe_str str1, int str1len, unsigned char c )
 {
-    char str2 = c;
+    unsigned char str2 = c;
     return _awe_str_cmp(str1, str1len, &str2, 1);
 }
 
@@ -298,7 +298,7 @@ _awe_str_cmp_sc ( const _awe_str str1, int str1len, unsigned char c )
 int 
 _awe_str_cmp_cs ( unsigned char c, const _awe_str str2, int str2len )
 {
-    char str1 = c;
+    unsigned char str1 = c;
     return _awe_str_cmp(&str1, 1, str2, str2len);
 }
 

@@ -249,6 +249,9 @@ _awe_array_bounds_error(_awe_loc l, const char *array, int subscript, int lwb, i
 }
 
 
+/* Statements -------------------------------------------------------------------------------- */
+
+
 void
 _awe_assert(_awe_loc l, int condition)
 {
@@ -270,6 +273,9 @@ _awe_case_range_error(_awe_loc l, int selector)
 {
   _awe_error(l, "CASE range error: selector is %d", selector);
 }
+
+
+/* Maths -------------------------------------------------------------------------------- */
 
 
 int

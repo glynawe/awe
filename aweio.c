@@ -157,7 +157,7 @@ static
 Scanner_result
 Scanner_scan (_awe_Scanner *scanner)
 {
-  char c;
+  int c;
 
   while (true) {
     c = Scanner_fgetc(scanner);
