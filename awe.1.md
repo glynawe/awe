@@ -35,12 +35,11 @@ behaviour of Awe-compiled programs, and how to interface ALGOL with C.
 
 The **awe** command line may consist of a list of ALGOL W source file
 names and an optional output file flag.  The source files will be
-concatenated into a single source program.  
+concatenated into a single source program.
 
 By default **awe** compiles an executable. The default name of the
 executable is the name of the last ALGOL W source file with its
-extension removed, on Windows systems an ".exe" suffix will be 
-appended. 
+extension removed. 
 
 If an ALGOL W program contains procedures with external references 
 (cf. section 5.3.2.4 of the Language Description) then **awe** 
@@ -91,23 +90,23 @@ The Gnu C compiler, the Boehm GC library.
 
 ## FILES
 
-**{{BINDIR}}/awe** -
-The Awe compiler.
+{{BINDIR}}/awe
+: The Awe compiler.
 
-**{{DOCDIR}}/awe.txt** -
-The Awe ALGOL W documentation file.
+{{DOCDIR}}/awe.txt
+: The Awe ALGOL W documentation file.
 
-**{{INCDIR}}/awe.mk** -
-The Awe general-purpose Makefile.
+{{INCDIR}}/awe.mk
+: The Awe general-purpose Makefile.
 
-**{{INCDIR}}/awe.h** -
-The Awe runtime library header file. Include this in C files that define external procedures for ALGOL W programs.
+{{INCDIR}}/awe.h
+: The Awe runtime library header file. Include this in C files that define external procedures for ALGOL W programs.
 
-**{{LIBDIR}}/libawe.a** -
-The runtime library for Awe-compiled programs.
+{{LIBDIR}}/libawe.a
+: The runtime library for Awe-compiled programs.
 
-**{{INCDIR}}/aweio.h** -
-The Awe Standard I/O System header file. (Experimental.)
+{{INCDIR}}/aweio.h
+: The Awe Standard I/O System header file. (Experimental.)
 
 ## SEE ALSO
 

@@ -6,13 +6,14 @@
 
 # Where the Awe files will be installed. Edit these to suit your system:
 
-PREFIX = $(DESTDIR)/usr/local
-BINDIR = $(PREFIX)/bin
-INCDIR = $(PREFIX)/include
-LIBDIR = $(PREFIX)/lib
-DOCDIR = $(PREFIX)/share/doc/awe
-MANDIR1 = $(PREFIX)/share/man/man1
-MANDIR7 = $(PREFIX)/share/man/man7
+BASEDIR = /usr/local
+
+BINDIR = $(BASEDIR)/bin
+INCDIR = $(BASEDIR)/include
+LIBDIR = $(BASEDIR)/lib
+DOCDIR = $(BASEDIR)/share/doc/awe
+MANDIR1 = $(BASEDIR)/share/man/man1
+MANDIR7 = $(BASEDIR)/share/man/man7
 
 # The default Makefile action is to do a re-build and perform all the tests
 
@@ -37,7 +38,8 @@ install:
 	install -m 644 -t $(INCDIR) aweio.h
 	install -m 644 -t $(LIBDIR) libawe.a 
 	install -m 644 -t $(INCDIR) awe.mk
-	install -m 644 -t $(DOCDIR) awe.md
+	install -m 644 -t $(DOCDIR) awe.html
+	install -m 644 -t $(DOCDIR) github-markdown.css
 	install -m 644 -t $(MANDIR1) awe.1
 	install -m 644 -t $(MANDIR7) awe.mk.7
 
@@ -83,7 +85,7 @@ $(OBJECTS) : $(HEADERS)
 aweio.o: aweio.c scanner.inc
 
 scanner.inc: scanner.py
-	python2 scanner.py
+	python scanner.py
 
 libawe.a: $(OBJECTS)
 	rm -f libawe.a
@@ -132,7 +134,6 @@ test-examples:
 	make test -C Examples/Roman  -I $(shell pwd) COMPILER_PATH=$(shell pwd) || exit 1
 	make test -C Examples/List   -I $(shell pwd) COMPILER_PATH=$(shell pwd) || exit 1
 	make test -C Examples/Wumpus -I $(shell pwd) COMPILER_PATH=$(shell pwd) || exit 1
-	make test -C Examples/FreeingRecords -I $(shell pwd) COMPILER_PATH=$(shell pwd) || exit 1
 	make test -C Examples/Macro -I $(shell pwd) COMPILER_PATH=$(shell pwd) || exit 1
 ifndef NO_GC
 	make test -C Examples/test-cords -I $(shell pwd) COMPILER_PATH=$(shell pwd) || exit 1
@@ -142,31 +143,31 @@ endif
 # ------------------------------------------------------------------------------
 # Preprocess the documentation
 
-manpages: awe.1 awe.mk.7
+manpages: awe.1 awe.mk.7 awe.html github-markdown.css
 
-webpages: manpages awe.html awe.1.html awe.mk.7.html INSTALL.html
+webpages: manpages awe.1.html awe.mk.7.html INSTALL.html
 
 awe.1 : man.py awe.1.md VERSION
-	python2 man.py awe.1.md awe.1 \
+	python3 man.py awe.1.md awe.1 \
                       VERSION="$(shell cat VERSION)" \
                       BINDIR="$(BINDIR)" LIBDIR="$(LIBDIR)" DOCDIR="$(DOCDIR)" INCDIR="$(INCDIR)"
 
 awe.mk.7 : man.py awe.mk.7.md VERSION
-	python2 man.py awe.mk.7.md awe.mk.7 \
+	python3 man.py awe.mk.7.md awe.mk.7 \
                       VERSION="$(shell cat VERSION)" \
                       BINDIR="$(BINDIR)" LIBDIR="$(LIBDIR)" DOCDIR="$(DOCDIR)" INCDIR="$(INCDIR)"
 
 awe.1.html: awe.1 htmltext.py
-	MANWIDTH=80 man ./awe.1 | python2 htmltext.py "awe(1): Awe ALGOL W compiler man page" > awe.1.html
+	MANWIDTH=80 man ./awe.1 | python3 htmltext.py "awe(1): Awe ALGOL W compiler man page" > awe.1.html
 
 awe.mk.7.html: awe.mk.7 htmltext.py
-	MANWIDTH=80 man ./awe.mk.7 | python2 htmltext.py "awe.mk(7): Awe ALGOL W Makefile man page" > awe.mk.7.html
+	MANWIDTH=80 man ./awe.mk.7 | python3 htmltext.py "awe.mk(7): Awe ALGOL W Makefile man page" > awe.mk.7.html
 
-awe.html: awe.txt htmltext.py
-	python2 htmltext.py "awe.txt: Awe ALGOL W compiler documentation file" < awe.txt > awe.html
+awe.html: awe.md markdown-to-html.py github-markdown.css
+	python3 markdown-to-html.py awe.md awe.html
 
-INSTALL.html: INSTALL htmltext.py
-	python2 htmltext.py "INSTALL: Awe ALGOL W compiler installation instructions" < INSTALL > INSTALL.html
+INSTALL.html: INSTALL.md markdown-to-html.py github-markdown.css
+	python3 markdown-to-html.py INSTALL.md INSTALL.html
 
 
 # ------------------------------------------------------------------------------

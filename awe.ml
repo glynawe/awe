@@ -30,11 +30,6 @@ let error (loc : Location.t) (message : string) : 'a =
   exit 1
 
 
-let windows : bool =  Sys.os_type = "Cygwin" || Sys.os_type = "Win32"
-
-let no_gc : bool = windows
-
-
 (* This returns a lexbuf that takes its input from a list of source files.
    If the list is empty, the input is from stdin instead. *)
 
@@ -121,7 +116,7 @@ let compile (sources : string list) (operation : operation_t) (target : string) 
   | Compile ->
       let target_c = target ^ ".awe.c" in
       output_code target_c code ;
-      let libs = "-lawe -lm" ^ (if no_gc then "" else " -lgc")  in
+      let libs = "-lawe -lm -lgc"  in
       let run_gcc = sprintf "gcc %s %s -o %s" (Filename.quote target_c) libs (Filename.quote target) in
       let exitcode = Sys.command run_gcc in
       if exitcode = 0 then
@@ -152,7 +147,7 @@ let command_line () : string list * operation_t * string =
   let rec executable_filename filenames = 
     let lastname = List.hd (List.rev filenames) in
     try 
-      (Filename.chop_extension lastname) ^ (if windows then ".exe" else "")
+      Filename.chop_extension lastname
     with 
       Invalid_argument _ -> raise (Arg.Bad (lastname ^ " has no file extension"))
   in

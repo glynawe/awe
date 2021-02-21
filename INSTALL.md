@@ -3,13 +3,14 @@
 
 ## Requirements
 
-A Debian-like operating system, Gnu C, Python 2, OCaml 4.05 or later, make, ar and the Boehm GC.
+A Debian-like operating system, Gnu C, Python 2, OCaml 4.05 or later,
+make, ar, Python markdown and the Boehm GC.
 
 On Windows use the Windows 10 Linux Subsystem.
 
-Install the packages:
+On Debian, Ubuntu or Windows install these packages:
 
-     gcc ocaml-nox python2 binutils libgc-dev
+     gcc ocaml-nox python3 python3-markdown binutils libgc-dev
 
 
 ## Building Awe
@@ -32,10 +33,11 @@ the "awe/" source code directory:
 
    Learn how to run your new Algol W compiler.
 
+
 That's it, it should be that simple.
 
 Feel free to ask me any questions. 
-My email address is in the distribution file.
+My email address is in the distribution files.
 
 ---
 Glyn Webster, 2020

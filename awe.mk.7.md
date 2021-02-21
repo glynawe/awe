@@ -22,45 +22,45 @@ section 3.3 of the GNU Make manual.
 
 ### The targets provided by awe.mk
 
-**build** -
-Build the program.
+build
+: Build the program.
 
-**clean** -
-Clean away the temporary files. This only deletes files that **awe.mk**
+clean
+: Clean away the temporary files. This only deletes files that **awe.mk**
 creates.
 
-**dist** -
-Pack your source files into a tar file for distribution.
+dist
+: Pack your source files into a tar file for distribution.
 
 
 ### Variables to set for awe.mk
 
-**PROGRAM** -
-the name of the executable (mandatory).
+PROGRAM
+: the name of the executable (mandatory).
 
-**ALGOLW_SOURCES** -
-the Algol W source files, in order (mandatory).
+ALGOLW_SOURCES
+: the Algol W source files, in order (mandatory).
 
-**C_SOURCES**, **C_INCLUDES** -
-C library files for external procedures, if any.
+C_SOURCES, C_INCLUDES
+: C library files for external procedures, if any.
 
-**AWE_FLAGS**, **CFLAGS**, **LDLIBS** -
-flags to pass to the Awe and GCC compilers. Extra libraries to link to the
+AWE_FLAGS, CFLAGS, LDLIBS
+: flags to pass to the Awe and GCC compilers. Extra libraries to link to the
 executable. (The libraries required by the Awe runtime will always be
 linked.)
 
-**OTHER_FILES** -
-Additional files to include in the distribution tar file.
+OTHER_FILES
+: Additional files to include in the distribution tar file.
 (The source files above and your Makefile are always included.)
 
-**DISTNAME** -
-A name for the project. The default name is the name of the current
+DISTNAME
+: A name for the project. The default name is the name of the current
 working directory. The distribution file will have this as its
 basename, with a *.tar.gz* extension added. The distribution file will
 unpack to a directory with this name.
 
-**COMPILER_PATH** -
-A path to a directory containing Awe's compiler and runtime library
+COMPILER_PATH
+: A path to a directory containing Awe's compiler and runtime library
 files.  Set this to Awe's build directory to test Awe before
 installing it.  (This exists mainly for Awe's self testing.)
 

@@ -110,7 +110,7 @@ _awe_process_exception (_awe_loc loc, void *condition)
     *xcpnoted(loc, condition) = 1;
     (*xcplimit(loc, condition))--;
     if (*xcplimit(loc, condition) < 0 || *xcpmark(loc, condition)) {
-      char msg[65];
+      unsigned char msg[65];
       _awe_str_cpy(msg, 64, xcpmsg(loc, condition), 64); msg[64] = '\0';
       _awe_warning(loc, msg);
     }

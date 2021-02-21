@@ -1,4 +1,8 @@
-# AWE ALGOL W
+# Awe Algol W
+
+[TOC]
+
+## About Awe
 
 This file documents Awe's implementation of ALGOL W, the run-time
 behaviour of Awe-compiled programs, and how to interface ALGOL with C.
@@ -9,37 +13,42 @@ You will need a copy of the 'ALGOL W Language Description' by your
 elbow:
 
 A LaTeX-formatted PDF:
-        http://www.tiddly-pom.com/~glyn/algolw.pdf
-    
+
+<http://www.tiddly-pom.com/~glyn/algolw.pdf>
+        
 A scanned original can be found here:
-        http://www.fh-jena.de/~kleine/history/history.html
+
+<http://www.fh-jena.de/~kleine/history/history.html>
 
 *The Michigan Terminal System, Volume 16: ALGOL W in MTS* contains a
 good, textbook guide to ALGOL W (but stop reading at page 188, where
 it begins to describe an extensive MTS-dependant I/O system that Awe
 does not implement).
 
-http://www.bitsavers.org/pdf/univOfMichigan/mts/volumes/
+<http://www.bitsavers.org/pdf/univOfMichigan/mts/volumes/>
 
 
-## AWE'S DIALECT
+## Awe's Dialect
 
 Awe's dialect of ALGOL W is the language described by the *ALGOL W
 Language Description, June 1972*, with these exceptions:
 
 Language:
+
 - identifiers are case-insensitive;
 - procedure formal parameters must be fully specified;
 - LOGICAL values may be compared;
 - modern handing of ambiguous IF/ELSE statements;
 - arrays may have dimensions of zero width;
-- compiler directive cards for block comments.
+- compiler directives block comments.
 
 Standard Library:
+
 - floating-point arithmetic is done according to IEEE-754 rules;
 - a few of the standard functions have been extended or omitted.
 
 Operating System Interface:
+
 - the I/O System is reconfigurable, initially set for stream-based I/O;
 - the I/O System has a second printer, directed to stderr;
 - the character set is ISO 8859-1, with EBCDIC 1047 ordering;
@@ -82,54 +91,53 @@ the same as System/360, except that overflows will not be detected.
 
 Floating point arithmetic is performed to IEEE-754 double-precision 
 rules, not the System/360 processor's rules. The domains of the 
-functions of analysis will have changed. C's double type, 
-used to represent both REAL and LONG REAL, can have a three
+functions of analysis will have changed. C's `double` type, 
+used to represent both `REAL` and `LONG REAL`, can have a three
 digit exponent.
 
 Functions and conditions too dependent on System/360 to be
-reliably or consistently reimplemented (UNFL, OVFL, INTOVFL, BASE16
-and LONGBASE16) have been omitted.
+reliably or consistently reimplemented (`UNFL`, `OVFL`, `INTOVFL`, `BASE16`
+and `LONGBASE16`) have been omitted.
 
 ▸ In section 8.2 Standard Functions of Analysis, remove the "domain:"
   parts from the procedure comments.
 
 ▸ In section 8.4 Predeclared Variables, remove the "initialized to"
-  parts from the procedure comments for EPSILON, LONGEPSILON and
-  MAXREAL.
+  parts from the procedure comments for `EPSILON`, `LONGEPSILON` and
+  `MAXREAL`.
 
-▸ In section 8.1, Standard Transfer Functions, replace BASE10 and
-  LONGBASE10 with these:
+▸ In section 8.1, Standard Transfer Functions, replace `BASE10` and
+  `LONGBASE10` with these:
 
-> ```AlgolW
-> STRING(12) PROCEDURE BASE10 (LONG REAL VALUE X);
-> COMMENT If the exponent part of X is 3 digits long,
->         X in the format ±EEE±DDDDDDD,
->         otherwise X in the format ⊔±EE±DDDDDDD ;
-> 
-> STRING(20) PROCEDURE LONGBASE10 (LONG REAL VALUE X);
-> COMMENT If the exponent part of X is 3 digits long,
->         X in the format ±EEE±DDDDDDDDDDDDDDD,
->         otherwise X in the format ⊔±EE±DDDDDDDDDDDDDDD ;
-> ```
+>     STRING(12) PROCEDURE BASE10 (LONG REAL VALUE X);
+>     COMMENT If the exponent part of X is 3 digits long,
+>             X in the format ±EEE±DDDDDDD,
+>             otherwise X in the format ⊔±EE±DDDDDDD ;
+>
+>     STRING(20) PROCEDURE LONGBASE10 (LONG REAL VALUE X);
+>     COMMENT If the exponent part of X is 3 digits long,
+>             X in the format ±EEE±DDDDDDDDDDDDDDD,
+>             otherwise X in the format ⊔±EE±DDDDDDDDDDDDDDD ;
 
-▸ In section 8.5 Exceptional Conditions, remove all mention of UNFL,
-  OVFL and INTOVFL.
 
-▸ In section 8.1, Standard Transfer Functions, remove all metion of BASE16 and
-  LONGBASE16.
+▸ In section 8.5 Exceptional Conditions, remove all mention of `UNFL`,
+  `OVFL` and `INTOVFL`.
+
+▸ In section 8.1, Standard Transfer Functions, remove all metion of `BASE16` and
+  `LONGBASE16`.
 
 
 ### TIME Function
 
-The TIME function has additional control codes to allow finer
+The `TIME` function has additional control codes to allow finer
 measurements.
 
 ▸ To the table in section 8.2, Time Function, add:
 
->    | code  | result                 | units       |
->    | ----- | ---------------------- | ----------- |
->    | 10000 | elapsed execution time | clock ticks |
->    | 10001 | clock ticks per second |             |
+| code  | result                 | units       |
+| ----- | ---------------------- | ----------- |
+| 10000 | elapsed execution time | clock ticks |
+| 10001 | clock ticks per second |             |
 
 ▸ Add the paragraph:
 
@@ -144,7 +152,7 @@ parameters.
 
 Awe will not accept this correct program:
 
-```AlgolW
+```
 BEGIN
     PROCEDURE TRI (INTEGER VALUE I);
       (I * I + I) DIV 2;
@@ -155,9 +163,9 @@ BEGIN
 END.
 ```
 
-But it will accept this program:
+But it will accept this modified program:
 
-```AlgolW
+```
 BEGIN
     PROCEDURE TRI (INTEGER VALUE I);
       (I * I + I) DIV 2;
@@ -359,8 +367,10 @@ The Awe compiler gives a warning when the '% 〈comment〉 ;' form is
 used, because it can lead to unexpected results. Consider carefully
 what this attempt at commenting out a line actually does:
 
-    % commented_out; %
-    next_procedure;
+```
+% commented_out; %
+next_procedure;
+```
 
 The `@awe_text` and `@awe_code` compiler directives can be used to
 reliably comment out lines of code.
@@ -378,7 +388,7 @@ the same as the procedure's identifier then Awe will give a warning.
 
 
 
-## CHARACTER SET
+## Character Set
 
 Programs compiled with Awe will use the ISO 8859-1 (Latin1) character
 set internally and for I/O. This is for the sake of compatibility with
@@ -456,14 +466,14 @@ function procedures.
 
 In the ALGOL W program source, add:
 
-```AlgolW
+```
 INTEGER PROCEDURE CODE (STRING(1) VALUE S); ALGOL "byte2int";
 STRING(1) PROCEDURE DECODE (INTEGER VALUE X); ALGOL "int2byte";
 ```
 
 Link the program to these C functions:
 
-```C
+```
 int byte2int (unsigned char s) { return s; }
 unsigned char int2byte (int x) { return x % 256; }
 ```
@@ -471,7 +481,7 @@ unsigned char int2byte (int x) { return x % 256; }
 (See the [C Interface](#c-interface) section below.)
 
 
-## COMPILER ERRORS
+## Compiler Errors
 
 Awe's compiler error messages are printed on the standard error stream
 in GCC's "brief format". An example:
@@ -504,7 +514,7 @@ behaviour, see [Invalid Name Parameters](#invalid-name-parameters)
 below.
 
 
-## RUN-TIME BEHAVIOUR
+## Run-Time Behaviour
 
 This section describes behaviour of programs compiled by Awe. 
 This behaviour is mostly determined by the Awe run-time library
@@ -582,7 +592,6 @@ Description*.)
 #### Array errors
 
 - `bound 〈n〉 of '〈array〉' is (〈min〉::〈max〉) here` (Raised when an array is declared, if 〈min〉 is more than 1 greater than 〈max〉.)
-
 - `subscript 〈n〉  = 〈i〉, outside the range (〈min〉::〈max〉)` (Arrays are "empty" if 〈min〉 is 1 greater than 〈max〉.)
 
 See [Empty arrays](#empty-arrays) above.
@@ -590,7 +599,6 @@ See [Empty arrays](#empty-arrays) above.
 #### String errors
 
 - `Invalid substring (〈index〉|〈length〉).`  (Raised if 〈index〉 < 0.)
-
 - `Substring (〈index〉|〈length〉) of a string of length 〈length〉` (Raised if the substring does not lie within the string.)
 
 
@@ -602,18 +610,13 @@ See [Empty arrays](#empty-arrays) above.
 - `Bits constant too high on line 〈n〉 of 〈file〉`
 - `String too long on line 〈n〉 of 〈file〉`
 - `Real number out of range on line 〈n〉 of 〈file〉` (Real number underflow/overflow are range errors.)
-
 - `A WRITE field was too wide for the page here. The page width is 〈n〉 but the field width was 〈n〉.`
-
 - `The page estimate, 〈n〉 pages, has been reached.`
 - `The page estimate is 0 pages, nothing should be written.`
-
 - `IOCONTROL code 〈n〉 is undefined.`
 - `R_FORMAT = "〈character〉", this is not a valid format code.`
-
 - `Expected an integer between 〈min〉 and 〈max〉 in system variable 〈name〉.`
 - `Expected a true or false value in system variable 〈name〉.`
-
 - `Unexpected end of input.`
 
 See the table in the [I/O System](#io-system) section.
@@ -647,27 +650,29 @@ implementation of ALGOL W, and very useful when debugging a program.)
 
 
 
-## INPUT/OUTPUT SYSTEM
+## Input/Output System
 
 The Awe Input/Output System is the one described in section 7.9 of the
 *June 1972 ALGOL W Language Description*, with minor modifications to
-allow it to deal with Unix stream I/O.
+allow it to deal with Posix stream I/O.
 
-The Unix standard output stream represents the printer. Lines from
-standard input represent card reader input records. At the default I/O
-System settings, record lengths are flexible. The character set is
-ISO-8859-1 (Latin1), rather than EBCDIC.
+An Awe-compiled program uses the Posix standard output stream
+(`stdout`) as its printer. Lines from standard input (`stdin`)
+represent card reader input records. At the default I/O System
+settings, record lengths are flexible. The character set is ISO-8859-1
+(Latin1), rather than EBCDIC.
 
 There is a second "printer" for sending messages to the standard error
-stream. Output can be directed there using an extended IOCONTROL code.
+stream (`stderr`). Output can be directed there using an extended
+IOCONTROL code.
 
 Run-time error messages are printed on the standard error stream.
 
 ▸ In section 7.9.1, The Input/Output System, replace the first two
   paragraphs with:
 
->  ALGOL W provides a single input stream and a single legible output
->  stream. These streams are conceived as sequences of records, each
+>  ALGOL W provides a single input stream and a two legible output
+>  streams. These streams are conceived as sequences of records, each
 >  record consisting of an ISO 8859-1 character sequence, excluding
 >  the operating system's standard newline and formfeed characters.
 >
@@ -682,7 +687,7 @@ Run-time error messages are printed on the standard error stream.
 
 IOCONTROL has an extended set of control codes, mostly to modify the
 Input/ Output System configuration. The configuration can also be set
-by Unix environment variables.
+by operating system environment variables.
 
 The initial configuration handles line length, whitespace and page
 breaks in a relaxed way that better suits stream I/O. The Input/Output
@@ -693,35 +698,29 @@ behaviour by setting Unix environment variables, or by this statement:
 The control codes:
 
 
-| code  | meaning                   | default | environment variable   |
-| ----  | ------------------------- | ------- | ---------------------- |
-| 4     | hard page breaks = ON     | off     | AWE_HARD_PAGE_BREAKS   |
-| 5     | hard page breaks = OFF    |         |                        |
-|       |                           |         |                        |
-| 1dddd | output page width         | 132     | AWE_PAGE_WIDTH         |
-| 2dddd | output page height        | 60      | AWE_PAGE_HEIGHT        |
-| 3dddd | output page estimate      | 9999    | AWE_PAGE_ESTIMATE      |
-| 40001 | reset page and line count |         |                        |
-|       |                           |         |                        |
-| 40002 | unconditional line break  |         |                        |
-|       |                           |         |                        |
-| 40004 | pretty page breaks = OFF  | OFF     | AWE_PRETTY_PAGE BREAKS |
-| 40005 | pretty page breaks = ON   |         |                        |
-|       |                           |         |                        |
-| 40006 | strict line breaks = OFF  | OFF     | AWE_STRICT_LINE_BREAKS |
-| 40007 | strict line breaks = ON   |         |                        |
-|       |                           |         |                        |
-| 40008 | trim lines = OFF          | ON      | AWE_TRIM_LINES         |
-| 40009 | trim lines = ON           |         |                        |
-|       |                           |         |                        |
-| 40010 | eject last page = OFF     | OFF     | AWE_EJECT_LAST_PAGE    |
-| 40011 | eject last page = ON      |         |                        |
-|       |                           |         |                        |
-| 50000 | redirect output to stdout | stdout  |                        |
-| 50001 | redirect output to stderr |         |                        |
+| code  | meaning                   | default | environment variable     |
+| ----  | ------------------------- | ------- | ------------------------ |
+| 4     | hard page breaks = ON     | off     | `AWE_HARD_PAGE_BREAKS`   |
+| 5     | hard page breaks = OFF    |         |                          |
+| 1dddd | output page width         | 132     | `AWE_PAGE_WIDTH`         |
+| 2dddd | output page height        | 60      | `AWE_PAGE_HEIGHT`        |
+| 3dddd | output page estimate      | 9999    | `AWE_PAGE_ESTIMATE`      |
+| 40001 | reset page and line count |         |                          |
+| 40002 | unconditional line break  |         |                          |
+| 40004 | pretty page breaks = OFF  | OFF     | `AWE_PRETTY_PAGE BREAKS` |
+| 40005 | pretty page breaks = ON   |         |                          |
+| 40006 | strict line breaks = OFF  | OFF     | `AWE_STRICT_LINE_BREAKS` |
+| 40007 | strict line breaks = ON   |         |                          |
+| 40008 | trim lines = OFF          | ON      | `AWE_TRIM_LINES`         |
+| 40009 | trim lines = ON           |         |                          |
+| 40010 | eject last page = OFF     | OFF     | `AWE_EJECT_LAST_PAGE`    |
+| 40011 | eject last page = ON      |         |                          |
+| 50000 | redirect output to stdout | stdout  |                          |
+| 50001 | redirect output to stderr |         |                          |
 
 
-**dddd** stands for the digits of a numeric setting, where 9999 means *unlimited*.
+**dddd** 
+  stands for the digits of a numeric setting, where 9999 means *unlimited*.
 
 **Output page estimate** 
   is the number of pages the program may output, 0 means no
@@ -748,7 +747,6 @@ The control codes:
 
 **Trim lines**
   means do not print spaces at the end of a line. 
-
   (The correct ALGOL W Language Description behaviour is to print
   spaces at the ends of lines, but that can be confusing when
   displayed in a environment that wraps lines.)
@@ -756,14 +754,13 @@ The control codes:
 **Eject last page**
  means perform a page break at the end of the program. If this is
   off a line break is performed instead. 
-
-(The correct ALGOL W Language Description behaviour is to eject
+  (The correct ALGOL W Language Description behaviour is to eject
   the last page, but a mere line break suits stream output better.)
 
 **Redirect output to stderr**
-  By default the "printer" outputs to stdout, which will most likely
+  By default the "printer" outputs to `stdout`, which will most likely
   be piped into a file by the program's user. Awe allows the
-  program's output to be temporarily redirected to strerr to print
+  program's output to be temporarily redirected to `strerr` to print
   error messages where they can be seen.
 
 
@@ -831,12 +828,12 @@ No other features of MTS ALGOL W's I/O system have been implemented.
 
 
 
-## C INTERFACE
+## C Interface
 
 Procedure declarations with "external references" describe the
 interfaces of separately compiled procedures. An example:
 
-```Algol
+```
 INTEGER PROCEDURE UNPACK (BITS VALUE W; INTEGER RESULT LO, HI); 
     ALGOL "unpack16";
 ```
@@ -847,7 +844,7 @@ for each of those prototypes.
 
 An example output:
 
-```C
+```
 /* INTEGER PROCEDURE unpack (BITS VALUE w; INTEGER RESULT lo, hi); 
    ALGOL "unpack16"; */
 void unpack16 (unsigned int w, int *lo, int *hi);
@@ -877,7 +874,7 @@ and that procedure is defined by a separately compiled C function.
 
 The ALGOL W program, `when.alw`:
 
-```AlgolW
+```
 BEGIN
     PROCEDURE LOCAL_TIME (INTEGER ARRAY HMS(*); LOGICAL RESULT DST);
       ALGOL "localtime_wrapper";
@@ -894,7 +891,7 @@ END.
 
 The Makefile:
 
-```Makefile
+```
 PROGRAM        = when
 ALGOLW_SOURCES = when.alw
 C_SOURCES      = timelib.c
@@ -905,7 +902,7 @@ The include file does all the real work, see the `awe.mk(7)` man page.
 
 The C library, `timelib.c`:
 
-```C
+```
 #include <awe.h>
 #include <time.h>
 #include "when.awe.h"
@@ -998,7 +995,7 @@ The FALSE value is 0, all other values are TRUE.
 An external C function should return the C equivalent of its ALGOL W
 procedure's simple type.
 
-```C
+```
 /* INTEGER PROCEDURE TRI (INTEGER VALUE X); ALGOL "tri"; */
 
 int tri (int x)
@@ -1012,7 +1009,7 @@ characters must be copied into a special buffer. Use the function
 `_awe_str_cast` to do this, it will also handle ALGOL W's string
 padding for you.
 
-```C
+```
 /* STRING(8) PROCEDURE HEX (INTEGER VALUE X); ALGOL "hex"; */
 
 #include <awe.h>  /* for _awe_str_cast's prototype */
@@ -1072,7 +1069,7 @@ PROCEDURE x (INTEGER PROCEDURE y (BITS VALUE z));
 
 Becomes:
 
-```C
+```
 void x (int (*y)(unsigned int z));
 ```
 
@@ -1094,7 +1091,8 @@ _awe_array_SUB(loc, type, array, subscripts...)
 ```
 
 Where:
-- `loc`            is a source location (use the _awe_HERE macro)
+
+- `loc`            is a source location (use the `_awe_HERE` macro)
 - `type`           is the C type of the array's elements
 - `array`          is pointer to the array
 - `subscripts...`  all further arguments are integer subscripts
@@ -1102,13 +1100,13 @@ Where:
 For example, this accesses element `x(2,j+1)` of the two-dimensional
 integer array x:
 
-```C    
+``` 
 *_awe_array_SUB(_awe_HERE, int, x, 2, j+1)
 ```
 
 Macros can be used to make array access less cumbersome:
 
-```C
+```
 #define X(i,j) *_awe_array_SUB(_awe_HERE, int, x, (i), (j))
 ```
 
@@ -1165,16 +1163,19 @@ ways out of this problem:
 
 (2) return pointers as references to dummy record classes:
 
-        RECORD file (INTEGER dummy_field);
+```
+RECORD file (INTEGER dummy_field);
 
-        REFERENCE(file) fopen (STRING(255) VALUE path; 
-                               STRING(2) VALUE mode);
+REFERENCE(file) fopen (STRING(255) VALUE path; 
+                       STRING(2) VALUE mode);
             ALGOL "fopen_wrapper";
+```
 
-These references point to C structures rather than
-valid ALGOL W records. So a dummy record class must be the sole member of a reference's
-class identifier list, a dummy record class's field identifiers
-should never be used, and ALGOL W should not allocate new dummy class records. 
+These references point to C structures rather than valid ALGOL W
+records, so a dummy record class must be the sole member of a
+reference's class identifier list, a dummy record class's field
+identifiers should never be used and ALGOL W should not allocate new
+dummy class records.
 
 ---
 Glyn Webster, 2019
