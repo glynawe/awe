@@ -52,7 +52,7 @@ let multi_file_lexbuf (sources : string list) : Lexing.lexbuf =
         in
         let channel = ref (open_source first) in
         let remaining = ref rest in
-        let rec lexbuf_reader (buffer : string) (n_requested : int) : int =
+        let rec lexbuf_reader buffer n_requested =
           let n = input !channel buffer 0 n_requested in
           if n > 0 then 
             n 

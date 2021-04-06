@@ -424,11 +424,11 @@ _awe_str longbase10(double r);
 _awe_str intbase10(int r);
 _awe_str intbase16(int r);
 
-int maxinteger;
-double pi;
-double epsilon;
-double longepsilon;
-double maxreal;
+extern int maxinteger;
+extern double pi;
+extern double epsilon;
+extern double longepsilon;
+extern double maxreal;
 
 double _awe_sqrt (_awe_loc, double);
 double _awe_exp (_awe_loc, double);
