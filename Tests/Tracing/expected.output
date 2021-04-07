@@ -1,0 +1,15 @@
+program.alw:15:5: --> a
+program.alw:2:5:     a
+program.alw:15:5: <-- a
+program.alw:16:5: --> b
+program.alw:6:5:     b
+program.alw:8:30:     --> c
+program.alw:11:5:         c
+program.alw:8:30:     <-- c
+program.alw:8:30:     --> c
+program.alw:11:5:         c
+program.alw:8:30:     <-- c
+program.alw:8:30:     --> c
+program.alw:11:5:         c
+program.alw:8:30:     <-- c
+program.alw:16:5: <-- b

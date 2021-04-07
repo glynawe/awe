@@ -1,0 +1,64 @@
+00001 1-  BEGIN
+00002 --  
+00003 --  PROCEDURE ROMAN (INTEGER VALUE NUMBER; STRING(15) RESULT CHARACTERS; INTEGER RESULT LENGTH);
+00004 --      COMMENT
+00005 --           Returns the Roman number of an integer between 1 and 3999.
+00006 --           "MMMDCCCLXXXVIII" (15 characters long) is the longest Roman number under 4000;
+00007 2-      BEGIN
+00008 --          INTEGER PLACE, POWER;
+00009 --  
+00010 --          PROCEDURE APPEND (STRING(1) VALUE C);
+00011 --              BEGIN CHARACTERS(LENGTH|1) := C; LENGTH := LENGTH + 1 END;
+00012 --  
+00013 --          PROCEDURE I; APPEND(CASE PLACE OF ("I","X","C","M"));
+00014 --          PROCEDURE V; APPEND(CASE PLACE OF ("V","L","D"));
+00015 --          PROCEDURE X; APPEND(CASE PLACE OF ("X","C","M"));
+00016 --  
+00017 --          ASSERT (NUMBER >= 1) AND (NUMBER < 4000);
+00018 --  
+00019 --          CHARACTERS := "               ";  
+00020 --          LENGTH := 0;
+00021 --          POWER := 1000;  
+00022 --          PLACE := 4;
+00023 --          WHILE PLACE > 0 DO
+00024 3-              BEGIN
+00025 4-                  CASE NUMBER DIV POWER + 1 OF BEGIN
+00026 --                      BEGIN            END;
+00027 --                      BEGIN I          END;
+00028 --                      BEGIN I; I       END;
+00029 --                      BEGIN I; I; I    END;
+00030 --                      BEGIN I; V       END;
+00031 --                      BEGIN V          END;
+00032 --                      BEGIN V; I       END;
+00033 --                      BEGIN V; I; I    END;
+00034 --                      BEGIN V; I; I; I END;
+00035 --                      BEGIN I; X       END
+00036 -4                  END;
+00037 --                  NUMBER := NUMBER REM POWER;
+00038 --                  POWER := POWER DIV 10;
+00039 --                  PLACE := PLACE - 1
+00040 -3              END
+00041 -2      END ROMAN;
+00042 --  
+00043 --  INTEGER I;
+00044 --  STRING(15) S;
+00045 --  
+00046 --  ROMAN(1, S, I);    WRITE(S, I);
+00047 --  ROMAN(3999, S, I); WRITE(S, I);
+00048 --  ROMAN(3888, S, I); WRITE(S, I);
+00049 --  ROMAN(2009, S, I); WRITE(S, I);
+00050 --  ROMAN(405, S, I);  WRITE(S, I);
+00051 --  
+00052 --  @AWE_TEXT
+00053 --  
+00054 --    Ignore this rubbish, it is commented out.
+00055 --  PROCEDURE ROMAN (INTEGER VALUE NUMBER; STRING(15) RESULT CHARACTERS; INTEGER RESULT LENGTH);
+00056 --      COMMENT
+00057 --           Returns the Roman number of an integer between 1 and 3999.
+00058 --           "MMMDCCCLXXXVIII" (15 characters long) is the longest Roman number under 4000;
+00059 --      BEGIN
+00060 --  
+00061 --  @AWE_CODE
+00062 --  
+00063 -1  END.
+00064 --  

@@ -1,0 +1,2404 @@
+
+             1
+PROGRAM    CLOSURE
+             2
+PROGRAM    LOOP
+             3
+PROGRAM    BOUNDU   :        CLOSURE
+             4
+PROGRAM    BOUNDU   :        LOOP
+             5
+CLOSURE    (        CHOICE   )
+             6
+CLOSURE    (        COLL     )
+             7
+CLOSURE    PAR      (        COLL     )
+             8
+CLOSURE    (        SERIAL   )
+             9
+CLOSURE    (        BOUNDE   )
+            10
+CHOICE     SERIAL   |        SERIAL   ELSE
+            11
+CHOICE     SERIAL   |        COLL     ELSE
+            12
+CHOICE     SERIAL   |        CONFS    ELSE
+            13
+ELSE
+            14
+ELSE       |        SERIAL
+            15
+ELSE       |:       CHOICE
+            16
+CONFS      CONF
+            17
+CONFS      CONFS    ,        CONF
+            18
+CONF       (        DECL     )        :        UNIT
+            19
+CONF       (        DECER    )        :        UNIT
+            20
+SERIAL     PRELUDE  BOUNDU
+            21
+SERIAL     BOUNDU
+            22
+PRELUDE    BOUNDU   .
+            23
+PRELUDE    BOUNDU   ;
+            24
+PRELUDE    DECL     ;
+            25
+PRELUDE    PRELUDE  BOUNDU   .
+            26
+PRELUDE    PRELUDE  BOUNDU   ;
+            27
+PRELUDE    PRELUDE  DECL     ;
+            28
+COLL       BOUNDE   ,        BOUNDE
+            29
+COLL       BOUNDE   ,        BOUNDU
+            30
+COLL       BOUNDU   ,        BOUNDE
+            31
+COLL       BOUNDU   ,        BOUNDU
+            32
+COLL       COLL     ,        BOUNDE
+            33
+COLL       COLL     ,        BOUNDU
+            34
+BOUNDU     UNIT
+            35
+BOUNDU     BOUNDU   :        UNIT
+            36
+BOUNDE     BOUNDE   :        UNIT
+            37
+BOUNDE
+            38
+BOUNDE     BOUNDE   :
+            39
+BOUNDE     BOUNDU   :
+            40
+BOUNDE     BOUNDE   @        UNIT
+            41
+BOUNDE     BOUNDU   @        UNIT
+            42
+UNIT       TERTIARY
+            43
+UNIT       TERTIARY :=       UNIT
+            44
+UNIT       TERTIARY IS       TERTIARY
+            45
+UNIT       TERTIARY ISNT     TERTIARY
+            46
+UNIT       TEXT
+            47
+UNIT       LOOP
+            48
+TEXT       (        DECL     )        DECER    :        UNIT
+            49
+TEXT       DECER    :        UNIT
+            50
+LOOP       FORETY   FROMETY  BYETY    TOETY    WHILETY  DOCLAUSE
+            51
+FORETY     FOR      ID
+            52
+FORETY
+            53
+FROMETY    FROM     SERIAL
+            54
+FROMETY
+            55
+BYETY      BY       SERIAL
+            56
+BYETY
+            57
+TOETY      TO       SERIAL
+            58
+TOETY
+            59
+WHILETY    WHILE    SERIAL
+            60
+WHILETY
+            61
+DOCLAUSE   DO       SERIAL   OD
+            62
+TERTIARY   TERTIARY ATOR1    FORM2
+            63
+TERTIARY   FORM2
+            64
+FORM2      FORM2    ATOR2    FORM3
+            65
+FORM2      FORM3
+            66
+FORM3      FORM3    ATOR3    FORM4
+            67
+FORM3      FORM4
+            68
+FORM4      FORM4    ATOR4    FORM5
+            69
+FORM4      FORM5
+            70
+FORM5      FORM5    ATOR5    FORM6
+            71
+FORM5      FORM6
+            72
+FORM6      FORM6    ATOR6    FORM7
+            73
+FORM6      FORM7
+            74
+FORM7      FORM7    ATOR7    FORM8
+            75
+FORM7      FORM8
+            76
+FORM8      FORM8    ATOR8    FORM9
+            77
+FORM8      FORM9
+            78
+FORM9      FORM9    ATOR9    FORM10
+            79
+FORM9      FORM10
+            80
+FORM10     ATOR     FORM10
+            81
+FORM10     SECONDAR
+            82
+ATOR       ATOR1
+            83
+ATOR       ATOR2
+            84
+ATOR       ATOR3
+            85
+ATOR       ATOR4
+            86
+ATOR       ATOR5
+            87
+ATOR       ATOR6
+            88
+ATOR       ATOR7
+            89
+ATOR       ATOR8
+            90
+ATOR       ATOR9
+            91
+ATOR       MON
+            92
+SECONDAR   LOC      DECER
+            93
+SECONDAR   HEAP     DECER
+            94
+SECONDAR   ID       OF       SECONDAR
+            95
+SECONDAR   PRIMARY
+            96
+SECONDAR   PRIMARY  CLOSURES
+            97
+SECONDAR   CLOSURES
+            98
+SECONDAR   DECER    CLOSURES
+            99
+PRIMARY    DENOT
+           100
+PRIMARY    TRUE
+           101
+PRIMARY    FALSE
+           102
+PRIMARY    EMPTY
+           103
+PRIMARY    ID
+           104
+PRIMARY    GOTO     ID
+           105
+PRIMARY    SKIP
+           106
+PRIMARY    NIL
+           107
+CLOSURES   CLOSURE  CLOSURES
+           108
+CLOSURES   CLOSURE
+           109
+PRIMARY    $        FORMAT   $
+           110
+FORMAT
+           111
+FORMAT     FORMAT   FID
+           112
+FORMAT     FORMAT   DENOT
+           113
+FORMAT     FORMAT   ,
+           114
+FORMAT     FORMAT   (
+           115
+FORMAT     FORMAT   )
+           116
+FORMAT     FORMAT   GID      CLOSURE
+           117
+FORMAT     FORMAT   +-
+           118
+DECL       OPDEC1
+           119
+DECL       OPDEC1   ,        DECL
+           120
+DECL       OPDEC2
+           121
+DECL       OPDEC2   ,        DECL
+           122
+DECL       PRIODEC
+           123
+DECL       PRIODEC  ,        DECL
+           124
+DECL       IDDEC
+           125
+DECL       IDDEC    ,        DECL
+           126
+DECL       VARDEC
+           127
+DECL       VARDEC   ,        DECL
+           128
+DECL       MODEC
+           129
+DECL       MODEC    ,        DECL
+           130
+DECL       PROCDEC
+           131
+DECL       PROCDEC  ,        DECL
+           132
+DECL       PVARDEC
+           133
+DECL       PVARDEC  ,        DECL
+           134
+OPDEC1     OP       ATOR     =        TEXT
+           135
+OPDEC1     OPDEC1   ,        ATOR     =        TEXT
+           136
+OPDEC2     OP       (        DECERLIS )        DECER    OPDEF
+           137
+OPDEC2     OPDEC2   ,        OPDEF
+           138
+OPDEF      ATOR     =        UNIT
+           139
+PRIODEC    PRIO     ATOR     =        DENOT
+           140
+PRIODEC    PRIODEC  ,        ATOR     =        DENOT
+           141
+IDDEC      DECER    ID       =        UNIT
+           142
+IDDEC      IDDEC    ,        ID       =        UNIT
+           143
+VARDEC     DECER    ID
+           144
+VARDEC     LOC      DECER    ID
+           145
+VARDEC     HEAP     DECER    ID
+           146
+VARDEC     DECER    ID       :=       UNIT
+           147
+VARDEC     LOC      DECER    ID       :=       UNIT
+           148
+VARDEC     HEAP     DECER    ID       :=       UNIT
+           149
+VARDEC     VARDEC   ,        ID
+           150
+VARDEC     VARDEC   ,        ID       :=       UNIT
+           151
+MODEC      MODE     DECER    =        DECER
+           152
+MODEC      MODEC    ,        DECER    =        DECER
+           153
+PROCDEC    PROC     ID       =        TEXT
+           154
+PROCDEC    PROCDEC  ,        ID       =        TEXT
+           155
+PVARDEC    PROC     ID       :=       TEXT
+           156
+PVARDEC    LOC      PROC     ID       :=       TEXT
+           157
+PVARDEC    HEAP     PROC     ID       :=       TEXT
+           158
+PVARDEC    PVARDEC  ,        ID       :=       TEXT
+           159
+DECER      STRUCT   (        DECL     )
+           160
+DECER      UNION    (        DECERLIS )
+           161
+DECERLIS   DECER
+           162
+DECERLIS   DECERLIS ,        DECER
+           163
+DECER      REF      DECER
+           164
+DECER      CLOSURE  DECER
+           165
+DECER      FLEX     CLOSURE  DECER
+           166
+DECER      PROC     (        DECERLIS )        DECER
+           167
+DECER      PROC     DECER
+           168
+DECER      MODEIND
+
+Terminals
+             1  end file
+             2  :
+             3  )
+             4  (
+             5  PAR
+             6  |
+             7  |:
+             8  ,
+             9  .
+            10  ;
+            11  @
+            12  :=
+            13  IS
+            14  ISNT
+            15  ID
+            16  FOR
+            17  FROM
+            18  BY
+            19  TO
+            20  WHILE
+            21  OD
+            22  DO
+            23  ATOR1
+            24  ATOR2
+            25  ATOR3
+            26  ATOR4
+            27  ATOR5
+            28  ATOR6
+            29  ATOR7
+            30  ATOR8
+            31  ATOR9
+            32  MON
+            33  LOC
+            34  HEAP
+            35  OF
+            36  DENOT
+            37  TRUE
+            38  FALSE
+            39  EMPTY
+            40  GOTO
+            41  SKIP
+            42  NIL
+            43  $
+            44  FID
+            45  GID
+            46  +-
+            47  =
+            48  OP
+            49  PRIO
+            50  MODE
+            51  PROC
+            52  STRUCT
+            53  UNION
+            54  REF
+            55  FLEX
+            56  MODEIND
+Non-terminals
+            57  * start
+            58  CLOSURE
+            59  PROGRAM
+            60  LOOP
+            61  BOUNDU
+            62  CHOICE
+            63  COLL
+            64  SERIAL
+            65  BOUNDE
+            66  ELSE
+            67  CONFS
+            68  CONF
+            69  UNIT
+            70  DECL
+            71  DECER
+            72  PRELUDE
+            73  TERTIARY
+            74  TEXT
+            75  DOCLAUSE
+            76  WHILETY
+            77  TOETY
+            78  BYETY
+            79  FROMETY
+            80  FORETY
+            81  FORM2
+            82  FORM3
+            83  FORM4
+            84  FORM5
+            85  FORM6
+            86  FORM7
+            87  FORM8
+            88  FORM9
+            89  FORM10
+            90  ATOR
+            91  SECONDAR
+            92  PRIMARY
+            93  CLOSURES
+            94  FORMAT
+            95  OPDEC1
+            96  OPDEC2
+            97  PRIODEC
+            98  IDDEC
+            99  VARDEC
+           100  MODEC
+           101  PROCDEC
+           102  PVARDEC
+           103  OPDEF
+           104  DECERLIS
+
+The empty string can be derived from the following non-terminals:
+BOUNDE
+ELSE
+WHILETY
+TOETY
+BYETY
+FROMETY
+FORETY
+FORMAT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        e:)(P||,.;@:IIIFFBTWODAAAAAAAAAMLHODTFEGSN$FG+=OPMPSURFM*CPLBCCSBECCUDDPTTDWTBFFFFFFFFFFFASPCFOOPIVM
+                        n   A :    =SSDORYOHDOTTTTTTTTTOOEFERAMOKI II- PRORTNELO LROOHOEOLOONEEREEOHOYROOOOOOOOOOTERLOPPRDAO
+                        d   R        N RO  I  OOOOOOOOONCA NULPTIL DD   IDORIFEDsOOOUOLRUSNNICCERXCIEEORRRRRRRRRROCIORDDIDRD
+                                     T  M  L  RRRRRRRRR  P OESTOP       OECUO XEtSGPNILINEFFTLELTTLLTTMEMMMMMMMMMROMSMEEOEDE
+                        f                  E  123456789    T EY            CN  IaUR DC AD S   RUI AEYYET234567891 NAUACCDCEC
+                        i                                                  T   NrRA UE LE      DA UT  TY        0 DRRT12E C
+                        l                                                      DtEM            ER SY  Y           AYE   C
+                        e                                                                       Y E               R S
+            57  * start R   |    |    |    |    |    |    |    |    |    |    | R  |    |    |    |    |    |    |    |    |
+            58  CLOSURE   R |    |    |    |    |    |    |    |    |    |    |  R |    |    |    |    |    |    |    |    |
+            59  PROGRAM   R |    |    |    |R   |    |    |    |    |    |    |  RRR    |    |    R    |    |    |    |    |
+            60  LOOP    ----+----+----+----+R---+----+----+----+----+----+----+----R----+----+----R----+----+----+----+----+
+            61  BOUNDU    R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R RR   |   R|R RRR    |RRRRRRRRR|RRR |    |
+            62  CHOICE   RR |  R |    R    |R   |    |    |RRRR|RRR |    |    |R R RRRRRRRRRR|R RRR    |RRRRRRRRR|RRR |    |
+            63  COLL     RR |  R |    R    |R   |    |    |RRRR|RRR |    |    |R R RR R R   R|R RRR    |RRRRRRRRR|RRR |    |
+            64  SERIAL    R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R RR  R|   R|R RRR    |RRRRRRRRR|RRR |    |
+            65  BOUNDE  -RR-+----+----R----+R---+----+----+RRRR+RRR-+----+----+R-R-R----R---R+R-RRR----+RRRRRRRRR+RRR-+----+
+            66  ELSE     RR |  R |    R    |R   |    |    |RRRR|RRR |    |    |R R RRRRRRRRRR|R RRR    |RRRRRRRRR|RRR |    |
+            67  CONFS     R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R R    | RRR|R RRR    |RRRRRRRRR|RRR |    |
+            68  CONF      R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R R    |  RR|R RRR    |RRRRRRRRR|RRR |    |
+            69  UNIT      R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R R    |   R|R RRR    |RRRRRRRRR|RRR |    |
+            70  DECL    --R-+----+----R----+R---+----+----+RRRR+RRR-+----+----+R-R-R----+---RRR-RRR----+RRRRRRRRR+RRR-RRRRRR
+            71  DECER     R |    |    |    |    |    |    |    |    |    |    |R   |    |    |R   |    |    |    |    |    |
+            72  PRELUDE     |   RR    |    |    |    |    |    |    |    |    |    |    |    | R  |    |    |    |    |    |
+            73  TERTIARY  R |    |    R    |    |    |    |RRRR|RRR |    |    |R R |    |    |R R |    |RRRRRRRRR|RRR |    |
+            74  TEXT      R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R R    |   R|R RRR    |RRRRRRRRR|RRR |    |
+            75  DOCLAUSE----+----+----+----+R---+----+----+----+----+----+----+----+----+----+----R----+----+----+----+----+
+            76  WHILETY   R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R RR  R|   R|R RRRR   |RRRRRRRRR|RRR |    |
+            77  TOETY     R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R RR  R|   R|R RRR R  |RRRRRRRRR|RRR |    |
+            78  BYETY     R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R RR  R|   R|R RRR  R |RRRRRRRRR|RRR |    |
+            79  FROMETY   R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R RR  R|   R|R RRR   R|RRRRRRRRR|RRR |    |
+            80  FORETY  ----+----+----R----+----+----+----+----+----+----+----+----+----+----+----+----R----+----+----+----+
+            81  FORM2     R |    |    R    |    |    |    |RRRR|RRR |    |    |R R |    |    |R   |    |RRRRRRRRR|RRR |    |
+            82  FORM3     R |    |    R    |    |    |    |RRRR|RRR |    |    |R R |    |    |R   |    | RRRRRRRR|RRR |    |
+            83  FORM4     R |    |    R    |    |    |    |RRRR|RRR |    |    |R R |    |    |R   |    |  RRRRRRR|RRR |    |
+            84  FORM5     R |    |    R    |    |    |    |RRRR|RRR |    |    |R R |    |    |R   |    |   RRRRRR|RRR |    |
+            85  FORM6   --R-+----+----R----+----+----+----+RRRR+RRR-+----+----+R-R-+----+----+R---+----+----RRRRR+RRR-+----+
+            86  FORM7     R |    |    R    |    |    |    |RRRR|RRR |    |    |R R |    |    |R   |    |    |RRRR|RRR |    |
+            87  FORM8     R |    |    R    |    |    |    |RRRR|RRR |    |    |R R |    |    |R   |    |    | RRR|RRR |    |
+            88  FORM9     R |    |    R    |    |    |    |RRRR|RRR |    |    |R R |    |    |R   |    |    |  RR|RRR |    |
+            89  FORM10    R |    |    R    |    |    |    |RRRR|RRR |    |    |R R |    |    |R   |    |    |   R|RRR |    |
+            90  ATOR    ----+----+----+----+--RRRRRRRRRR--+----+----+----+----+----+----+----+----+----+----+----R----+----+
+            91  SECONDAR  R |    |    R    |    |    |    |RRRR|RRR |    |    |R R |    |    |R   |    |    |    |RRR |    |
+            92  PRIMARY     |    |    R    |    |    |    |RRRR|RRR |    |    |    |    |    |    |    |    |    | R  |    |
+            93  CLOSURES  R |    |    |    |    |    |    |    |    |    |    |  R |    |    |    |    |    |    |  R |    |
+            94  FORMAT    RR|  R |    |    |    |    |    |R   |   R|R   |    |  R |    |    |    |    |    |    |   R|    |
+            95  OPDEC1  --R-+----+----R----+R---+----+----+RRRR+RRR-+----+----+R-R-R----+---R+R-RRR----+RRRRRRRRR+RRR-R----+
+            96  OPDEC2    R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R R    |   R|R RRR    |RRRRRRRRR|RRR |R   |
+            97  PRIODEC     |    |    |    |    |    |    |R   |    |    |    |    |    |    |    |    |    |    |    | R  |
+            98  IDDEC     R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R R    |   R|R RRR    |RRRRRRRRR|RRR |  R |
+            99  VARDEC    R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R R    |   R|R RRR    |RRRRRRRRR|RRR |   R|
+           100  MODEC   --R-+----+----+----+----+----+----+----+----+----+----+R---+----+----+R---+----+----+----+----+----R
+           101  PROCDEC   R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R R    |   R|R RRR    |RRRRRRRRR|RRR |    |
+           102  PVARDEC   R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R R    |   R|R RRR    |RRRRRRRRR|RRR |    |
+           103  OPDEF     R |    |    R    |R   |    |    |RRRR|RRR |    |    |R R R    |   R|R RRR    |RRRRRRRRR|RRR |    |
+           104  DECERLIS  R |    |    |    |    |    |    |    |    |    |    |R   |    |    |R   |    |    |    |    |    |
+
+
+
+
+                        PPOD
+                        RVPE
+                        OADC
+                        CREE
+                        DDFR
+                        EE L
+                        CC I
+                           S
+            57  * start
+            58  CLOSURE
+            59  PROGRAM
+            60  LOOP    ----
+            61  BOUNDU
+            62  CHOICE
+            63  COLL
+            64  SERIAL
+            65  BOUNDE  ----
+            66  ELSE
+            67  CONFS
+            68  CONF
+            69  UNIT
+            70  DECL    RRR-
+            71  DECER
+            72  PRELUDE
+            73  TERTIARY
+            74  TEXT
+            75  DOCLAUSE----
+            76  WHILETY
+            77  TOETY
+            78  BYETY
+            79  FROMETY
+            80  FORETY  ----
+            81  FORM2
+            82  FORM3
+            83  FORM4
+            84  FORM5
+            85  FORM6   ----
+            86  FORM7
+            87  FORM8
+            88  FORM9
+            89  FORM10
+            90  ATOR    ----
+            91  SECONDAR
+            92  PRIMARY
+            93  CLOSURES
+            94  FORMAT
+            95  OPDEC1  ----
+            96  OPDEC2    R
+            97  PRIODEC
+            98  IDDEC
+            99  VARDEC
+           100  MODEC   ----
+           101  PROCDEC R
+           102  PVARDEC  R
+           103  OPDEF     R
+           104  DECERLIS   R
+
+
+
+
+                        e:)(P||,.;@:IIIFFBTWODAAAAAAAAAMLHODTFEGSN$FG+=OPMPSURFM*CPLBCCSBECCUDDPTTDWTBFFFFFFFFFFFASPCFOOPIVM
+                        n   A :    =SSDORYOHDOTTTTTTTTTOOEFERAMOKI II- PRORTNELO LROOHOEOLOONEEREEOHOYROOOOOOOOOOTERLOPPRDAO
+                        d   R        N RO  I  OOOOOOOOONCA NULPTIL DD   IDORIFEDsOOOUOLRUSNNICCERXCIEEORRRRRRRRRROCIORDDIDRD
+                                     T  M  L  RRRRRRRRR  P OESTOP       OECUO XEtSGPNILINEFFTLELTTLLTTMEMMMMMMMMMROMSMEEOEDE
+                        f                  E  123456789    T EY            CN  IaUR DC AD S   RUI AEYYET234567891 NAUACCDCEC
+                        i                                                  T   NrRA UE LE      DA UT  TY        0 DRRT12E C
+                        l                                                      DtEM            ER SY  Y           AYE   C
+                        e                                                                       Y E               R S
+            57  * start    LL    |    LLLLLL LLLLLLLLLLLLL|LLLLLLLL |    |LLLLLLLLLLL   |   L|L LLLLLLLLLLLLLLLLLLLLL |    |
+            58  CLOSURE    LL    |    |    |    |    |    |    |    |    |    |  L |    |    |    |    |    |    |    |    |
+            59  PROGRAM    LL    |    LLLLLL LLLLLLLLLLLLL|LLLLLLLL |    |LLLLLL LLLL   |   L|L LLLLLLLLLLLLLLLLLLLLL |    |
+            60  LOOP    ----+----+----+LLLLL-L--+----+----+----+----+----+----+----L----+----+----LLLLLL----+----+----+----+
+            61  BOUNDU     LL    |    LLLLLL LLLLLLLLLLLLL|LLLLLLLL |    |LLLLLL L LL   |   L|L LLLLLLLLLLLLLLLLLLLLL |    |
+            62  CHOICE     LL    |    LLLLLL LLLLLLLLLLLLL|LLLLLLLL |  LLLLLLLLL L LLL L|   LLLLLLLLLLLLLLLLLLLLLLLLL LLLLLL
+            63  COLL     L LL  L |L   LLLLLL LLLLLLLLLLLLL|LLLLLLLL |    |LLLLLL L LL L L   L|L LLLLLLLLLLLLLLLLLLLLL |    |
+            64  SERIAL     LL    |    LLLLLL LLLLLLLLLLLLL|LLLLLLLL |  LLLLLLLLL L LL  L|   LLLLLLLLLLLLLLLLLLLLLLLLL LLLLLL
+            65  BOUNDE  -L-LL----+L---LLLLLL-LLLLLLLLLLLLL+LLLLLLLL-+----+LLLLLL-L-LL---L---L+L-LLLLLLLLLLLLLLLLLLLLL-+----+
+            66  ELSE        |LL  |    |    |    |    |    |    |    |    |    |    |    |L   |    |    |    |    |    |    |
+            67  CONFS      L|    |    |    |    |    |    |    |    |    |    |    |    | LL |    |    |    |    |    |    |
+            68  CONF       L|    |    |    |    |    |    |    |    |    |    |    |    |  L |    |    |    |    |    |    |
+            69  UNIT       LL    |    LLLLLL LLLLLLLLLLLLL|LLLLLLLL |    |LLLLLL L L    |   L|L LLLLLLLLLLLLLLLLLLLLL |    |
+            70  DECL    ---LL----+----+----+----+----+--LL+----+----+--LLLLLLLLL-L-+----+----LL---+----+----+----+----LLLLLL
+            71  DECER      LL    |    |    |    |    |    |    |    |    |LLLLLL L |    |    |L   |    |    |    |    |    |
+            72  PRELUDE    LL    |    LLLLLL LLLLLLLLLLLLL|LLLLLLLL |  LLLLLLLLL L LL   |   LLLLLLLLLLLLLLLLLLLLLLLLL LLLLLL
+            73  TERTIARY   LL    |    L    |  LLLLLLLLLLLL|LLLLLLLL |    |LLLLLL L |    |    |L L |    |LLLLLLLLLLLLL |    |
+            74  TEXT       LL    |    |    |    |    |    |    |    |    |LLLLLL L |    |    |L  L|    |    |    |    |    |
+            75  DOCLAUSE----+----+----+----+-L--+----+----+----+----+----+----+----+----+----+----L----+----+----+----+----+
+            76  WHILETY     |    |    |    L    |    |    |    |    |    |    |    |    |    |    |L   |    |    |    |    |
+            77  TOETY       |    |    |   L|    |    |    |    |    |    |    |    |    |    |    | L  |    |    |    |    |
+            78  BYETY       |    |    |  L |    |    |    |    |    |    |    |    |    |    |    |  L |    |    |    |    |
+            79  FROMETY     |    |    | L  |    |    |    |    |    |    |    |    |    |    |    |   L|    |    |    |    |
+            80  FORETY  ----+----+----+L---+----+----+----+----+----+----+----+----+----+----+----+----L----+----+----+----+
+            81  FORM2      LL    |    L    |  LLLLLLLLLLLL|LLLLLLLL |    |LLLLLL L |    |    |L   |    |LLLLLLLLLLLLL |    |
+            82  FORM3      LL    |    L    |  LLLLLLLLLLLL|LLLLLLLL |    |LLLLLL L |    |    |L   |    | LLLLLLLLLLLL |    |
+            83  FORM4      LL    |    L    |  LLLLLLLLLLLL|LLLLLLLL |    |LLLLLL L |    |    |L   |    |  LLLLLLLLLLL |    |
+            84  FORM5      LL    |    L    |  LLLLLLLLLLLL|LLLLLLLL |    |LLLLLL L |    |    |L   |    |   LLLLLLLLLL |    |
+            85  FORM6   ---LL----+----L----+--LLLLLLLLLLLL+LLLLLLLL-+----+LLLLLL-L-+----+----+L---+----+----LLLLLLLLL-+----+
+            86  FORM7      LL    |    L    |  LLLLLLLLLLLL|LLLLLLLL |    |LLLLLL L |    |    |L   |    |    |LLLLLLLL |    |
+            87  FORM8      LL    |    L    |  LLLLLLLLLLLL|LLLLLLLL |    |LLLLLL L |    |    |L   |    |    | LLLLLLL |    |
+            88  FORM9      LL    |    L    |  LLLLLLLLLLLL|LLLLLLLL |    |LLLLLL L |    |    |L   |    |    |  LLLLLL |    |
+            89  FORM10     LL    |    L    |  LLLLLLLLLLLL|LLLLLLLL |    |LLLLLL L |    |    |L   |    |    |   LLLLL |    |
+            90  ATOR    ----+----+----+----+--LLLLLLLLLL--+----+----+----+----+----+----+----+----+----+----+----L----+----+
+            91  SECONDAR   LL    |    L    |    |    |  LL|LLLLLLLL |    |LLLLLL L |    |    |L   |    |    |    |LLL |    |
+            92  PRIMARY     |    |    L    |    |    |    |LLLLLLLL |    |    |    |    |    |    |    |    |    | L  |    |
+            93  CLOSURES   LL    |    |    |    |    |    |    |    |    |    |  L |    |    |    |    |    |    |  L |    |
+            94  FORMAT    LL|  L |    |    |    |    |    |L   |   LLL   |    |    |    |    |    |    |    |    |   L|    |
+            95  OPDEC1  ----+----+----+----+----+----+----+----+----+--L-+----+----+----+----+----+----+----+----+----L----+
+            96  OPDEC2      |    |    |    |    |    |    |    |    |  L |    |    |    |    |    |    |    |    |    |L   |
+            97  PRIODEC     |    |    |    |    |    |    |    |    |   L|    |    |    |    |    |    |    |    |    | L  |
+            98  IDDEC      LL    |    |    |    |    |    |    |    |    |LLLLLL L |    |    |L   |    |    |    |    |  L |
+            99  VARDEC     LL    |    |    |    |    |  LL|    |    |    |LLLLLL L |    |    |L   |    |    |    |    |   L|
+           100  MODEC   ----+----+----+----+----+----+----+----+----+----L----+----+----+----+----+----+----+----+----+----L
+           101  PROCDEC     |    |    |    |    |    |    |    |    |    |L   |    |    |    |    |    |    |    |    |    |
+           102  PVARDEC     |    |    |    |    |    |  LL|    |    |    |L   |    |    |    |    |    |    |    |    |    |
+           103  OPDEF       |    |    |    |  LLLLLLLLLL  |    |    |    |    |    |    |    |    |    |    |    L    |    |
+           104  DECERLIS   LL    |    |    |    |    |    |    |    |    |LLLLLL L |    |    |L   |    |    |    |    |    |
+
+
+
+
+                        PPOD
+                        RVPE
+                        OADC
+                        CREE
+                        DDFR
+                        EE L
+                        CC I
+                           S
+            57  * start
+            58  CLOSURE
+            59  PROGRAM
+            60  LOOP    ----
+            61  BOUNDU
+            62  CHOICE  LL
+            63  COLL
+            64  SERIAL  LL
+            65  BOUNDE  ----
+            66  ELSE
+            67  CONFS
+            68  CONF
+            69  UNIT
+            70  DECL    LL--
+            71  DECER
+            72  PRELUDE LL
+            73  TERTIARY
+            74  TEXT
+            75  DOCLAUSE----
+            76  WHILETY
+            77  TOETY
+            78  BYETY
+            79  FROMETY
+            80  FORETY  ----
+            81  FORM2
+            82  FORM3
+            83  FORM4
+            84  FORM5
+            85  FORM6   ----
+            86  FORM7
+            87  FORM8
+            88  FORM9
+            89  FORM10
+            90  ATOR    ----
+            91  SECONDAR
+            92  PRIMARY
+            93  CLOSURES
+            94  FORMAT
+            95  OPDEC1  ----
+            96  OPDEC2
+            97  PRIODEC
+            98  IDDEC
+            99  VARDEC
+           100  MODEC   ----
+           101  PROCDEC L
+           102  PVARDEC  L
+           103  OPDEF     L
+           104  DECERLIS   L
+
+
+
+
+                        e:)(P||,.;@:IIIFFBTWODAAAAAAAAAMLHODTFEGSN$FG+=OPMPSURFM*CPLBCCSBECCUDDPTTDWTBFFFFFFFFFFFASPCFOOPIVM
+                        n   A :    =SSDORYOHDOTTTTTTTTTOOEFERAMOKI II- PRORTNELO LROOHOEOLOONEEREEOHOYROOOOOOOOOOTERLOPPRDAO
+                        d   R        N RO  I  OOOOOOOOONCA NULPTIL DD   IDORIFEDsOOOUOLRUSNNICCERXCIEEORRRRRRRRRROCIORDDIDRD
+                                     T  M  L  RRRRRRRRR  P OESTOP       OECUO XEtSGPNILINEFFTLELTTLLTTMEMMMMMMMMMROMSMEEOEDE
+                        f                  E  123456789    T EY            CN  IaUR DC AD S   RUI AEYYET234567891 NAUACCDCEC
+                        i                                                  T   NrRA UE LE      DA UT  TY        0 DRRT12E C
+                        l                                                      DtEM            ER SY  Y           AYE   C
+                        e                                                                       Y E               R S
+            57  * start    >>    |    >>   |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>>>>>>>   |   >|> >>|    >>>>>>>>>>>>>> |    |
+            58  CLOSURE    >>    |    |    |    |    |    |    |    |    |    |  > |    |    |    |    |    |    |    |    |
+            59  PROGRAM    >>    |    >>   |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>> >>>>   |   >|> >>|    >>>>>>>>>>>>>> |    |
+            60  LOOP    ----+----+----+>---+----+----+----+----+----+----+----+---->----+----+----+---->----+----+----+----+
+            61  BOUNDU     >>    |    >>   |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>> > >>   |   >|> >>|    >>>>>>>>>>>>>> |    |
+            62  CHOICE     >>    |    >>   |  >>>>>>>>>>>>|>>>>>>>> |  >>>>>>>>> > >>> >|   >>>>>>|    >>>>>>>>>>>>>> >>>>>>
+            63  COLL       >>    |    >>   |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>> > >> > >   >|> >>|    >>>>>>>>>>>>>> |    |
+            64  SERIAL     >>    |    >>   |  >>>>>>>>>>>>|>>>>>>>> |  >>>>>>>>> > >>  >|   >>>>>>|    >>>>>>>>>>>>>> >>>>>>
+            65  BOUNDE  --->>----+---->>---+-->>>>>>>>>>>>+>>>>>>>>-+----+>>>>>>->->>--->--->+>->>+---->>>>>>>>>>>>>>-+----+
+            66  ELSE        |>>  |    |    |    |    |    |    |    |    |    |    |    |>   |    |    |    |    |    |    |
+            67  CONFS      >|    |    |    |    |    |    |    |    |    |    |    |    | >> |    |    |    |    |    |    |
+            68  CONF       >|    |    |    |    |    |    |    |    |    |    |    |    |  > |    |    |    |    |    |    |
+            69  UNIT       >>    |    >>   |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>> > >    |   >|> >>|    >>>>>>>>>>>>>> |    |
+            70  DECL    --->>----+----+----+----+----+-->>+----+----+-->>>>>>>>>->-+----+---->>---+----+----+----+---->>>>>>
+            71  DECER      >>    |    |    |    |    |    |    |    |    |>>>>>> > |    |    |>   |    |    |    |    |    |
+            72  PRELUDE    >>    |    >>   |  >>>>>>>>>>>>|>>>>>>>> |  >>>>>>>>> > >>   |   >>>>>>|    >>>>>>>>>>>>>> >>>>>>
+            73  TERTIARY   >>    |    >    |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>> > |    |    |> > |    |>>>>>>>>>>>>> |    |
+            74  TEXT       >>    |    |    |    |    |    |    |    |    |>>>>>> > |    |    |>  >|    |    |    |    |    |
+            75  DOCLAUSE----+----+----+----+->--+----+----+----+----+----+----+----+----+----+---->----+----+----+----+----+
+            76  WHILETY     |    |    |    >    |    |    |    |    |    |    |    |    |    |    |>   |    |    |    |    |
+            77  TOETY       |    |    |   >|    |    |    |    |    |    |    |    |    |    |    | >  |    |    |    |    |
+            78  BYETY       |    |    |  > |    |    |    |    |    |    |    |    |    |    |    |  > |    |    |    |    |
+            79  FROMETY     |    |    | >  |    |    |    |    |    |    |    |    |    |    |    |   >|    |    |    |    |
+            80  FORETY  ----+----+----+>---+----+----+----+----+----+----+----+----+----+----+----+---->----+----+----+----+
+            81  FORM2      >>    |    >    |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>> > |    |    |>   |    |>>>>>>>>>>>>> |    |
+            82  FORM3      >>    |    >    |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>> > |    |    |>   |    | >>>>>>>>>>>> |    |
+            83  FORM4      >>    |    >    |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>> > |    |    |>   |    |  >>>>>>>>>>> |    |
+            84  FORM5      >>    |    >    |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>> > |    |    |>   |    |   >>>>>>>>>> |    |
+            85  FORM6   --->>----+---->----+-->>>>>>>>>>>>+>>>>>>>>-+----+>>>>>>->-+----+----+>---+----+---->>>>>>>>>-+----+
+            86  FORM7      >>    |    >    |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>> > |    |    |>   |    |    |>>>>>>>> |    |
+            87  FORM8      >>    |    >    |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>> > |    |    |>   |    |    | >>>>>>> |    |
+            88  FORM9      >>    |    >    |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>> > |    |    |>   |    |    |  >>>>>> |    |
+            89  FORM10     >>    |    >    |  >>>>>>>>>>>>|>>>>>>>> |    |>>>>>> > |    |    |>   |    |    |   >>>>> |    |
+            90  ATOR    ----+----+----+----+-->>>>>>>>>>--+----+----+----+----+----+----+----+----+----+----+---->----+----+
+            91  SECONDAR   >>    |    >    |    |    |  >>|>>>>>>>> |    |>>>>>> > |    |    |>   |    |    |    |>>> |    |
+            92  PRIMARY     |    |    >    |    |    |    |>>>>>>>> |    |    |    |    |    |    |    |    |    | >  |    |
+            93  CLOSURES   >>    |    |    |    |    |    |    |    |    |    |  > |    |    |    |    |    |    |  > |    |
+            94  FORMAT      |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |   >|    |
+            95  OPDEC1  ----+----+----+----+----+----+----+----+----+-->-+----+----+----+----+----+----+----+----+---->----+
+            96  OPDEC2      |    |    |    |    |    |    |    |    |  > |    |    |    |    |    |    |    |    |    |>   |
+            97  PRIODEC     |    |    |    |    |    |    |    |    |   >|    |    |    |    |    |    |    |    |    | >  |
+            98  IDDEC      >>    |    |    |    |    |    |    |    |    |>>>>>> > |    |    |>   |    |    |    |    |  > |
+            99  VARDEC     >>    |    |    |    |    |  >>|    |    |    |>>>>>> > |    |    |>   |    |    |    |    |   >|
+           100  MODEC   ----+----+----+----+----+----+----+----+----+---->----+----+----+----+----+----+----+----+----+---->
+           101  PROCDEC     |    |    |    |    |    |    |    |    |    |>   |    |    |    |    |    |    |    |    |    |
+           102  PVARDEC     |    |    |    |    |    |  >>|    |    |    |>   |    |    |    |    |    |    |    |    |    |
+           103  OPDEF       |    |    |    |  >>>>>>>>>>  |    |    |    |    |    |    |    |    |    |    |    >    |    |
+           104  DECERLIS   >>    |    |    |    |    |    |    |    |    |>>>>>> > |    |    |>   |    |    |    |    |    |
+
+
+
+
+                        PPOD
+                        RVPE
+                        OADC
+                        CREE
+                        DDFR
+                        EE L
+                        CC I
+                           S
+            57  * start
+            58  CLOSURE
+            59  PROGRAM
+            60  LOOP    ----
+            61  BOUNDU
+            62  CHOICE  >>
+            63  COLL
+            64  SERIAL  >>
+            65  BOUNDE  ----
+            66  ELSE
+            67  CONFS
+            68  CONF
+            69  UNIT
+            70  DECL    >>--
+            71  DECER
+            72  PRELUDE >>
+            73  TERTIARY
+            74  TEXT
+            75  DOCLAUSE----
+            76  WHILETY
+            77  TOETY
+            78  BYETY
+            79  FROMETY
+            80  FORETY  ----
+            81  FORM2
+            82  FORM3
+            83  FORM4
+            84  FORM5
+            85  FORM6   ----
+            86  FORM7
+            87  FORM8
+            88  FORM9
+            89  FORM10
+            90  ATOR    ----
+            91  SECONDAR
+            92  PRIMARY
+            93  CLOSURES
+            94  FORMAT
+            95  OPDEC1  ----
+            96  OPDEC2
+            97  PRIODEC
+            98  IDDEC
+            99  VARDEC
+           100  MODEC   ----
+           101  PROCDEC >
+           102  PVARDEC  >
+           103  OPDEF     >
+           104  DECERLIS   >
+
+
+
+
+                        e:)(P||,.;@:IIIFFBTWODAAAAAAAAAMLHODTFEGSN$FG+=OPMPSURFM*CPLBCCSBECCUDDPTTDWTBFFFFFFFFFFFASPCFOOPIVM
+                        n   A :    =SSDORYOHDOTTTTTTTTTOOEFERAMOKI II- PRORTNELO LROOHOEOLOONEEREEOHOYROOOOOOOOOOTERLOPPRDAO
+                        d   R        N RO  I  OOOOOOOOONCA NULPTIL DD   IDORIFEDsOOOUOLRUSNNICCERXCIEEORRRRRRRRRROCIORDDIDRD
+                                     T  M  L  RRRRRRRRR  P OESTOP       OECUO XEtSGPNILINEFFTLELTTLLTTMEMMMMMMMMMROMSMEEOEDE
+                        f                  E  123456789    T EY            CN  IaUR DC AD S   RUI AEYYET234567891 NAUACCDCEC
+                        i                                                  T   NrRA UE LE      DA UT  TY        0 DRRT12E C
+                        l                                                      DtEM            ER SY  Y           AYE   C
+                        e                                                                       Y E               R S
+             1  end file    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+             2  :        FFFFFFF |F   FFFFFF FFFFFFFFFFFFF|FFFFFFFF |    |FFFFFF F F    |F  F|F FFFFFFFFFFFFFFFFFFFFF |    |
+             3  )       FFFFFFFFFFFFFFF  FFFFFFFFFFFFFFF  |F   |  FFFFF  |FFFFFF F |    |F   |F   FFFF |    |    F  F |    |
+             4  (        FFFF  F |F   FFFFFF FFFFFFFFFFFFF|FFFFFFFFFFF FFFFFFFFF F FFFFFF   FFFFFFFFFFFFFFFFFFFFFFFFF FFFFFF
+             5  PAR     ---F+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+             6  |        F FF  F |F   FFFFFF FFFFFFFFFFFFF|FFFFFFFF |  FFFFFFFFF F FF FFF FFFFFFFFFFFFFFFFFFFFFFFFFFF FFFFFF
+             7  |:         FF    |    FFFFFF FFFFFFFFFFFFF|FFFFFFFF |  FFFFFFFFF F FFF F|   FFFFFFFFFFFFFFFFFFFFFFFFF FFFFFF
+             8  ,        FFFFFFF |F   FFFFFF FFFFFFFFFFFFF|FFFFFFFFFFF FFFFFFFFF F FF   FF FFFF FFFFFFFFFFFFFFFFFFFFF FFFFFF
+             9  .          FF    |    FFFFFF FFFFFFFFFFFFF|FFFFFFFF |  FFFFFFFFF F FF   |   FFF FFFFFFFFFFFFFFFFFFFFF FFFFFF
+            10  ;       ---FF----+----FFFFFF-FFFFFFFFFFFFF+FFFFFFFF-+--FFFFFFFFF-F-FF---+---FFF-FFFFFFFFFFFFFFFFFFFFF-FFFFFF
+            11  @          FF    |    FFFFFF FFFFFFFFFFFFF|FFFFFFFF |    |FFFFFF F F    |   F|F FFFFFFFFFFFFFFFFFFFFF |    |
+            12  :=         FF    |    FFFFFF FFFFFFFFFFFFF|FFFFFFFF |    |FFFFFF F F    |   F|F FFFFFFFFFFFFFFFFFFFFF |    |
+            13  IS         FF    |    F    |  FFFFFFFFFFFF|FFFFFFFF |    |FFFFFF F |    |    |F F |    |FFFFFFFFFFFFF |    |
+            14  ISNT       FF    |    F    |  FFFFFFFFFFFF|FFFFFFFF |    |FFFFFF F |    |    |F F |    |FFFFFFFFFFFFF |    |
+            15  ID      -FFFFFFFFFFFFF+-FFFFFFFFFFFFFFF---F----+----+-F--+----+--F-+----+F---+----FFFFF+----+----+--F-+----+
+            16  FOR         |    |    F    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+            17  FROM       FF    |    FFFFFF FFFFFFFFFFFFF|FFFFFFFF |  FFFFFFFFF F FF  F|   FFFFFFFFFFFFFFFFFFFFFFFFF FFFFFF
+            18  BY         FF    |    FFFFFF FFFFFFFFFFFFF|FFFFFFFF |  FFFFFFFFF F FF  F|   FFFFFFFFFFFFFFFFFFFFFFFFF FFFFFF
+            19  TO         FF    |    FFFFFF FFFFFFFFFFFFF|FFFFFFFF |  FFFFFFFFF F FF  F|   FFFFFFFFFFFFFFFFFFFFFFFFF FFFFFF
+            20  WHILE   ---FF----+----FFFFFF-FFFFFFFFFFFFF+FFFFFFFF-+--FFFFFFFFF-F-FF--F+---FFFFFFFFFFFFFFFFFFFFFFFFF-FFFFFF
+            21  OD      FFF |FFFFFF   |  FFFFF  |    |    |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            22  DO         FF    |    FFFFFF FFFFFFFFFFFFF|FFFFFFFF |  FFFFFFFFF F FF  F|   FFFFFFFFFFFFFFFFFFFFFFFFF FFFFFF
+            23  ATOR1      FF    |    F    |  FFFFFFFFFFFF|FFFFFFFF | F  |FFFFFF F |    |    |F   |    |FFFFFFFFFFFFF |    |
+            24  ATOR2      FF    |    F    |  FFFFFFFFFFFF|FFFFFFFF | F  |FFFFFF F |    |    |F   |    | FFFFFFFFFFFF |    |
+            25  ATOR3   ---FF----+----F----+--FFFFFFFFFFFF+FFFFFFFF-+-F--+FFFFFF-F-+----+----+F---+----+--FFFFFFFFFFF-+----+
+            26  ATOR4      FF    |    F    |  FFFFFFFFFFFF|FFFFFFFF | F  |FFFFFF F |    |    |F   |    |   FFFFFFFFFF |    |
+            27  ATOR5      FF    |    F    |  FFFFFFFFFFFF|FFFFFFFF | F  |FFFFFF F |    |    |F   |    |    FFFFFFFFF |    |
+            28  ATOR6      FF    |    F    |  FFFFFFFFFFFF|FFFFFFFF | F  |FFFFFF F |    |    |F   |    |    |FFFFFFFF |    |
+            29  ATOR7      FF    |    F    |  FFFFFFFFFFFF|FFFFFFFF | F  |FFFFFF F |    |    |F   |    |    | FFFFFFF |    |
+            30  ATOR8   ---FF----+----F----+--FFFFFFFFFFFF+FFFFFFFF-+-F--+FFFFFF-F-+----+----+F---+----+----+--FFFFFF-+----+
+            31  ATOR9      FF    |    F    |  FFFFFFFFFFFF|FFFFFFFF | F  |FFFFFF F |    |    |F   |    |    |   FFFFF |    |
+            32  MON        FF    |    F    |  FFFFFFFFFFFF|FFFFFFFF | F  |FFFFFF F |    |    |F   |    |    |   FFFFF |    |
+            33  LOC        FF    |    |    |    |    |    |    |    |    |FFFFFF F |    |    |F   |    |    |    |    |    |
+            34  HEAP       FF    |    |    |    |    |    |    |    |    |FFFFFF F |    |    |F   |    |    |    |    |    |
+            35  OF      ---FF----+----F----+----+----+--FF+FFFFFFFF-+----+FFFFFF-F-+----+----+F---+----+----+----+FFF-+----+
+            36  DENOT    FFFFFFFFFFFFF|  FFFFFFFFFFFFFF   |F   |  FFFF   |    |  F |    |F   |    FFFF |    |    |  F |    |
+            37  TRUE     FFFFFFFFFFFFF|  FFFFFFFFFFFFFF   |    |    |    |    |  F |    |F   |    FFFF |    |    |  F |    |
+            38  FALSE    FFFFFFFFFFFFF|  FFFFFFFFFFFFFF   |    |    |    |    |  F |    |F   |    FFFF |    |    |  F |    |
+            39  EMPTY    FFFFFFFFFFFFF|  FFFFFFFFFFFFFF   |    |    |    |    |  F |    |F   |    FFFF |    |    |  F |    |
+            40  GOTO    ----+----+----F----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+            41  SKIP     FFFFFFFFFFFFF|  FFFFFFFFFFFFFF   |    |    |    |    |  F |    |F   |    FFFF |    |    |  F |    |
+            42  NIL      FFFFFFFFFFFFF|  FFFFFFFFFFFFFF   |    |    |    |    |  F |    |F   |    FFFF |    |    |  F |    |
+            43  $        FFFFFFFFFFFFF|  FFFFFFFFFFFFFF   |F   |  FFFF   |    |  F |    |F   |    FFFF |    |    |  FF|    |
+            44  FID       FF|  F |    |    |    |    |    |F   |  FFFF   |    |    |    |    |    |    |    |    |    |    |
+            45  GID     ---FF----+----+----+----+----+----+----+----+----+----+--F-+----+----+----+----+----+----+----+----+
+            46  +-        FF|  F |    |    |    |    |    |F   |  FFFF   |    |    |    |    |    |    |    |    |    |    |
+            47  =          FF    |    FFFFFF FFFFFFFFFFFFF|FFFFFFFF |    |FFFFFF F F    |   F|F FFFFFFFFFFFFFFFFFFFFF |    |
+            48  OP         F|    |    |    |  FFFFFFFFFF  |    |    |    |    |    |    |    |    |    |    |    F    |    |
+            49  PRIO        |    |    |    |  FFFFFFFFFF  |    |    |    |    |    |    |    |    |    |    |    F    |    |
+            50  MODE    ---FF----+----+----+----+----+----+----+----+----+FFFFFF-F-+----+----+F---+----+----+----+----+----+
+
+
+                        PPOD
+                        RVPE
+                        OADC
+                        CREE
+                        DDFR
+                        EE L
+                        CC I
+                           S
+             1  end file
+             2  :
+             3  )         F
+             4  (       FF F
+             5  PAR     ----
+             6  |       FF
+             7  |:      FF
+             8  ,       FFF
+             9  .       FF
+            10  ;       FF--
+            11  @
+            12  :=
+            13  IS
+            14  ISNT
+            15  ID      ----
+            16  FOR
+            17  FROM    FF
+            18  BY      FF
+            19  TO      FF
+            20  WHILE   FF--
+            21  OD
+            22  DO      FF
+            23  ATOR1
+            24  ATOR2
+            25  ATOR3   ----
+            26  ATOR4
+            27  ATOR5
+            28  ATOR6
+            29  ATOR7
+            30  ATOR8   ----
+            31  ATOR9
+            32  MON
+            33  LOC
+            34  HEAP
+            35  OF      ----
+            36  DENOT
+            37  TRUE
+            38  FALSE
+            39  EMPTY
+            40  GOTO    ----
+            41  SKIP
+            42  NIL
+            43  $
+            44  FID
+            45  GID     ----
+            46  +-
+            47  =
+            48  OP
+            49  PRIO
+            50  MODE    ----
+
+
+                        e:)(P||,.;@:IIIFFBTWODAAAAAAAAAMLHODTFEGSN$FG+=OPMPSURFM*CPLBCCSBECCUDDPTTDWTBFFFFFFFFFFFASPCFOOPIVM
+                        n   A :    =SSDORYOHDOTTTTTTTTTOOEFERAMOKI II- PRORTNELO LROOHOEOLOONEEREEOHOYROOOOOOOOOOTERLOPPRDAO
+                        d   R        N RO  I  OOOOOOOOONCA NULPTIL DD   IDORIFEDsOOOUOLRUSNNICCERXCIEEORRRRRRRRRROCIORDDIDRD
+                                     T  M  L  RRRRRRRRR  P OESTOP       OECUO XEtSGPNILINEFFTLELTTLLTTMEMMMMMMMMMROMSMEEOEDE
+                        f                  E  123456789    T EY            CN  IaUR DC AD S   RUI AEYYET234567891 NAUACCDCEC
+                        i                                                  T   NrRA UE LE      DA UT  TY        0 DRRT12E C
+                        l                                                      DtEM            ER SY  Y           AYE   C
+                        e                                                                       Y E               R S
+            51  PROC       FF    |    F    |    |    |    |    |    |    |FFFFFF F |    |    |F   |    |    |    |    |    |
+            52  STRUCT     F|    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+            53  UNION      F|    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+            54  REF        FF    |    |    |    |    |    |    |    |    |FFFFFF F |    |    |F   |    |    |    |    |    |
+            55  FLEX    ---FF----+----+----+----+----+----+----+----+----+----+--F-+----+----+----+----+----+----+----+----+
+            56  MODEIND  FFFFFFFFFFFFFF  FFFFFFFFFFFFFFF  |    |    | F  |    |  F |    |F   |    FFFF |    |    F  F |    |
+            57  * start     |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+            58  CLOSURE FFFFFFFFFFFFFF|  FFFFFFFFFFFFFF   |F   |  FFFF   |FFFFFF F |    |F   |F   FFFF |    |    |  F |    |
+            59  PROGRAM F   |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+            60  LOOP    FFF-+FFFFFF---+--FFFFF--+----+----+----+----+----+----+----+----+F---+----FFFF-+----+----+----+----+
+            61  BOUNDU   FF |FFFFFF   |  FFFFF  |    |    |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            62  CHOICE    F |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+            63  COLL      F |FFF |    |    |    |    |    |    |    |    |    |    |    |F   |    |    |    |    |    |    |
+            64  SERIAL    F |FF  |    |  FFFFF  |    |    |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            65  BOUNDE  -FF-+FFF-+F---+----+----+----+----+----+----+----+----+----+----+F---+----+----+----+----+----+----+
+            66  ELSE      F |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+            67  CONFS     F |FFF |    |    |    |    |    |    |    |    |    |    |    |F   |    |    |    |    |    |    |
+            68  CONF      F |FFF |    |    |    |    |    |    |    |    |    |    |    |F   |    |    |    |    |    |    |
+            69  UNIT     FF |FFFFFF   |  FFFFF  |    |    |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            70  DECL    --F-+----F----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+            71  DECER    FFFFFFFFFFFFFF  FFFFFFFFFFFFFFF  |    |    | F  |    |  F |    |F   |    FFFF |    |    F  F |    |
+            72  PRELUDE    FF    |    FFFFFF FFFFFFFFFFFFF|FFFFFFFF |  FFFFFFFFF F FF   |   FFF FFFFFFFFFFFFFFFFFFFFF FFFFFF
+            73  TERTIARY FF |FFFFFFFFF|  FFFFFF |    |    |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            74  TEXT     FF |FFFFFF   |  FFFFF  |    |    |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            75  DOCLAUSEFFF-+FFFFFF---+--FFFFF--+----+----+----+----+----+----+----+----+F---+----FFFF-+----+----+----+----+
+            76  WHILETY     |    |    |    | F  |    |    |    |    |    |    |    |    |    |    F    |    |    |    |    |
+            77  TOETY       |    |    |    F F  |    |    |    |    |    |    |    |    |    |    FF   |    |    |    |    |
+            78  BYETY       |    |    |   FF F  |    |    |    |    |    |    |    |    |    |    FFF  |    |    |    |    |
+            79  FROMETY     |    |    |  FFF F  |    |    |    |    |    |    |    |    |    |    FFFF |    |    |    |    |
+            80  FORETY  ----+----+----+-FFFF-F--+----+----+----+----+----+----+----+----+----+----FFFFF+----+----+----+----+
+            81  FORM2    FF |FFFFFFFFF|  FFFFFFF|    |    |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            82  FORM3    FF |FFFFFFFFF|  FFFFFFFF    |    |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            83  FORM4    FF |FFFFFFFFF|  FFFFFFFFF   |    |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            84  FORM5    FF |FFFFFFFFF|  FFFFFFFFFF  |    |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            85  FORM6   -FF-+FFFFFFFFF+--FFFFFFFFFFF-+----+----+----+----+----+----+----+F---+----FFFF-+----+----+----+----+
+            86  FORM7    FF |FFFFFFFFF|  FFFFFFFFFFFF|    |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            87  FORM8    FF |FFFFFFFFF|  FFFFFFFFFFFFF    |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            88  FORM9    FF |FFFFFFFFF|  FFFFFFFFFFFFFF   |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            89  FORM10   FF |FFFFFFFFF|  FFFFFFFFFFFFFF   |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            90  ATOR    ---FF----+----F----+--FFFFFFFFFFFF+FFFFFFFF-+-F--+FFFFFF-F-+----+----+F---+----+----+---FFFFF-+----+
+            91  SECONDAR FF |FFFFFFFFF|  FFFFFFFFFFFFFF   |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            92  PRIMARY  FFFFFFFFFFFFF|  FFFFFFFFFFFFFF   |    |    |    |    |  F |    |F   |    FFFF |    |    |  F |    |
+            93  CLOSURES FF |FFFFFFFFF|  FFFFFFFFFFFFFF   |    |    |    |    |    |    |F   |    FFFF |    |    |    |    |
+            94  FORMAT    FF|  F |    |    |    |    |    |F   |  FFFF   |    |    |    |    |    |    |    |    |    |    |
+            95  OPDEC1  --F-+--F-F----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+            96  OPDEC2    F |  F F    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+            97  PRIODEC   F |  F F    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+            98  IDDEC     F |  F F    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+            99  VARDEC    F |  F F    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+           100  MODEC   --F-+--F-F----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+----+
+
+
+                        PPOD
+                        RVPE
+                        OADC
+                        CREE
+                        DDFR
+                        EE L
+                        CC I
+                           S
+            51  PROC
+            52  STRUCT
+            53  UNION
+            54  REF
+            55  FLEX    ----
+            56  MODEIND   F
+            57  * start
+            58  CLOSURE
+            59  PROGRAM
+            60  LOOP    ----
+            61  BOUNDU
+            62  CHOICE
+            63  COLL
+            64  SERIAL
+            65  BOUNDE  ----
+            66  ELSE
+            67  CONFS
+            68  CONF
+            69  UNIT
+            70  DECL    ----
+            71  DECER     F
+            72  PRELUDE FF
+            73  TERTIARY
+            74  TEXT
+            75  DOCLAUSE----
+            76  WHILETY
+            77  TOETY
+            78  BYETY
+            79  FROMETY
+            80  FORETY  ----
+            81  FORM2
+            82  FORM3
+            83  FORM4
+            84  FORM5
+            85  FORM6   ----
+            86  FORM7
+            87  FORM8
+            88  FORM9
+            89  FORM10
+            90  ATOR    ----
+            91  SECONDAR
+            92  PRIMARY
+            93  CLOSURES
+            94  FORMAT
+            95  OPDEC1  ----
+            96  OPDEC2
+            97  PRIODEC
+            98  IDDEC
+            99  VARDEC
+           100  MODEC   ----
+
+
+                        e:)(P||,.;@:IIIFFBTWODAAAAAAAAAMLHODTFEGSN$FG+=OPMPSURFM*CPLBCCSBECCUDDPTTDWTBFFFFFFFFFFFASPCFOOPIVM
+                        n   A :    =SSDORYOHDOTTTTTTTTTOOEFERAMOKI II- PRORTNELO LROOHOEOLOONEEREEOHOYROOOOOOOOOOTERLOPPRDAO
+                        d   R        N RO  I  OOOOOOOOONCA NULPTIL DD   IDORIFEDsOOOUOLRUSNNICCERXCIEEORRRRRRRRRROCIORDDIDRD
+                                     T  M  L  RRRRRRRRR  P OESTOP       OECUO XEtSGPNILINEFFTLELTTLLTTMEMMMMMMMMMROMSMEEOEDE
+                        f                  E  123456789    T EY            CN  IaUR DC AD S   RUI AEYYET234567891 NAUACCDCEC
+                        i                                                  T   NrRA UE LE      DA UT  TY        0 DRRT12E C
+                        l                                                      DtEM            ER SY  Y           AYE   C
+                        e                                                                       Y E               R S
+           101  PROCDEC   F |  F F    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+           102  PVARDEC   F |  F F    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+           103  OPDEF     F |  F F    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+           104  DECERLIS  F |  F |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |    |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        PPOD
+                        RVPE
+                        OADC
+                        CREE
+                        DDFR
+                        EE L
+                        CC I
+                           S
+           101  PROCDEC
+           102  PVARDEC
+           103  OPDEF
+           104  DECERLIS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Machine-readable tables
+    322      104      168
+ 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9 10 11
+12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27 28
+29 30 31 0 32 33 34 35 0 0 0 0 0 0 0 36 0 37 0 38 39 -52 -52 -52 -52
+-52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0 0 0 0 0 0 0
+0 -37 -37 2 3 -37 -37 -37 0 0 -37 0 0 0 4 5 -52 -52 -52 -52 0 -52 6
+7 8 9 10 11 12 13 14 15 58 59 0 18 19 20 21 22 23 24 25 0 0 0 0 60
+61 62 63 27 28 29 30 31 0 64 0 65 66 67 68 69 70 -37 0 0 36 321 72
+73 38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52
+53 0 74 75 76 77 78 79 80 81 0 0 0 0 0 317 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -103 -103 -103 -103 -103
+-103 -103 -103 -103 -103 -103 -103 -103 0 0 0 -103 -103 -103 -103 -103
+-103 -103 -103 -103 -103 -103 -103 -103 -103 0 0 0 315 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -103 0 0 0 0 0 0 0 -103 0 0 0 0 0 0
+0 0 -103 -103 -103 -103 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -103 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 314 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 -82 -82 0 0 0 0 0 0 0 0 0 -82 0 0 0 0 0 0 0
+-82 -82 -82 -82 -82 -82 -82 -82 -82 -82 -82 -82 0 -82 -82 -82 -82 -82
+-82 -82 -82 0 0 0 -82 0 0 0 -82 -82 -82 -82 -82 -82 0 -82 0 0 0 0 0
+0 0 0 0 0 0 0 -82 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -82 -82 -82 -82
+-82 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -83 -83 0 0 0 0 0 0 0 0 0 -83 0 0 0
+0 0 0 0 -83 -83 -83 -83 -83 -83 -83 -83 -83 -83 -83 -83 0 -83 -83 -83
+-83 -83 -83 -83 -83 0 0 0 -83 0 0 0 -83 -83 -83 -83 -83 -83 0 -83 0
+0 0 0 0 0 0 0 0 0 0 0 -83 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -83 -83
+-83 -83 -83 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -84 -84 0 0 0 0 0 0 0 0 0 -84
+0 0 0 0 0 0 0 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 -84 0 -84
+-84 -84 -84 -84 -84 -84 -84 0 0 0 -84 0 0 0 -84 -84 -84 -84 -84 -84
+0 -84 0 0 0 0 0 0 0 0 0 0 0 0 -84 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-84 -84 -84 -84 -84 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -85 -85 0 0 0 0 0 0
+0 0 0 -85 0 0 0 0 0 0 0 -85 -85 -85 -85 -85 -85 -85 -85 -85 -85 -85
+-85 0 -85 -85 -85 -85 -85 -85 -85 -85 0 0 0 -85 0 0 0 -85 -85 -85 -85
+-85 -85 0 -85 0 0 0 0 0 0 0 0 0 0 0 0 -85 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 -85 -85 -85 -85 -85 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -86 -86 0 0
+0 0 0 0 0 0 0 -86 0 0 0 0 0 0 0 -86 -86 -86 -86 -86 -86 -86 -86 -86
+-86 -86 -86 0 -86 -86 -86 -86 -86 -86 -86 -86 0 0 0 -86 0 0 0 -86 -86
+-86 -86 -86 -86 0 -86 0 0 0 0 0 0 0 0 0 0 0 0 -86 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 -86 -86 -86 -86 -86 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -87
+-87 0 0 0 0 0 0 0 0 0 -87 0 0 0 0 0 0 0 -87 -87 -87 -87 -87 -87 -87
+-87 -87 -87 -87 -87 0 -87 -87 -87 -87 -87 -87 -87 -87 0 0 0 -87 0 0
+0 -87 -87 -87 -87 -87 -87 0 -87 0 0 0 0 0 0 0 0 0 0 0 0 -87 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 -87 -87 -87 -87 -87 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 -88 -88 0 0 0 0 0 0 0 0 0 -88 0 0 0 0 0 0 0 -88 -88 -88 -88 -88
+-88 -88 -88 -88 -88 -88 -88 0 -88 -88 -88 -88 -88 -88 -88 -88 0 0 0
+-88 0 0 0 -88 -88 -88 -88 -88 -88 0 -88 0 0 0 0 0 0 0 0 0 0 0 0 -88
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -88 -88 -88 -88 -88 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 -89 -89 0 0 0 0 0 0 0 0 0 -89 0 0 0 0 0 0 0 -89 -89 -89
+-89 -89 -89 -89 -89 -89 -89 -89 -89 0 -89 -89 -89 -89 -89 -89 -89 -89
+0 0 0 -89 0 0 0 -89 -89 -89 -89 -89 -89 0 -89 0 0 0 0 0 0 0 0 0 0 0
+0 -89 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -89 -89 -89 -89 -89 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 -90 -90 0 0 0 0 0 0 0 0 0 -90 0 0 0 0 0 0 0 -90
+-90 -90 -90 -90 -90 -90 -90 -90 -90 -90 -90 0 -90 -90 -90 -90 -90 -90
+-90 -90 0 0 0 -90 0 0 0 -90 -90 -90 -90 -90 -90 0 -90 0 0 0 0 0 0 0
+0 0 0 0 0 -90 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -90 -90 -90 -90 -90
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 -91 -91 0 0 0 0 0 0 0 0 0 -91 0 0 0 0 0
+0 0 -91 -91 -91 -91 -91 -91 -91 -91 -91 -91 -91 -91 0 -91 -91 -91 -91
+-91 -91 -91 -91 0 0 0 -91 0 0 0 -91 -91 -91 -91 -91 -91 0 -91 0 0 0
+0 0 0 0 0 0 0 0 0 -91 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -91 -91 -91
+-91 -91 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26
+27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 313 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 26 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 312 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -99
+-99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 -99 0 0 0 -99 -99 -99 -99
+-99 -99 -99 -99 -99 -99 -99 -99 -99 -99 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 -99 0 0 0 0 0 0 0 -99 0 0 0 0 0 0 0 0 -99 -99
+-99 -99 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -99 0 0 0 0 0 0 0 0 0 0 0 0 -100
+-100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 0 0 0 -100
+-100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 -100 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -100 0 0 0 0 0 0
+0 -100 0 0 0 0 0 0 0 0 -100 -100 -100 -100 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 -100 0 0 0 0 0 0 0 0 0 0 0 0 -101 -101 -101 -101 -101 -101 -101
+-101 -101 -101 -101 -101 -101 0 0 0 -101 -101 -101 -101 -101 -101 -101
+-101 -101 -101 -101 -101 -101 -101 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 -101 0 0 0 0 0 0 0 -101 0 0 0 0 0 0 0 0 -101 -101
+-101 -101 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -101 0 0 0 0 0 0 0 0 0 0 0 0
+-102 -102 -102 -102 -102 -102 -102 -102 -102 -102 -102 -102 -102 0
+0 0 -102 -102 -102 -102 -102 -102 -102 -102 -102 -102 -102 -102 -102
+-102 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -102 0 0 0
+0 0 0 0 -102 0 0 0 0 0 0 0 0 -102 -102 -102 -102 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 -102 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 311
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -105 -105 -105 -105 -105
+-105 -105 -105 -105 -105 -105 -105 -105 0 0 0 -105 -105 -105 -105 -105
+-105 -105 -105 -105 -105 -105 -105 -105 -105 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -105 0 0 0 0 0 0 0 -105 0 0 0 0 0 0 0
+0 -105 -105 -105 -105 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -105 0 0 0 0 0 0
+0 0 0 0 0 0 -106 -106 -106 -106 -106 -106 -106 -106 -106 -106 -106
+-106 -106 0 0 0 -106 -106 -106 -106 -106 -106 -106 -106 -106 -106 -106
+-106 -106 -106 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-106 0 0 0 0 0 0 0 -106 0 0 0 0 0 0 0 0 -106 -106 -106 -106 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 -106 0 0 0 0 0 0 0 0 0 0 0 0 0 -110 -110 0 0 0
+-110 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -110 0 0
+0 0 0 0 -110 -110 -110 -110 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 301 0 0 0 0 0
+0 0 0 0 0 0 0 0 100 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26 27 28 29 30 31 0 86
+0 0 0 0 0 0 0 0 0 0 0 0 102 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 298 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 295 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 26 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 294 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 292 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -168
+-168 -168 -168 -168 -168 -168 -168 -168 -168 -168 -168 -168 -168 0
+0 -168 -168 -168 -168 -168 -168 -168 -168 -168 -168 -168 -168 -168
+-168 -168 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -168 0 0 0 0 0 0 0 0 0 0 -168
+0 0 0 0 0 0 0 -168 0 0 0 0 0 0 0 0 -168 -168 -168 -168 0 0 0 0 0 0
+0 0 0 0 0 -168 0 0 -168 0 0 0 0 0 0 0 0 0 -168 0 -1 -108 -108 54 3
+-108 -108 -108 -108 -108 -108 -108 -108 -108 0 0 0 -108 -108 -108 -108
+-108 -108 -108 -108 -108 -108 -108 -108 -108 -108 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 0 0 0 0 0 0 -108 0 0 0
+0 94 0 0 0 -108 -108 -108 -108 0 0 0 0 0 0 0 0 0 0 0 0 0 0 57 0 0 0
+0 0 0 0 0 0 0 0 291 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 -2 -47 -47 0 0 -47 -47 -47 -47 -47 -47 0 0 0
+0 0 0 -47 -47 -47 -47 -47 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -47 0 0 0 0 0 0 0 0 -47
+-47 -47 -47 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 288
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 -34 -34 0 0 -34 -34 -34 -34 -34 -34 0 0 0 0 0 0 -34 -34 -34 -34 -34
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 -34 0 0 0 0 0 0 0 0 -34 -34 -34 -34 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 106 0 54 3 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 55 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 114 0 0 0 0 0 0 0 0 0 0 0 0 -42 -42 0 0 -42
+-42 -42 -42 -42 -42 280 281 282 0 0 0 -42 -42 -42 -42 -42 283 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 -42 0 0 0 0 0 0 0 0 -42 -42 -42 -42 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -46 -46 0 0 -46 -46 -46 -46 -46 -46
+0 0 0 0 0 0 -46 -46 -46 -46 -46 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -46 0 0 0 0 0 0 0
+0 -46 -46 -46 -46 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 264 -54 -54 -54 0 -54 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 -54 -54 -54 -54 265 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 -63 -63 0 0 -63 -63 -63 -63 -63 -63 -63
+-63 -63 0 0 0 -63 -63 -63 -63 -63 -63 262 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -63 0 0 0 0
+0 0 0 0 -63 -63 -63 -63 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 -65 -65 0 0 -65 -65 -65 -65 -65 -65 -65 -65 -65 0 0 0 -65
+-65 -65 -65 -65 -65 -65 260 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -65 0 0 0 0 0 0 0 0 -65 -65
+-65 -65 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -67 -67
+0 0 -67 -67 -67 -67 -67 -67 -67 -67 -67 0 0 0 -67 -67 -67 -67 -67 -67
+-67 -67 258 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 -67 0 0 0 0 0 0 0 0 -67 -67 -67 -67 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -69 -69 0 0 -69 -69 -69
+-69 -69 -69 -69 -69 -69 0 0 0 -69 -69 -69 -69 -69 -69 -69 -69 -69 256
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 -69 0 0 0 0 0 0 0 0 -69 -69 -69 -69 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -71 -71 0 0 -71 -71 -71 -71 -71 -71 -71
+-71 -71 0 0 0 -71 -71 -71 -71 -71 -71 -71 -71 -71 -71 254 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -71
+0 0 0 0 0 0 0 0 -71 -71 -71 -71 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 -73 -73 0 0 -73 -73 -73 -73 -73 -73 -73 -73 -73 0
+0 0 -73 -73 -73 -73 -73 -73 -73 -73 -73 -73 -73 252 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -73 0 0 0 0
+0 0 0 0 -73 -73 -73 -73 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 -75 -75 0 0 -75 -75 -75 -75 -75 -75 -75 -75 -75 0 0 0 -75
+-75 -75 -75 -75 -75 -75 -75 -75 -75 -75 -75 250 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -75 0 0 0 0 0 0 0
+0 -75 -75 -75 -75 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 -77 -77 0 0 -77 -77 -77 -77 -77 -77 -77 -77 -77 0 0 0 -77 -77 -77
+-77 -77 -77 -77 -77 -77 -77 -77 -77 -77 248 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -77 0 0 0 0 0 0 0 0 -77
+-77 -77 -77 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -79
+-79 0 0 -79 -79 -79 -79 -79 -79 -79 -79 -79 0 0 0 -79 -79 -79 -79 -79
+-79 -79 -79 -79 -79 -79 -79 -79 -79 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -79 0 0 0 0 0 0 0 0 -79 -79 -79
+-79 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3
+0 0 0 0 0 0 0 0 0 4 0 0 0 0 0 0 0 6 7 8 9 10 11 12 13 14 15 16 17 0
+18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 0 0
+0 0 0 0 0 0 0 0 0 246 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 247 50 51 52
+53 0 0 0 0 0 0 0 0 0 0 0 0 -81 -81 0 0 -81 -81 -81 -81 -81 -81 -81
+-81 -81 0 0 0 -81 -81 -81 -81 -81 -81 -81 -81 -81 -81 -81 -81 -81 -81
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-81 0 0 0 0 0 0 0 0 -81 -81 -81 -81 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 -95 -95 54 3 -95 -95 -95 -95 -95 -95 -95 -95
+-95 0 0 0 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 -95 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 55 0 0 0 0 0 0 0
+-95 0 0 0 0 0 0 0 0 -95 -95 -95 -95 0 0 0 0 0 0 0 0 0 0 0 0 0 0 56
+0 0 0 0 0 0 0 0 0 0 0 0 -97 -97 0 0 -97 -97 -97 -97 -97 -97 -97 -97
+-97 0 0 0 -97 -97 -97 -97 -97 -97 -97 -97 -97 -97 -97 -97 -97 -97 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -97
+0 0 0 0 0 0 0 0 -97 -97 -97 -97 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 -37 -37 2 3 -37 -37 -37 0 0 -37 0 0 0 4 5 -52 -52
+-52 -52 0 -52 6 7 8 9 10 11 12 13 14 15 58 59 0 18 19 20 21 22 23 24
+25 0 0 0 0 60 61 62 63 27 28 29 30 31 0 64 0 65 66 67 68 69 70 -37
+0 0 36 71 72 73 38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47 48
+49 50 51 52 53 0 74 75 76 77 78 79 80 81 0 0 0 -108 -108 54 3 -108
+-108 -108 -108 -108 -108 -108 -108 -108 0 0 0 -108 -108 -108 -108 -108
+-108 -108 -108 -108 -108 -108 -108 -108 -108 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 55 0 0 0 0 0 0 0 -108 0 0 0 0 0 0 0 0
+-108 -108 -108 -108 0 0 0 0 0 0 0 0 0 0 0 0 0 0 57 0 0 0 0 0 0 0 0
+0 0 0 0 -96 -96 0 0 -96 -96 -96 -96 -96 -96 -96 -96 -96 0 0 0 -96 -96
+-96 -96 -96 -96 -96 -96 -96 -96 -96 -96 -96 -96 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -96 0 0 0 0 0 0 0 0
+-96 -96 -96 -96 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 -107 -107 0 0 -107 -107 -107 -107 -107 -107 -107 -107 -107 0 0 0
+-107 -107 -107 -107 -107 -107 -107 -107 -107 -107 -107 -107 -107 -107
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-107 0 0 0 0 0 0 0 0 -107 -107 -107 -107 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 115 27
+28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 245 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 95 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 244 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 235
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 6 7 8 9 10 11 12 13 14 15 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 236 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 6 7 8 9 10 11 12 13
+14 15 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 232 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26 27 28 29 30 31
+0 86 0 0 0 0 0 0 0 0 0 0 0 0 229 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 100 3 0 0 0 0 0 0 0 0 0 224 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+26 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 102 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -108 -108 54 3
+-108 -108 -108 -108 -108 -108 -108 -108 -108 0 0 0 -108 -108 -108 -108
+-108 -108 -108 -108 -108 -108 -108 -108 -108 -108 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 0 0 0 0 0 0 -108 0 0 0
+0 94 0 0 0 -108 -108 -108 -108 0 0 0 0 0 0 0 0 0 0 0 0 0 0 57 0 0 0
+0 0 0 0 0 0 0 0 0 -47 -47 0 0 -47 -47 -47 -47 -47 -47 0 0 0 0 0 0 -47
+-47 -47 -47 -47 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -47 0 0 0 0 0 0 0 0 -47 -47 -47 -47
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 176 -21 0 0 -21
+-21 221 205 206 177 0 0 0 0 0 0 -21 -21 -21 -21 -21 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 -21 0 0 0 0 0 0 0 0 -21 -21 -21 -21 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 220 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 219 0 0 0 0 209 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 180 0 0 181 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 169 170 0 0 0 0 171 0
+0 172 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 168 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 106
+0 54 3 0 0 0 0 0 0 0 0 0 89 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 55 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 114 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9
+10 11 12 13 14 15 58 59 0 18 19 20 21 22 23 24 25 0 0 0 0 60 61 62
+63 27 28 29 30 31 0 64 0 65 161 0 0 0 0 0 0 0 36 162 72 0 38 39 -52
+-52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 74 75 76
+77 78 79 80 81 0 0 0 0 -118 0 0 0 0 156 0 -118 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -120 0 0 0 0 150 0 -120 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -122 0 0 0 0 145 0
+-122 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -124
+0 0 0 0 140 0 -124 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 -126 0 0 0 0 135 0 -126 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 -128 0 0 0 0 130 0 -128 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -130 0 0 0 0 125 0 -130 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -132 0 0 0 0 82 0 -132
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0
+0 0 0 0 0 0 0 83 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 84 85 0 0 0 0 0
+0 0 0 0 0 0 0 0 60 61 62 63 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0
+0 87 88 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 74 75 76 77 78
+79 80 81 0 0 0 0 0 0 0 0 0 0 0 0 0 123 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 115 27 28 29
+30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 116 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 95 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 96 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 26 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 94
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 -133 0 0 0 0 0 0 -133 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 89 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 -143 0 0 0 0 -143 0 -143 0 90 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 91 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52
+-52 -52 0 -52 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24
+25 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 65 0 0 0 0 0 0 0 0 93 0 37
+0 38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52
+53 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52
+-52 0 -52 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25
+0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 65 0 0 0 0 0 0 0 0 92 0 37 0
+38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53
+0 0 0 0 0 0 0 0 0 0 0 0 0 -141 0 0 0 0 -141 0 -141 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -146 0 0 0 0 -146 0 -146 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -164 -164 -164
+-164 -164 -164 -164 -164 -164 -164 -164 -164 -164 -164 0 0 -164 -164
+-164 -164 -164 -164 -164 -164 -164 -164 -164 -164 -164 -164 -164 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 -164 0 0 0 0 0 0 0 0 0 0 -164 0 0 0 0 0 0
+0 -164 0 0 0 0 0 0 0 0 -164 -164 -164 -164 0 0 0 0 0 0 0 0 0 0 0 -164
+0 0 -164 0 0 0 0 0 0 0 0 0 -164 0 0 0 0 100 3 0 0 0 0 0 0 0 0 0 101
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 26 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 102 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 97 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -145
+0 0 0 0 -145 0 -145 0 98 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9
+10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26
+27 28 29 30 31 0 64 0 65 0 0 0 0 0 0 0 0 99 0 37 0 38 39 -52 -52 -52
+-52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0 0 0 0 0
+0 0 0 0 -148 0 0 0 0 -148 0 -148 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 -37 -37 2 3 -37 -37 -37 0 0 -37 0 0 0 4 5 -52 -52
+-52 -52 0 -52 6 7 8 9 10 11 12 13 14 15 58 59 0 18 19 20 21 22 23 24
+25 0 0 0 0 60 61 62 63 27 28 29 30 31 0 64 0 65 66 67 68 69 70 -37
+0 0 36 71 108 73 38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47
+48 49 50 51 52 53 0 74 75 76 77 78 79 80 81 0 109 0 0 0 0 0 0 0 0 0
+0 0 103 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -167 -167
+-167 -167 -167 -167 -167 -167 -167 -167 -167 -167 -167 -167 0 0 -167
+-167 -167 -167 -167 -167 -167 -167 -167 -167 -167 -167 -167 -167 -167
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 -167 0 0 0 0 0 0 0 0 0 0 -167 0 0 0 0 0
+0 0 -167 0 0 0 0 0 0 0 0 -167 -167 -167 -167 0 0 0 0 0 0 0 0 0 0 0
+-167 0 0 -167 0 0 0 0 0 0 0 0 0 -167 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 26 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 104 0 0 105 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 106 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -157
+0 0 0 0 -157 0 -157 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9 10
+11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27
+28 29 30 31 0 64 0 65 0 0 0 0 0 0 0 0 107 0 37 0 38 39 -52 -52 -52
+-52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0 0 0 0 0
+0 0 0 -49 -49 0 0 -49 -49 -49 -49 -49 -49 0 0 0 0 0 0 -49 -49 -49 -49
+-49 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 -49 0 0 0 0 0 0 0 0 -49 -49 -49 -49 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 106 -161 54 3 0 0 -161
+0 0 0 0 0 0 89 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 55 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 114 0 0 0 0 0 0 0 0 0 0 0 0 0 110
+0 0 0 0 111 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26 27 28 29 30 31 0 86 0 0 0 0 0
+0 0 0 0 0 0 0 113 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26 27 28 29 30 31
+0 86 0 0 0 0 0 0 0 0 0 0 0 0 112 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -162 0 0 0 0 -162 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -166 -166 -166 -166 -166
+-166 -166 -166 -166 -166 -166 -166 -166 -166 0 0 -166 -166 -166 -166
+-166 -166 -166 -166 -166 -166 -166 -166 -166 -166 -166 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 -166 0 0 0 0 0 0 0 0 0 0 -166 0 0 0 0 0 0 0 -166 0
+0 0 0 0 0 0 0 -166 -166 -166 -166 0 0 0 0 0 0 0 0 0 0 0 -166 0 0 -166
+0 0 0 0 0 0 0 0 0 -166 0 0 -98 -98 0 0 -98 -98 -98 -98 -98 -98 -98
+-98 -98 0 0 0 -98 -98 -98 -98 -98 -98 -98 -98 -98 -98 -98 -98 -98 -98
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-98 0 0 0 0 0 0 0 0 -98 -98 -98 -98 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 100 3 0 0 0 0 0 0 0 0 0 120 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26 27 28 29
+30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 102 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 117
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -144 0 0 0 0 -144 0 -144
+0 118 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0
+0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9 10 11 12 13 14 15 16
+17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0
+65 0 0 0 0 0 0 0 0 119 0 37 0 38 39 -52 -52 -52 -52 -52 40 41 42 43
+44 45 46 47 48 49 50 51 52 53 0 0 0 0 0 0 0 0 0 0 0 0 0 -147 0 0 0
+0 -147 0 -147 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 121 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26 27 28 29 30 31 0 86 0 0 0 0
+0 0 0 0 0 0 0 0 104 0 0 122 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 -156 0 0 0 0 -156 0 -156 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26
+27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 104 0 0 124 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -158 0 0 0 0 -158
+0 -158 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54
+3 0 0 0 0 0 0 0 0 0 126 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 84 85 0 0
+0 0 0 0 0 0 0 0 0 0 0 60 61 62 63 27 28 29 30 31 0 86 0 0 0 0 0 0 0
+0 0 0 0 127 88 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 74 75
+76 77 78 79 80 81 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 128 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -131 0 0 0 0 0 0 -131 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 26 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 104 0 0 129 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -154 0 0
+0 0 -154 0 -154 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 84
+85 0 0 0 0 0 0 0 0 0 0 0 0 0 60 61 62 63 27 28 29 30 31 0 86 0 0 0
+0 0 0 0 0 0 0 0 131 132 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 74 75 76 77 78 79 80 81 0 0 0 0 -129 0 0 0 0 0 0 -129 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+89 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 133
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 26 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 134 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -152
+0 0 0 0 -152 0 -152 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 136 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 84 85 0 0 0 0 0 0 0 0 0 0 0 0 0 60 61 62 63 27 28 29 30 31 0 86
+0 0 0 0 0 0 0 0 0 0 0 137 88 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 74 75 76 77 78 79 80 81 0 0 0 0 -149 0 0 0 0 -149 0 -149 0
+138 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -127 0 0 0
+0 0 0 -127 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9 10 11 12
+13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27 28 29
+30 31 0 64 0 65 0 0 0 0 0 0 0 0 139 0 37 0 38 39 -52 -52 -52 -52 -52
+40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0 0 0 0 0 0 0 0 0
+-150 0 0 0 0 -150 0 -150 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 141 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 84 85 0 0 0 0 0 0 0 0 0 0 0 0 0 60 61 62 63 27 28 29 30 31
+0 86 0 0 0 0 0 0 0 0 0 0 0 142 88 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 74 75 76 77 78 79 80 81 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 143
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -125 0 0 0 0 0 0
+-125 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3
+0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9 10 11 12 13 14
+15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27 28 29 30 31
+0 64 0 65 0 0 0 0 0 0 0 0 144 0 37 0 38 39 -52 -52 -52 -52 -52 40 41
+42 43 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0 0 0 0 0 0 0 0 0 -142
+0 0 0 0 -142 0 -142 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 6 7 8 9 10 11 12 13
+14 15 84 85 0 0 0 0 0 0 0 0 0 0 0 0 0 60 61 62 63 27 28 29 30 31 0
+86 0 0 0 0 0 0 0 0 0 0 0 146 88 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+147 0 0 0 0 74 75 76 77 78 79 80 81 0 0 0 0 -123 0 0 0 0 0 0 -123 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 148 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 149 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -140
+0 0 0 0 -140 0 -140 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 6 7 8 9 10 11 12 13
+14 15 84 85 0 0 0 0 0 0 0 0 0 0 0 0 0 60 61 62 63 27 28 29 30 31 0
+86 0 0 0 0 0 0 0 0 0 0 0 151 88 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+152 0 0 0 0 74 75 76 77 78 79 80 81 153 0 0 0 -121 0 0 0 0 0 0 -121
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 154 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -137
+0 0 0 0 -137 0 -137 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9 10
+11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27
+28 29 30 31 0 64 0 65 0 0 0 0 0 0 0 0 155 0 37 0 38 39 -52 -52 -52
+-52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0 0 0 0 0
+0 0 0 0 -138 0 0 0 0 -138 0 -138 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 6 7
+8 9 10 11 12 13 14 15 84 85 0 0 0 0 0 0 0 0 0 0 0 0 0 60 61 62 63 27
+28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 157 88 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 158 0 0 0 0 74 75 76 77 78 79 80 81 0 0 0 0 -119 0 0
+0 0 0 0 -119 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 159 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26 27 28 29 30 31 0 86 0 0 0 0
+0 0 0 0 0 0 0 0 104 0 0 160 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 -135 0 0 0 0 -135 0 -135 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 164 -20 0 0 -20 -20 0 165 166 0
+0 0 0 0 0 0 -20 -20 -20 -20 -20 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -20 0 0 0 0 0 0 0
+0 -20 -20 -20 -20 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 163 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 -27 -27 0 0 0 0 0 0 0 0 0 -27 -27 -27 -27 -27 -27 0 -27
+-27 -27 -27 -27 -27 -27 -27 -27 -27 -27 -27 -27 0 -27 -27 -27 -27 -27
+-27 -27 -27 0 0 0 0 -27 -27 -27 -27 -27 -27 -27 -27 -27 0 -27 0 -27
+-27 0 0 0 0 0 0 0 -27 -27 -27 0 -27 -27 -27 -27 -27 -27 -27 -27 -27
+-27 -27 -27 -27 -27 -27 -27 -27 -27 -27 -27 -27 0 -27 -27 -27 -27 -27
+-27 -27 -27 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52
+6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0
+0 0 26 27 28 29 30 31 0 64 0 65 0 0 0 0 0 0 0 0 167 0 37 0 38 39 -52
+-52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 -25 -25 0 0 0 0 0 0 0 0 0 -25 -25 -25 -25 -25 -25
+0 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 0 -25 -25 -25
+-25 -25 -25 -25 -25 0 0 0 0 -25 -25 -25 -25 -25 -25 -25 -25 -25 0 -25
+0 -25 -25 0 0 0 0 0 0 0 -25 -25 -25 0 -25 -25 -25 -25 -25 -25 -25 -25
+-25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 -25 0 -25 -25 -25 -25
+-25 -25 -25 -25 0 0 0 0 0 -26 -26 0 0 0 0 0 0 0 0 0 -26 -26 -26 -26
+-26 -26 0 -26 -26 -26 -26 -26 -26 -26 -26 -26 -26 -26 -26 -26 0 -26
+-26 -26 -26 -26 -26 -26 -26 0 0 0 0 -26 -26 -26 -26 -26 -26 -26 -26
+-26 0 -26 0 -26 -26 0 0 0 0 0 0 0 -26 -26 -26 0 -26 -26 -26 -26 -26
+-26 -26 -26 -26 -26 -26 -26 -26 -26 -26 -26 -26 -26 -26 -26 -26 0 -26
+-26 -26 -26 -26 -26 -26 -26 0 0 0 -35 -35 0 0 -35 -35 -35 -35 -35 -35
+0 0 0 0 0 0 -35 -35 -35 -35 -35 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -35 0 0 0 0 0 0 0
+0 -35 -35 -35 -35 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 -24 -24 0 0 0 0 0 0 0 0 0 -24 -24 -24 -24 -24 -24 0 -24 -24
+-24 -24 -24 -24 -24 -24 -24 -24 -24 -24 -24 0 -24 -24 -24 -24 -24 -24
+-24 -24 0 0 0 0 -24 -24 -24 -24 -24 -24 -24 -24 -24 0 -24 0 -24 -24
+0 0 0 0 0 0 0 -24 -24 -24 0 -24 -24 -24 -24 -24 -24 -24 -24 -24 -24
+-24 -24 -24 -24 -24 -24 -24 -24 -24 -24 -24 0 -24 -24 -24 -24 -24 -24
+-24 -24 0 0 0 -38 -38 2 3 -38 -38 -38 0 0 -38 0 0 0 4 5 -52 -52 -52
+-52 0 -52 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25
+0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 65 0 0 0 0 0 -38 0 0 179 0 37
+0 38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52
+53 0 0 0 0 0 0 0 0 0 0 0 -9 -9 -9 -9 -9 -9 -9 -9 -9 -9 -9 -9 -9 -9
+0 0 0 -9 -9 -9 -9 -9 -9 -9 -9 -9 -9 -9 -9 -9 -9 0 0 0 0 -9 0 0 0 0
+0 0 -9 -9 -9 -9 0 0 0 0 -9 -9 -9 -9 -9 -9 0 -9 0 0 0 0 0 0 0 -9 0 0
+0 0 -9 0 0 0 -9 -9 -9 -9 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -9 0 0 0 0 0 0
+0 0 0 0 0 0 -37 -37 2 3 -37 -37 -37 0 0 -37 0 0 0 4 5 -52 -52 -52 -52
+0 -52 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0
+0 0 0 0 0 26 27 28 29 30 31 0 64 0 65 174 0 0 0 175 -37 0 0 36 0 37
+0 38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52
+53 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52
+-52 0 -52 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25
+0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 65 0 0 0 0 0 0 0 0 173 0 37
+0 38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52
+53 0 0 0 0 0 0 0 0 0 0 0 0 -40 -40 0 0 -40 -40 -40 0 0 -40 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -40 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 176 -29 0 0 -29 -29 -29
+0 0 177 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -29 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 169 -28
+0 0 -28 -28 -28 0 0 172 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -28
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 -39 -39 2 3 -39 -39 -39 0 0 -39 0 0 0 4 5 -52 -52 -52 -52
+0 -52 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0
+0 0 0 0 0 26 27 28 29 30 31 0 64 0 65 0 0 0 0 0 -39 0 0 167 0 37 0
+38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52
+0 -52 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0
+0 0 0 0 0 26 27 28 29 30 31 0 64 0 65 0 0 0 0 0 0 0 0 178 0 37 0 38
+39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0
+0 0 0 0 0 0 0 0 0 0 0 -41 -41 0 0 -41 -41 -41 0 0 -41 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 -41 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -36 -36 0 0 -36 -36 -36 0 0
+-36 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -36 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -8 -8 -8 -8
+-8 -8 -8 -8 -8 -8 -8 -8 -8 -8 0 0 0 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8 -8
+-8 -8 -8 0 0 0 0 -8 0 0 0 0 0 0 -8 -8 -8 -8 0 0 0 0 -8 -8 -8 -8 -8
+-8 0 -8 0 0 0 0 0 0 0 -8 0 0 0 0 -8 0 0 0 -8 -8 -8 -8 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 -8 0 0 0 0 0 0 0 0 0 0 0 0 -37 -37 182 3 -37 -37 -37
+0 0 -37 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9 10 11 12 13 14 15 58
+59 0 18 19 20 21 22 23 24 25 0 0 0 0 60 61 62 63 27 28 29 30 31 0 64
+0 65 66 0 183 184 185 -37 186 187 36 71 72 73 38 39 -52 -52 -52 -52
+-52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 74 75 76 77 78 79 80
+81 0 0 0 -37 -37 2 3 -37 -37 -37 0 0 -37 0 0 0 4 5 -52 -52 -52 -52
+0 -52 6 7 8 9 10 11 12 13 14 15 58 59 0 18 19 20 21 22 23 24 25 0 0
+0 0 60 61 62 63 27 28 29 30 31 0 64 0 65 66 67 68 69 70 -37 0 0 36
+213 214 73 38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49
+50 51 52 53 0 74 75 76 77 78 79 80 81 0 0 0 0 -13 0 0 188 189 209 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 210 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -13 0 0
+188 189 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 208 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 169 0 0 0 0 0 171 0 0 172 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 -13 0 0 188 189 190 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 191 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 -16 0 0 -16 -16 -16 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 -16 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4
+5 -52 -52 -52 -52 0 -52 6 7 8 9 10 11 12 13 14 15 58 59 0 18 19 20
+21 22 23 24 25 0 0 0 0 60 61 62 63 27 28 29 30 31 0 64 0 65 202 0 0
+207 0 0 0 0 36 71 72 73 38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45
+46 47 48 49 50 51 52 53 0 74 75 76 77 78 79 80 81 0 0 0 0 0 2 3 0 0
+0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9 10 11 12 13 14 15 58
+59 0 18 19 20 21 22 23 24 25 0 0 0 0 60 61 62 63 27 28 29 30 31 0 64
+0 65 202 203 0 204 0 0 0 0 36 71 72 73 38 39 -52 -52 -52 -52 -52 40
+41 42 43 44 45 46 47 48 49 50 51 52 53 0 74 75 76 77 78 79 80 81 0
+0 0 0 0 192 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 193 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 -12 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 84 85 0 0 0 0 0 0 0 0 0 0 0 0 0 60 61 62 63 27 28 29
+30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 194 195 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 74 75 76 77 78 79 80 81 0 0 0 0 -17 0 0 -17 -17
+-17 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -17 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 199
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 196 0 0 0 0 0 0 0 0 0 0 0 89 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 197 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52 6
+7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0
+0 26 27 28 29 30 31 0 64 0 65 0 0 0 0 0 0 0 0 198 0 37 0 38 39 -52
+-52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0
+0 0 0 0 0 0 0 0 -19 0 0 -19 -19 -19 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 -19 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 200 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52
+-52 -52 -52 0 -52 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22
+23 24 25 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 65 0 0 0 0 0 0 0 0
+201 0 37 0 38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49
+50 51 52 53 0 0 0 0 0 0 0 0 0 0 0 0 0 -18 0 0 -18 -18 -18 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -18 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 164 -21 0 0 -21 -21
+0 205 206 0 0 0 0 0 0 0 -21 -21 -21 -21 -21 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -21 0
+0 0 0 0 0 0 0 -21 -21 -21 -21 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 -15 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 181 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -22 -22 0 0 0 0 0 0 0 0 0 -22 -22 -22
+-22 -22 -22 0 -22 -22 -22 -22 -22 -22 -22 -22 -22 -22 -22 -22 -22 0
+-22 -22 -22 -22 -22 -22 -22 -22 0 0 0 0 -22 -22 -22 -22 -22 -22 -22
+-22 -22 0 -22 0 -22 -22 0 0 0 0 0 0 0 -22 -22 -22 0 -22 -22 -22 -22
+-22 -22 -22 -22 -22 -22 -22 -22 -22 -22 -22 -22 -22 -22 -22 -22 -22
+0 -22 -22 -22 -22 -22 -22 -22 -22 0 0 0 0 0 -23 -23 0 0 0 0 0 0 0 0
+0 -23 -23 -23 -23 -23 -23 0 -23 -23 -23 -23 -23 -23 -23 -23 -23 -23
+-23 -23 -23 0 -23 -23 -23 -23 -23 -23 -23 -23 0 0 0 0 -23 -23 -23 -23
+-23 -23 -23 -23 -23 0 -23 0 -23 -23 0 0 0 0 0 0 0 -23 -23 -23 0 -23
+-23 -23 -23 -23 -23 -23 -23 -23 -23 -23 -23 -23 -23 -23 -23 -23 -23
+-23 -23 -23 0 -23 -23 -23 -23 -23 -23 -23 -23 0 0 0 0 -14 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -10 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -37
+-37 2 3 -37 -37 -37 0 0 -37 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9
+10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26
+27 28 29 30 31 0 64 0 65 211 0 0 0 212 -37 0 0 36 0 37 0 38 39 -52
+-52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0
+0 0 0 0 0 0 0 0 -11 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 176 -33 0 0 -33 -33 -33 0 0 177 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 -33 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 169 -32 0 0 -32 -32 -32 0 0 172
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -32 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 215 0 0 0 0
+0 0 168 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 106 196
+54 3 0 0 0 0 0 0 0 0 0 89 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 55 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 114 0 0 0 0 0 0 0 0 0
+0 0 0 200 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26 27 28 29 30 31 0 86 0 0
+0 0 0 0 0 0 0 0 0 0 216 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 217 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52
+-52 -52 0 -52 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24
+25 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 65 0 0 0 0 0 0 0 0 218 0
+37 0 38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51
+52 53 0 0 0 0 0 0 0 0 0 0 0 0 -48 -48 0 0 -48 -48 -48 -48 -48 -48 0
+0 0 0 0 0 -48 -48 -48 -48 -48 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -48 0 0 0 0 0 0 0 0
+-48 -48 -48 -48 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-6 -6 -6 -6 -6 -6 -6 -6 -6 -6 -6 -6 -6 -6 0 0 0 -6 -6 -6 -6 -6 -6 -6
+-6 -6 -6 -6 -6 -6 -6 0 0 0 0 -6 0 0 0 0 0 0 -6 -6 -6 -6 0 0 0 0 -6
+-6 -6 -6 -6 -6 0 -6 0 0 0 0 0 0 0 -6 0 0 0 0 -6 0 0 0 -6 -6 -6 -6 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 -6 0 0 0 0 0 0 0 0 0 0 0 -5 -5 -5 -5 -5 -5
+-5 -5 -5 -5 -5 -5 -5 -5 0 0 0 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5 -5
+-5 0 0 0 0 -5 0 0 0 0 0 0 -5 -5 -5 -5 0 0 0 0 -5 -5 -5 -5 -5 -5 0 -5
+0 0 0 0 0 0 0 -5 0 0 0 0 -5 0 0 0 -5 -5 -5 -5 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 -5 0 0 0 0 0 0 0 0 0 0 0 0 -37 -37 2 3 -37 -37 -37 0 0 -37 0
+0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9 10 11 12 13 14 15 16 17 0 18
+19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 65 222
+0 0 0 223 -37 0 0 36 0 37 0 38 39 -52 -52 -52 -52 -52 40 41 42 43 44
+45 46 47 48 49 50 51 52 53 0 0 0 0 0 0 0 0 0 0 0 0 176 -31 0 0 -31
+-31 -31 0 0 177 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -31 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 169 -30 0 0 -30 -30 -30 0 0 172 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 -30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 225 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 226 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26 27 28
+29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 104 0 0 228 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 26 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 104 0 0 227 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -153
+0 0 0 0 -153 0 -153 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 -155 0 0 0 0 -155 0 -155 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 230 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26 27 28
+29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 231 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -151 0 0 0 0 -151 0 -151
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 233 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 234 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-139 0 0 0 0 -139 0 -139 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26 27 28 29 30 31 0 86
+0 0 0 0 0 0 0 0 0 0 0 0 239 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 240 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 237 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26
+27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 104 0 0 238 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -134 0 0 0 0 -134
+0 -134 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -161
+0 0 0 0 -161 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 241 0 0 0 0 111 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26 27 28 29 30 31 0 86
+0 0 0 0 0 0 0 0 0 0 0 0 242 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 6 7 8 9 10 11 12 13 14 15 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 152 0 0 0 0 0 0 0 0 0 0 0 0 243 0 0 0 -136 0 0 0 0 -136 0 -136
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -93 -93 0 0 -93
+-93 -93 -93 -93 -93 -93 -93 -93 97 0 0 -93 -93 -93 -93 -93 -93 -93
+-93 -93 -93 -93 -93 -93 -93 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 -93 0 0 0 0 0 0 0 0 -93 -93 -93 -93 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -92 -92 0 0 -92 -92
+-92 -92 -92 -92 -92 -92 -92 117 0 0 -92 -92 -92 -92 -92 -92 -92 -92
+-92 -92 -92 -92 -92 -92 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 -92 0 0 0 0 0 0 0 0 -92 -92 -92 -92 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 55 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 114 0 0 0 0 0 0 0 0 0 0 0 0 -80 -80 0 0
+-80 -80 -80 -80 -80 -80 -80 -80 -80 0 0 0 -80 -80 -80 -80 -80 -80 -80
+-80 -80 -80 -80 -80 -80 -80 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 -80 0 0 0 0 0 0 0 0 -80 -80 -80 -80 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0
+0 0 0 0 0 4 0 0 0 0 0 0 0 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20
+21 22 23 24 25 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 0 0 0 0 0 0 0
+0 0 0 0 246 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 249 50 51 52 53 0 0 0
+0 0 0 0 0 0 0 0 0 -78 -78 0 0 -78 -78 -78 -78 -78 -78 -78 -78 -78 0
+0 0 -78 -78 -78 -78 -78 -78 -78 -78 -78 -78 -78 -78 -78 -78 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -78 0 0
+0 0 0 0 0 0 -78 -78 -78 -78 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 4 0 0 0 0 0 0 0 6 7 8 9 10
+11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27
+28 29 30 31 0 64 0 0 0 0 0 0 0 0 0 0 0 0 246 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 251 49 50 51 52 53 0 0 0 0 0 0 0 0 0 0 0 0 -76 -76 0 0 -76
+-76 -76 -76 -76 -76 -76 -76 -76 0 0 0 -76 -76 -76 -76 -76 -76 -76 -76
+-76 -76 -76 -76 -76 248 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 -76 0 0 0 0 0 0 0 0 -76 -76 -76 -76 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0
+0 0 0 4 0 0 0 0 0 0 0 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21
+22 23 24 25 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 0 0 0 0 0 0 0 0
+0 0 0 246 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 253 48 49 50 51 52 53 0 0 0
+0 0 0 0 0 0 0 0 0 -74 -74 0 0 -74 -74 -74 -74 -74 -74 -74 -74 -74 0
+0 0 -74 -74 -74 -74 -74 -74 -74 -74 -74 -74 -74 -74 250 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -74 0 0 0
+0 0 0 0 0 -74 -74 -74 -74 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 4 0 0 0 0 0 0 0 6 7 8 9 10 11
+12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27 28
+29 30 31 0 64 0 0 0 0 0 0 0 0 0 0 0 0 246 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 255 47 48 49 50 51 52 53 0 0 0 0 0 0 0 0 0 0 0 0 -72 -72 0 0 -72
+-72 -72 -72 -72 -72 -72 -72 -72 0 0 0 -72 -72 -72 -72 -72 -72 -72 -72
+-72 -72 -72 252 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 -72 0 0 0 0 0 0 0 0 -72 -72 -72 -72 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0
+0 4 0 0 0 0 0 0 0 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22
+23 24 25 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 0 0 0 0 0 0 0 0 0 0
+0 246 0 0 0 0 0 0 0 0 0 0 0 0 0 257 46 47 48 49 50 51 52 53 0 0 0 0
+0 0 0 0 0 0 0 0 -70 -70 0 0 -70 -70 -70 -70 -70 -70 -70 -70 -70 0 0
+0 -70 -70 -70 -70 -70 -70 -70 -70 -70 -70 254 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -70 0 0 0 0 0 0
+0 0 -70 -70 -70 -70 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 4 0 0 0 0 0 0 0 6 7 8 9 10 11 12 13
+14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27 28 29 30
+31 0 64 0 0 0 0 0 0 0 0 0 0 0 0 246 0 0 0 0 0 0 0 0 0 0 0 0 259 45
+46 47 48 49 50 51 52 53 0 0 0 0 0 0 0 0 0 0 0 0 -68 -68 0 0 -68 -68
+-68 -68 -68 -68 -68 -68 -68 0 0 0 -68 -68 -68 -68 -68 -68 -68 -68 -68
+256 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 -68 0 0 0 0 0 0 0 0 -68 -68 -68 -68 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 4 0 0
+0 0 0 0 0 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25
+0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 0 0 0 0 0 0 0 0 0 0 0 246 0
+0 0 0 0 0 0 0 0 0 0 261 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0 0 0
+0 0 0 0 0 -66 -66 0 0 -66 -66 -66 -66 -66 -66 -66 -66 -66 0 0 0 -66
+-66 -66 -66 -66 -66 -66 -66 258 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -66 0 0 0 0 0 0 0 0 -66 -66
+-66 -66 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54
+3 0 0 0 0 0 0 0 0 0 4 0 0 0 0 0 0 0 6 7 8 9 10 11 12 13 14 15 16 17
+0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 0
+0 0 0 0 0 0 0 0 0 0 246 0 0 0 0 0 0 0 0 0 0 263 43 44 45 46 47 48 49
+50 51 52 53 0 0 0 0 0 0 0 0 0 0 0 0 -64 -64 0 0 -64 -64 -64 -64 -64
+-64 -64 -64 -64 0 0 0 -64 -64 -64 -64 -64 -64 -64 260 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -64
+0 0 0 0 0 0 0 0 -64 -64 -64 -64 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52
+6 7 8 9 10 11 12 13 14 15 58 59 0 18 19 20 21 22 23 24 25 0 0 0 0 60
+61 62 63 27 28 29 30 31 0 64 0 65 202 0 0 279 0 0 0 0 36 71 72 73 38
+39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0
+74 75 76 77 78 79 80 81 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 266 -56
+-56 0 -56 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -56 -56 -56 267 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0
+0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9 10 11 12 13 14 15 58 59 0 18
+19 20 21 22 23 24 25 0 0 0 0 60 61 62 63 27 28 29 30 31 0 64 0 65 202
+0 0 278 0 0 0 0 36 71 72 73 38 39 -52 -52 -52 -52 -52 40 41 42 43 44
+45 46 47 48 49 50 51 52 53 0 74 75 76 77 78 79 80 81 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 268 -58 0 -58 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 -58 -58 269 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9
+10 11 12 13 14 15 58 59 0 18 19 20 21 22 23 24 25 0 0 0 0 60 61 62
+63 27 28 29 30 31 0 64 0 65 202 0 0 277 0 0 0 0 36 71 72 73 38 39 -52
+-52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 74 75 76
+77 78 79 80 81 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 270 0 -60
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -60 271 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52
+-52 -52 -52 0 -52 6 7 8 9 10 11 12 13 14 15 58 59 0 18 19 20 21 22
+23 24 25 0 0 0 0 60 61 62 63 27 28 29 30 31 0 64 0 65 202 0 0 276 0
+0 0 0 36 71 72 73 38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46 47
+48 49 50 51 52 53 0 74 75 76 77 78 79 80 81 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 272 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 273 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0
+0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9 10 11 12 13 14 15
+58 59 0 18 19 20 21 22 23 24 25 0 0 0 0 60 61 62 63 27 28 29 30 31
+0 64 0 65 202 0 0 274 0 0 0 0 36 71 72 73 38 39 -52 -52 -52 -52 -52
+40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 74 75 76 77 78 79 80 81
+0 0 -50 -50 -50 0 0 -50 -50 -50 -50 -50 -50 0 0 0 0 0 0 -50 -50 -50
+-50 -50 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 -50 0 0 0 0 0 0 0 0 -50 -50 -50 -50 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 275 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -61 -61 -61 0 0
+-61 -61 -61 -61 -61 -61 0 0 0 0 0 0 -61 -61 -61 -61 -61 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 -61 0 0 0 0 0 0 0 0 -61 -61 -61 -61 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+-59 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -59 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 -57 0 -57 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -57 -57 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 -55 -55 0 -55 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -55
+-55 -55 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 -53 -53 -53 0 -53 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 -53 -53 -53 -53 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0 0 4 5 -52 -52 -52 -52 0 -52
+6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0
+0 0 26 27 28 29 30 31 0 64 0 65 0 0 0 0 0 0 0 0 287 0 37 0 38 39 -52
+-52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 4 0 0 0 0 0 0 0 6 7 8 9 10
+11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27
+28 29 30 31 0 64 0 0 0 0 0 0 0 0 0 0 0 0 246 0 286 0 0 0 0 0 0 0 41
+42 43 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54
+3 0 0 0 0 0 0 0 0 0 4 0 0 0 0 0 0 0 6 7 8 9 10 11 12 13 14 15 16 17
+0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 0
+0 0 0 0 0 0 0 0 0 0 246 0 285 0 0 0 0 0 0 0 41 42 43 44 45 46 47 48
+49 50 51 52 53 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 4
+0 0 0 0 0 0 0 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24
+25 0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 0 0 0 0 0 0 0 0 0 0 0 246
+0 0 0 0 0 0 0 0 0 284 42 43 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0
+0 0 0 0 0 0 0 -62 -62 0 0 -62 -62 -62 -62 -62 -62 -62 -62 -62 0 0 0
+-62 -62 -62 -62 -62 -62 262 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -62 0 0 0 0 0 0 0 0 -62 -62
+-62 -62 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -45 -45
+0 0 -45 -45 -45 -45 -45 -45 0 0 0 0 0 0 -45 -45 -45 -45 -45 283 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 -45 0 0 0 0 0 0 0 0 -45 -45 -45 -45 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -44 -44 0 0 -44 -44 -44 -44 -44 -44
+0 0 0 0 0 0 -44 -44 -44 -44 -44 283 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -44 0 0 0 0 0 0
+0 0 -44 -44 -44 -44 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 -43 -43 0 0 -43 -43 -43 -43 -43 -43 0 0 0 0 0 0 -43 -43 -43 -43
+-43 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 -43 0 0 0 0 0 0 0 0 -43 -43 -43 -43 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 3 0 0 0 0 0 0 0 0
+0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9 10 11 12 13 14 15 16 17 0 18 19
+20 21 22 23 24 25 0 0 0 0 0 0 0 26 27 28 29 30 31 0 289 0 290 0 0 0
+0 0 0 0 0 167 0 37 0 38 39 -52 -52 -52 -52 -52 40 41 42 43 44 45 46
+47 48 49 50 51 52 53 0 0 0 0 0 0 0 0 0 0 0 -3 -108 -108 54 3 -108 -108
+-108 -108 -108 -108 -108 -108 -108 0 0 0 -108 -108 -108 -108 -108 -108
+-108 -108 -108 -108 -108 -108 -108 -108 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 26 27 28 29 30 31 0 64 0 0 0 0 0 0 0 -108 0 0 0 0 94 0 0
+0 -108 -108 -108 -108 0 0 0 0 0 0 0 0 0 0 0 0 0 0 57 0 0 0 0 0 0 0
+0 0 0 0 -4 -47 -47 0 0 -47 -47 -47 -47 -47 -47 0 0 0 0 0 0 -47 -47
+-47 -47 -47 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -47 0 0 0 0 0 0 0 0 -47 -47 -47 -47 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 26 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0
+293 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165
+-165 0 0 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165 -165
+-165 -165 -165 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -165 0 0 0 0 0 0 0 0 0 0
+-165 0 0 0 0 0 0 0 -165 0 0 0 0 0 0 0 0 -165 -165 -165 -165 0 0 0 0
+0 0 0 0 0 0 0 -165 0 0 -165 0 0 0 0 0 0 0 0 0 -165 0 0 -163 -163 -163
+-163 -163 -163 -163 -163 -163 -163 -163 -163 -163 -163 0 0 -163 -163
+-163 -163 -163 -163 -163 -163 -163 -163 -163 -163 -163 -163 -163 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 -163 0 0 0 0 0 0 0 0 0 0 -163 0 0 0 0 0 0
+0 -163 0 0 0 0 0 0 0 0 -163 -163 -163 -163 0 0 0 0 0 0 0 0 0 0 0 -163
+0 0 -163 0 0 0 0 0 0 0 0 0 -163 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+26 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 239 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 296 0 0 297 0 0 0 0
+111 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -160
+-160 -160 -160 -160 -160 -160 -160 -160 -160 -160 -160 -160 -160 0
+0 -160 -160 -160 -160 -160 -160 -160 -160 -160 -160 -160 -160 -160
+-160 -160 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -160 0 0 0 0 0 0 0 0 0 0 -160
+0 0 0 0 0 0 0 -160 0 0 0 0 0 0 0 0 -160 -160 -160 -160 0 0 0 0 0 0
+0 0 0 0 0 -160 0 0 -160 0 0 0 0 0 0 0 0 0 -160 0 0 0 0 54 3 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 84 85 0 0 0 0 0 0 0 0
+0 0 0 0 0 60 61 62 63 27 28 29 30 31 0 86 0 0 0 0 0 0 0 0 0 0 0 299
+88 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 74 75 76 77 78 79
+80 81 0 0 0 0 300 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 -159 -159 -159 -159 -159 -159 -159 -159 -159 -159
+-159 -159 -159 -159 0 0 -159 -159 -159 -159 -159 -159 -159 -159 -159
+-159 -159 -159 -159 -159 -159 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -159 0 0
+0 0 0 0 0 0 0 0 -159 0 0 0 0 0 0 0 -159 0 0 0 0 0 0 0 0 -159 -159 -159
+-159 0 0 0 0 0 0 0 0 0 0 0 -159 0 0 -159 0 0 0 0 0 0 0 0 0 -159 0 0
+0 302 303 0 0 0 304 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 305 0 0 0 0 0 0 306 307 308 309 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 -115 -115 0 0 0 -115 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -115 0 0 0 0 0 0 -115 -115 -115 -115
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -114 -114 0 0 0
+-114 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -114 0 0
+0 0 0 0 -114 -114 -114 -114 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 -113 -113 0 0 0 -113 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 -113 0 0 0 0 0 0 -113 -113 -113 -113 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -112 -112 0 0 0 -112 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -112 0 0 0 0 0 0
+-112 -112 -112 -112 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 -109 -109 -109 -109 -109 -109 -109 -109 -109 -109 -109 -109 -109
+0 0 0 -109 -109 -109 -109 -109 -109 -109 -109 -109 -109 -109 -109 -109
+-109 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -109 0 0 0
+0 0 0 0 -109 0 0 0 0 0 0 0 0 -109 -109 -109 -109 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 -109 0 0 0 0 0 0 0 0 0 0 0 0 0 -111 -111 0 0 0 -111 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -111 0 0 0 0 0 0 -111
+-111 -111 -111 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 310 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 -117 -117 0 0 0 -117 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 -117 0 0 0 0 0 0 -117 -117 -117 -117 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -116 -116 0 0 0 -116 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -116 0 0 0 0 0 0 -116
+-116 -116 -116 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -104
+-104 -104 -104 -104 -104 -104 -104 -104 -104 -104 -104 -104 0 0 0 -104
+-104 -104 -104 -104 -104 -104 -104 -104 -104 -104 -104 -104 -104 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -104 0 0 0 0 0 0
+0 -104 0 0 0 0 0 0 0 0 -104 -104 -104 -104 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 -104 0 0 0 0 0 0 0 0 0 0 0 0 -93 -93 0 0 -93 -93 -93 -93 -93 -93
+-93 -93 -93 0 0 0 -93 -93 -93 -93 -93 -93 -93 -93 -93 -93 -93 -93 -93
+-93 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 -93 0 0 0 0 0 0 0 0 -93 -93 -93 -93 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 -92 -92 0 0 -92 -92 -92 -92 -92 -92 -92 -92
+-92 0 0 0 -92 -92 -92 -92 -92 -92 -92 -92 -92 -92 -92 -92 -92 -92 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -92
+0 0 0 0 0 0 0 0 -92 -92 -92 -92 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -51 -51 -51 -51 0 -51
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -51 -51 -51 -51 -51 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0
+4 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 16 17 0 18 19 20 21 22 23 24 25
+0 0 0 0 0 0 0 26 27 28 29 30 31 0 64 0 0 0 0 0 0 0 0 0 0 0 0 246 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 316 52 53 0 0 0 0 0 0 0 0 0 0 0
+0 -94 -94 0 0 -94 -94 -94 -94 -94 -94 -94 -94 -94 0 0 0 -94 -94 -94
+-94 -94 -94 -94 -94 -94 -94 -94 -94 -94 -94 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -94 0 0 0 0 0 0 0 0 -94
+-94 -94 -94 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -37
+-37 2 3 -37 -37 -37 0 0 -37 0 0 0 4 5 -52 -52 -52 -52 0 -52 6 7 8 9
+10 11 12 13 14 15 16 17 0 18 19 20 21 22 23 24 25 0 0 0 0 0 0 0 26
+27 28 29 30 31 0 64 0 65 318 0 319 0 185 -37 0 0 36 0 37 0 38 39 -52
+-52 -52 -52 -52 40 41 42 43 44 45 46 47 48 49 50 51 52 53 0 0 0 0 0
+0 0 0 0 0 0 0 176 0 0 0 0 0 221 0 0 177 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 320 0 0 0 0 209 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -7 -7 -7 -7 -7 -7 -7 -7 -7 -7 -7 -7 -7
+-7 0 0 0 -7 -7 -7 -7 -7 -7 -7 -7 -7 -7 -7 -7 -7 -7 0 0 0 0 -7 0 0 0
+0 0 0 -7 -7 -7 -7 0 0 0 0 -7 -7 -7 -7 -7 -7 0 -7 0 0 0 0 0 0 0 -7 0
+0 0 0 -7 0 0 0 -7 -7 -7 -7 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -7 0 0 0 0 0
+0 0 0 0 0 0 0 0 322 0 0 0 0 0 0 168 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 54 3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 26 27 28 29 30
+31 0 86 0 0 0 0 0 0 0 0 0 0 0 0 216 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4 5 15 16 23 24 25 26 27 28 29
+30 31 32 33 34 36 37 38 39 40 41 42 43 51 52 53 54 55 56 58 59 60 61
+69 71 73 74 80 81 82 83 84 85 86 87 88 89 90 91 92 93 4 58 93 93 33
+34 48 49 50 51 58 60 61 62 63 64 65 70 71 72 95 96 97 98 99 100 101
+102 8 15 33 34 58 70 71 15 12 47 69 69 71 51 71 15 12 69 4 15 71 12
+71 74 2 69 71 104 3 8 71 71 93 51 71 15 12 69 15 12 74 12 74 8 15 70
+47 74 8 70 71 47 71 8 15 70 12 69 8 15 70 47 69 8 70 90 47 36 8 70
+90 103 47 69 8 70 90 47 74 61 70 10 2 9 10 69 10 2 3 8 11 69 61 65
+2 11 69 69 3 6 4 63 64 65 67 68 6 7 8 66 4 68 70 71 3 2 69 3 2 69 61
+62 64 9 10 64 66 8 66 61 65 70 71 3 71 2 69 3 3 8 61 65 15 12 47 74
+74 71 47 71 90 47 36 4 90 47 74 71 104 3 71 103 71 71 71 89 31 89 30
+88 29 87 28 86 27 85 26 84 25 83 24 82 17 79 18 78 19 77 20 76 22 75
+64 21 64 64 64 64 12 13 14 23 81 73 73 69 2 58 60 1 58 71 71 4 104
+3 4 70 3 94 3 4 8 36 43 44 45 46 58 15 71 71 15 35 91 4 61 63 3 70
+3
+ "end file"  ":       "  ")       "  "(       "  "PAR     "
+ "|       "  "|:      "  ",       "  ".       "  ";       "
+ "@       "  ":=      "  "IS      "  "ISNT    "  "ID      "
+ "FOR     "  "FROM    "  "BY      "  "TO      "  "WHILE   "
+ "OD      "  "DO      "  "ATOR1   "  "ATOR2   "  "ATOR3   "
+ "ATOR4   "  "ATOR5   "  "ATOR6   "  "ATOR7   "  "ATOR8   "
+ "ATOR9   "  "MON     "  "LOC     "  "HEAP    "  "OF      "
+ "DENOT   "  "TRUE    "  "FALSE   "  "EMPTY   "  "GOTO    "
+ "SKIP    "  "NIL     "  "$       "  "FID     "  "GID     "
+ "+-      "  "=       "  "OP      "  "PRIO    "  "MODE    "
+ "PROC    "  "STRUCT  "  "UNION   "  "REF     "  "FLEX    "
+ "MODEIND "  "* start "  "CLOSURE "  "PROGRAM "  "LOOP    "
+ "BOUNDU  "  "CHOICE  "  "COLL    "  "SERIAL  "  "BOUNDE  "
+ "ELSE    "  "CONFS   "  "CONF    "  "UNIT    "  "DECL    "
+ "DECER   "  "PRELUDE "  "TERTIARY"  "TEXT    "  "DOCLAUSE"
+ "WHILETY "  "TOETY   "  "BYETY   "  "FROMETY "  "FORETY  "
+ "FORM2   "  "FORM3   "  "FORM4   "  "FORM5   "  "FORM6   "
+ "FORM7   "  "FORM8   "  "FORM9   "  "FORM10  "  "ATOR    "
+ "SECONDAR"  "PRIMARY "  "CLOSURES"  "FORMAT  "  "OPDEC1  "
+ "OPDEC2  "  "PRIODEC "  "IDDEC   "  "VARDEC  "  "MODEC   "
+ "PROCDEC "  "PVARDEC "  "OPDEF   "  "DECERLIS"
+
+ 59 1 59 1 59 3 59 3 58 3 58 3 58 4 58 3 58 3 62 4 62 4 62 4 66 0 66
+2 66 2 67 1 67 3 68 5 68 5 64 2 64 1 72 2 72 2 72 2 72 3 72 3 72 3
+63 3 63 3 63 3 63 3 63 3 63 3 61 1 61 3 65 3 65 0 65 2 65 2 65 3 65
+3 69 1 69 3 69 3 69 3 69 1 69 1 74 6 74 3 60 6 80 2 80 0 79 2 79 0
+78 2 78 0 77 2 77 0 76 2 76 0 75 3 73 3 73 1 81 3 81 1 82 3 82 1 83
+3 83 1 84 3 84 1 85 3 85 1 86 3 86 1 87 3 87 1 88 3 88 1 89 2 89 1
+90 1 90 1 90 1 90 1 90 1 90 1 90 1 90 1 90 1 90 1 91 2 91 2 91 3 91
+1 91 2 91 1 91 2 92 1 92 1 92 1 92 1 92 1 92 2 92 1 92 1 93 2 93 1
+92 3 94 0 94 2 94 2 94 2 94 2 94 2 94 3 94 2 70 1 70 3 70 1 70 3 70
+1 70 3 70 1 70 3 70 1 70 3 70 1 70 3 70 1 70 3 70 1 70 3 95 4 95 5
+96 6 96 3 103 3 97 4 97 5 98 4 98 5 99 2 99 3 99 3 99 4 99 5 99 5 99
+3 99 5 100 4 100 5 101 4 101 5 102 4 102 5 102 5 102 5 71 4 71 4 104
+1 104 3 71 2 71 2 71 3 71 5 71 2 71 1
+
+
+

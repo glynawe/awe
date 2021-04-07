@@ -1,0 +1,21 @@
+test1.txt
+  0  |A rule appears in the makefile and says when and how to remake certain
+  1  |files, called the rule's targets (most often only one per rule). It
+  2  |lists the other files that are the dependencies of the target, and
+  3  |commands to use to create or update the target.
+test2.txt
+  0  |The order of rules is not significant, except for determining the
+  1  |default goal: the target for make to consider, if you do not otherwise
+  2  |specify one. The default goal is the target of the first rule in the
+  3  |first makefile. If the first rule has multiple targets, only the first
+  4  |target is taken as the default. There are two exceptions: a target
+  5  |starting with a period is not a default unless it contains one or more
+  6  |slashes, `/', as well; and, a target that defines a pattern rule has
+  7  |no effect on the default goal. (See section Defining and Redefining
+  8  |Pattern Rules.)
+test3.txt
+  0  |Therefore, we usually write the makefile so that the first rule is the
+  1  |one for compiling the entire program or all the programs described by
+  2  |the makefile (often with a target called `all'). See section Arguments
+  3  |to Specify the Goals.
+Cannot open test4.txt
