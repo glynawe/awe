@@ -112,7 +112,7 @@ _awe_process_exception (_awe_loc loc, void *condition)
     if (*xcplimit(loc, condition) < 0 || *xcpmark(loc, condition)) {
       unsigned char msg[65];
       _awe_str_cpy(msg, 64, xcpmsg(loc, condition), 64); msg[64] = '\0';
-      _awe_warning(loc, msg);
+      _awe_warning(loc, "%s", msg);
     }
     if (*xcplimit(loc, condition) < 0) {
       _awe_finalize(loc);
@@ -126,13 +126,13 @@ void
 _awe_init_exceptions (_awe_loc loc)
 {
   _awe_record_counter = -8; /* Predeclared records will have negative record numbers. */
-  divzero    = exception(loc, 0, 0, 0, 1, "Floating-point division by zero.                                ");
-  intdivzero = exception(loc, 0, 0, 0, 1, "Integer division by zero.                                       ");
-  sqrterr    = exception(loc, 0, 0, 0, 1, "Negative argument for SQRT or LONGSQRT.                         ");
-  experr     = exception(loc, 0, 0, 0, 1, "Argument of EXP or LONGEXP out of domain.                       ");
-  lnlogerr   = exception(loc, 0, 0, 0, 1, "Argument of LN, LOG, LONGLN or LONGLOG out of domain.           ");
-  sincoserr  = exception(loc, 0, 0, 0, 1, "Argument of SIN, COS, LONGSIN or LONGCOS out of domain.         ");
-  endfile    = exception(loc, 0, 0, 0, 1, "Unexpected end of input.                                        ");
+  divzero    = exception(loc, 0, 0, 0, 1, (_awe_str)"Floating-point division by zero.                                ");
+  intdivzero = exception(loc, 0, 0, 0, 1, (_awe_str)"Integer division by zero.                                       ");
+  sqrterr    = exception(loc, 0, 0, 0, 1, (_awe_str)"Negative argument for SQRT or LONGSQRT.                         ");
+  experr     = exception(loc, 0, 0, 0, 1, (_awe_str)"Argument of EXP or LONGEXP out of domain.                       ");
+  lnlogerr   = exception(loc, 0, 0, 0, 1, (_awe_str)"Argument of LN, LOG, LONGLN or LONGLOG out of domain.           ");
+  sincoserr  = exception(loc, 0, 0, 0, 1, (_awe_str)"Argument of SIN, COS, LONGSIN or LONGCOS out of domain.         ");
+  endfile    = exception(loc, 0, 0, 0, 1, (_awe_str)"Unexpected end of input.                                        ");
   _awe_record_counter = 0;
 }
 

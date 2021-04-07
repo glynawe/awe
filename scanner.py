@@ -209,7 +209,7 @@ f.write(c_code)
 f.close()
 
 # Output a "dot file" that can be used to visualize the state machine with GraphViz.
-def escape(s): return s.decode('string_escape').replace('"', '\\"')
+def escape(s): return s.encode('utf-8').decode('unicode_escape').replace('"', '\\"')
 f = open("scanner.dot", 'w')
 f.write('digraph state_machine { rankdir=LR; node [shape = circle];\n')
 for state in sorted(transitions.keys()):

@@ -69,7 +69,7 @@ Scanner_start (_awe_Scanner *scanner)
 
 
 static
-int
+void
 Scanner_error (_awe_Scanner *scanner, _awe_loc loc, const char *message)
 {
   _awe_error( loc, "%s on line %d of %s.", message, scanner->start_line, 
@@ -91,6 +91,7 @@ Scanner_result_string (Scanner_result result)
   case String:    return "a string"; break;
   case Error:     return "a syntax error"; break;
   case Eof:       return "the end of the input"; break;
+  default:        return ""; break;  /* should not happen */
   }
 }
 
@@ -115,7 +116,7 @@ Scanner_fgetc (_awe_Scanner *scanner)
 
 static
 void 
-Scanner_new_card (_awe_Scanner *scanner, _awe_loc loc)
+Scanner_new_card (_awe_Scanner *scanner, _awe_loc loc __attribute__((unused)))
 {
   if (scanner->eof) return;
   while (scanner->column >= 1) {
@@ -182,7 +183,7 @@ Scanner_type_error (_awe_Scanner *scanner, _awe_loc loc, Scanner_result expected
 
 
 static
-int
+void
 Scanner_exception (_awe_Scanner *scanner, _awe_loc loc, Scanner_result expected, Scanner_result result)
 {
   if (result == Eof)
@@ -214,7 +215,7 @@ _awe_readcard (_awe_loc loc, _awe_str recipient, int length)
     int c;
     int i;
     
-    _awe_str_cpy(recipient, length, " ", 1); /* empty string */
+    _awe_str_cpy(recipient, length, (_awe_str)" ", 1); /* empty string */
     Scanner_new_card(_awe_active_scanner, loc);
     for (i = 0; i < length; ++i) {
         c = Scanner_fgetc(_awe_active_scanner);
@@ -292,13 +293,13 @@ void
 _awe_read_string (_awe_loc loc, _awe_str recipient, int length)
 {
   if (!Scanner_scan_for(_awe_active_scanner, loc, String)) {
-      _awe_str_cpy(recipient, length, " ", 1); /* empty string */
+      _awe_str_cpy(recipient, length, (_awe_str)" ", 1); /* empty string */
     return;
   };
   if (_awe_active_scanner->buflen > length)
     Scanner_error(_awe_active_scanner, loc, "String too long");
   else
-    _awe_str_cpy(recipient, length, _awe_active_scanner->buffer, _awe_active_scanner->buflen);
+    _awe_str_cpy(recipient, length, (_awe_str)_awe_active_scanner->buffer, _awe_active_scanner->buflen);
 }
 
 
@@ -353,7 +354,7 @@ void _awe_read_real (_awe_loc loc, double *recipient)
   switch (result) {
   case Real:
   case Integer:
-    r = strtod (_awe_active_scanner->buffer, NULL);
+    r = strtod(_awe_active_scanner->buffer, NULL);
     test_real(loc);
     *recipient = r;
     break;
@@ -473,8 +474,6 @@ static
 void
 Printer_break_field (_awe_Printer *printer, _awe_loc loc, int field_width)
 {
-  int i;
-
   /* printf("[%d - %d:%d]", field_width, printer->column, printer->true_column); */
 
   if (printer->page_estimate == 0) 
@@ -490,7 +489,7 @@ Printer_break_field (_awe_Printer *printer, _awe_loc loc, int field_width)
 
 static
 void
-Printer_tab_field (_awe_Printer *printer, _awe_loc loc)
+Printer_tab_field (_awe_Printer *printer, _awe_loc loc __attribute__((unused)))
 {
   int i;
 
@@ -832,7 +831,7 @@ _awe_iocontrol (_awe_loc loc, int code)
 
 
 void
-_awe_init_aweio (_awe_loc loc)
+_awe_init_aweio (_awe_loc loc __attribute__((unused)))
 {
   _awe_Scanner_initialize(&_awe_stdin_scanner, stdin, "the standard input");
   _awe_active_scanner = &_awe_stdin_scanner;

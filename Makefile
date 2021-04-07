@@ -67,6 +67,8 @@ awe:
 # ------------------------------------------------------------------------------
 # Build libawe.a
 
+CFLAGS=-std=gnu11 -Wall -Wextra -Werror
+
 # In Cygwin GC_ALLOC crashes when used inside nested GCC auto functions.
 # This is a very obscure bug that the Cygwin maintainers WONTFIX.
 ifeq ($(shell uname -o),Cygwin)
@@ -85,7 +87,7 @@ $(OBJECTS) : $(HEADERS)
 aweio.o: aweio.c scanner.inc
 
 scanner.inc: scanner.py
-	python scanner.py
+	python3 scanner.py
 
 libawe.a: $(OBJECTS)
 	rm -f libawe.a

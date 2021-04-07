@@ -36,7 +36,7 @@ typedef struct {
     int line;
     int column;
     int start_line;
-    unsigned char buffer[Scanner_BUFSIZE];
+    char buffer[Scanner_BUFSIZE];
     int buflen;
 } _awe_Scanner;
 

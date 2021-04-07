@@ -67,7 +67,7 @@ void _awe_finalize (_awe_loc loc);
 
 /* Issue a run-time error, reporting the Algol W source location, and halt. */
 
-void _awe_error(_awe_loc l, const char *format, ...);
+void _awe_error(_awe_loc l, const char *format, ...)  __attribute__ ((noreturn));
 
 
 /* Issue a run-time warning, reporting the Algol W source location. Don't halt. */
@@ -127,7 +127,7 @@ extern int _awe_record_counter;  /* for numbering records */
    This is only called in places where such an error is possible.  
    'classes' is NULL-terminated array of pointers to class names. */
 
-#define _awe_ref_cast(loc, reference, classes...) (_awe_ref_cast_check(loc, reference, (const char *[]){classes, (const char *)0}))
+#define _awe_ref_cast(loc, reference, ...) (_awe_ref_cast_check(loc, reference, (const char *[]){__VA_ARGS__, (const char *)0}))
 void *_awe_ref_cast_check (_awe_loc loc, void *reference, const char **classes);
 
 /* This is used in field designator functions; it raises a run-time
@@ -189,7 +189,6 @@ void
 _awe_subarray_initialize ( _awe_loc loc,
                         const _awe_array_t *array,
                         _awe_array_t *subarray,
-                        int subarray_ndimensions,
                         const _awe_array_slicer_t *slicers,
                         _awe_array_bound_t *bounds,
                         long *multipliers );
@@ -202,8 +201,8 @@ _awe_array_element_pointer ( _awe_loc loc,
 
 
 /* array subscript, as pointer to element */
-#define _awe_array_SUB(loc, type, array, subscripts...)                 \
-    (type*)_awe_array_element_pointer((loc), (array), (int[]){subscripts})
+#define _awe_array_SUB(loc, type, array, ...)                 \
+    (type*)_awe_array_element_pointer((loc), (array), (int[]){__VA_ARGS__})
 
 
 /* declare an array on the stack. */
@@ -227,19 +226,18 @@ _awe_array_element_pointer ( _awe_loc loc,
 
 
 /* declare a subarray on the stack */
-#define _awe_array_DECLARE_SUBARRAY(loc, subarray, ndimensions, array_ptr, slicers...) \
+#define _awe_array_DECLARE_SUBARRAY(loc, subarray, ndimensions, array_ptr, ...) \
     _awe_array_t _##subarray##_descriptor;                              \
     _awe_array_t *subarray = &_##subarray##_descriptor;                 \
                                                                         \
     const int _##subarray##_ndimensions = (ndimensions);                \
     _awe_array_bound_t _##subarray##_bounds[_##subarray##_ndimensions]; \
     long _##subarray##_multipliers [_##subarray##_ndimensions];         \
-    _awe_array_slicer_t _##subarray##_slicers[] = {slicers};            \
+    _awe_array_slicer_t _##subarray##_slicers[] = {__VA_ARGS__};        \
                                                                         \
     _awe_subarray_initialize( (loc),                                    \
                               (array_ptr),                              \
                               subarray,                                 \
-                              _##subarray##_ndimensions,                \
                               _##subarray##_slicers,                    \
                               _##subarray##_bounds,                     \
                               _##subarray##_multipliers )

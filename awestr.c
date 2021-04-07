@@ -109,7 +109,7 @@ _awe_str_unpadded_copy (char *s,  const _awe_str src, int srclen)
     int length;
 
     length = _awe_str_unpadded_length(src, srclen);
-    strncpy(s, src, length);
+    memcpy(s, src, length);
     s[length] = '\0';
 }
 

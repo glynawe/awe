@@ -526,8 +526,8 @@ let rec program (tree : Tree.t) : Code.t =
   else
     "$
      $
-     int _awe_argc;
-     char **_awe_argv;
+     extern int _awe_argc;
+     extern char **_awe_argv;
      int main (int argc, char **argv) {
        _awe_argc = argc;
        _awe_argv = argv;

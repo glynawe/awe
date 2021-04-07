@@ -69,7 +69,6 @@ void
 _awe_subarray_initialize ( _awe_loc loc,
                            const _awe_array_t *array,
                            _awe_array_t *subarray,
-                           int subarray_ndimensions,
                            const _awe_array_slicer_t *slicers,
                            _awe_array_bound_t *bounds,
                            long *multipliers )

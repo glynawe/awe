@@ -175,20 +175,16 @@ _awe_sqrt (_awe_loc loc, double arg)
 
 _awe_str intbase10(int i)
 {
-    char s12[13];
-
-    sprintf(_awe_return_string, " %c%010d", (i < 0 ? '-' : '+'), abs(i));
-    assert(strlen(_awe_return_string) == 12);
+    sprintf((char*)_awe_return_string, " %c%010d", (i < 0 ? '-' : '+'), abs(i));
+    assert(strlen((char*)_awe_return_string) == 12);
     return _awe_return_string;
 }
 
 
 _awe_str intbase16(int i)
 {
-    char s12[13];
-
-    sprintf(_awe_return_string, "    %08X", i);
-    assert(strlen(_awe_return_string) == 12);
+    sprintf((char*)_awe_return_string, "    %08X", i);
+    assert(strlen((char*)_awe_return_string) == 12);
     return _awe_return_string;
 }
 
@@ -226,7 +222,7 @@ base10 (double x)
         sprintf(_awe_repr, "+%03d%c%c%s",  +exponent, sign, first_digit, following_digits);
 
     assert(strlen(_awe_repr) == 12);
-    return _awe_string(_awe_repr, 12);
+    return _awe_string((_awe_str)_awe_repr, 12);
 }
 
 
@@ -263,7 +259,7 @@ longbase10 (double x)
         sprintf(_awe_repr, "+%03d%c%c%s",  +exponent, sign, first_digit, following_digits);
 
     assert(strlen(_awe_repr) == 20);
-    return _awe_string(_awe_repr, 21);
+    return _awe_string((_awe_str)_awe_repr, 21);
 }
 
 
