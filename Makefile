@@ -137,6 +137,7 @@ test-examples:
 	make test -C Examples/List   -I $(shell pwd) COMPILER_PATH=$(shell pwd) || exit 1
 	make test -C Examples/Wumpus -I $(shell pwd) COMPILER_PATH=$(shell pwd) || exit 1
 	make test -C Examples/Macro -I $(shell pwd) COMPILER_PATH=$(shell pwd) || exit 1
+	make test -C Examples/Logic -I $(shell pwd) COMPILER_PATH=$(shell pwd) || exit 1
 ifndef NO_GC
 	make test -C Examples/test-cords -I $(shell pwd) COMPILER_PATH=$(shell pwd) || exit 1
 endif
