@@ -1,0 +1,157 @@
+PROGRAM logic68 CONTEXT VOID
+USE standard
+BEGIN
+
+PROC is letter = (CHAR c) BOOL:
+   ABS c >= ABS "a" AND ABS c <= ABS "z" OREL
+   ABS c >= ABS "A" AND ABS c <= ABS "Z";
+
+PROC is space = (CHAR c) BOOL:
+   c = " " OREL c = tab ch OREL c = lf;
+
+
+PROC parse = (STRING expression) STRING:
+BEGIN
+   STRING rpn; { in RPN, using one-character symbols }
+   INT cursor, position;
+   CHAR next;
+
+   PROC error = (STRING message) VOID:
+   BEGIN
+      put(stand error, (expression, newline));
+      TO position - 1 DO put(stand error, " ") OD;
+      put(stand error, ("^ ", message, newline));
+      exit(1)
+   END;
+
+   PROC get next = VOID:
+   BEGIN
+      PROC expect = (CHAR c) VOID:
+      BEGIN
+         cursor +:= 1;
+         IF cursor > UPB expression OREL expression[cursor] /= c THEN
+            position := cursor; error("expected a " + c)
+         FI
+      END;
+            
+      WHILE cursor <= UPB expression ANDTH is space(expression[cursor]) DO
+         cursor +:= 1
+      OD;
+      position := cursor;
+      IF cursor > UPB expression THEN
+         next := eof char
+      ELSE
+         CHAR c = expression[cursor];
+         next := (  c = "F" | "0"
+                 |: c = "T" | "1"
+                 |: c = "-" | expect(">"); ">"
+                 |: c = "<" | expect("-"); expect(">"); "="
+                 |: c = "\" | expect("/"); "+"
+                 |: c = "/" | expect("\"); "."
+                 |  c );
+         cursor +:= 1
+      FI
+   END;
+   
+   PROC match = (CHAR c) BOOL: (next = c | get next; TRUE | FALSE);
+
+   PROC l1 = VOID:
+   BEGIN
+      PROC l6 = VOID:
+         IF   match("~") THEN l6; rpn +:= "~"
+         ELIF match("(") THEN l1; IF NOT match(")") THEN error("expected a )") FI
+         ELIF is letter(next) THEN rpn +:= next; get next
+         ELSE error("syntax error")
+         FI;
+      PROC l5 = VOID: (l6; WHILE match(".") DO l6; rpn +:= "." OD);
+      PROC l4 = VOID: (l5; WHILE match("+") DO l5; rpn +:= "+" OD);
+      PROC l3 = VOID: (l4; WHILE match("@") DO l4; rpn +:= "@" OD);
+      PROC l2 = VOID: (l3; WHILE match(">") DO l3; rpn +:= ">" OD);
+      (l2; WHILE match("=") DO l2; rpn +:= "=" OD)
+   END;
+   PROC l0 = VOID: (l1; rpn +:= ","; WHILE match(",") DO l1; rpn +:= "," OD);
+
+   rpn := "";
+   cursor := 1;
+   get next;
+   l0;
+   IF next /= eof char THEN error("syntax error") FI;
+   print(("'", rpn, "'", newline));
+   rpn
+END; { parse }
+
+
+PROC print table = (STRING rpn, STRING expression) VOID:
+BEGIN
+   [ABS "A" : ABS "z"] BOOL truth values;
+
+   STRING variables := "";
+   FORALL c IN rpn DO
+     IF is letter(c) ANDTH NOT char in string(c, LOC INT, variables) THEN
+         variables +:= c
+     FI
+   OD;
+            
+   PROC set variables = (INT minterm) VOID:
+   BEGIN
+      BITS bits = BIN minterm;
+      FOR i TO UPB variables DO
+         INT bit = bits width - UPB variables + i;
+         truth values[ABS variables[i]] := bit ELEM bits
+      OD
+   END;
+
+   OP -> = (BOOL a, BOOL b) BOOL: NOT a OR b;
+
+   PROC interpret = VOID:
+   BEGIN
+      [1:100]BOOL stack;
+      INT top := 0; { top of stack }
+      FORALL c IN rpn DO
+         (  c = "." | stack[top-1] := stack[top-1] &  stack[top]; top -:= 1
+         |: c = "+" | stack[top-1] := stack[top-1] OR stack[top]; top -:= 1
+         |: c = "@" | stack[top-1] := stack[top-1] /= stack[top]; top -:= 1
+         |: c = "=" | stack[top-1] := stack[top-1] =  stack[top]; top -:= 1
+         |: c = ">" | stack[top-1] := stack[top-1] -> stack[top]; top -:= 1
+         |: c = "~" | stack[top] := NOT stack[top]
+         |: c = "F" | top +:= 1; stack[top] := FALSE 
+         |: c = "T" | top +:= 1; stack[top] := TRUE
+         |: c = "," | print((" ", (stack[top] | "1" | "0"))); top -:= 1
+         |            top +:= 1; stack[top] := truth values[ABS c] 
+         )
+      OD
+   END;
+
+   print(newline);
+   
+   FORALL c IN variables DO print((" ", c)) OD;
+   print((" | ", expression, newline));
+   
+   FOR minterm FROM 0 TO 2 ** UPB variables - 1 DO
+      set variables(minterm);
+      FOR i TO UPB variables DO
+         print((" ", (truth values[ABS variables[i]] | "1" | "0")))
+      OD;
+      print(" |");
+      interpret;
+      print(newline)
+   OD;
+   
+   print(newline)
+END; { print table }
+
+
+BEGIN
+   open(LOC FILE, "", arg channel); { initialize argc and argv }
+
+   IF argc /= 2 THEN
+      print(("usage: logic 'expression'", newline))
+   ELSE
+      STRING expression = CSTRTORVC argv[2];
+      STRING rpn = parse(expression);
+      print table(rpn, expression)
+   FI
+END
+
+END
+FINISH

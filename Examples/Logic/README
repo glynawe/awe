@@ -1,0 +1,39 @@
+This is a toy intepreter for predicates (boolean expressions).
+It produces a table of all possible valuations. You can put in
+multiple predicates separated by commas, all of them will be
+shown in the right hand columns.
+
+  a b | ~a \/ b, a -> b
+  0 0 | 1 1
+  0 1 | 1 1
+  1 0 | 0 0
+  1 1 | 1 1
+
+The program compiles an infix expression into RPN notion and
+interprets that on a stack machine. It is the toy program that I write
+when learnng a new computer language.  (I've included my Pascal and
+Algol 68 versions for comparison.)
+
+This program is also a demonstration of how to mix Algol W and C code.
+The Algol W program uses C functions to access the command line.
+
+   Boolean expression syntax:
+
+   predicates  = equivalence  (","   equivalence)*
+   equivalence = implication  ("<->" implication)*
+   implication = exclusiveOR  ("->"  exclusiveOR)*
+   exclusiveOR = disjunction  ("@"   disjunction)*
+   disjunction = conjunction  ("\/"  conjunction)*
+   conjunction = unary        ("/\"  unary)*
+   unary       = "0" | "1" | variable | "~" unary | "(" equivalence ")"
+
+   Variables are any letter but "T" or "F". Spaces are ignored.
+
+   Alternative symbols:
+
+   "/\"   -->  "."
+   "\/"   -->  "+"
+   "<->"  -->  "="
+   "->"   -->  ">"
+   "0"    -->  "F"
+   "1"    -->  "T"
