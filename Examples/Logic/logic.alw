@@ -14,6 +14,8 @@ INTEGER PROCEDURE argv_len (INTEGER VALUE index);
 PROCEDURE exit (INTEGER VALUE code);
    FORTRAN "do_exit";
 
+PROCEDURE stderr;
+   IOCONTROL(50001);  % redirect output to stderr (an Awe extension) %
 
 
 % NOTE: Algol W uses ECBDIC character codes! %
@@ -30,9 +32,8 @@ BOOLEAN PROCEDURE is_space(STRING(1) VALUE c);
    c = " " OR c = CODE(5) OR c = CODE(37); 
 
 
-
-PROCEDURE compile(STRING(100) VALUE predicate; INTEGER VALUE predicate_len;
-                  STRING(100) RESULT program; INTEGER RESULT program_len);
+PROCEDURE compile(STRING(100) VALUE expression; INTEGER VALUE expression_len;
+                  STRING(100) RESULT rpn; INTEGER RESULT rpn_len);
 COMMENT
    Compiles a predicate (a boolean expression) into 'reverse Polish notation'.
    The RPN uses the one-character variants of the symbols;
@@ -42,8 +43,8 @@ BEGIN
 
    PROCEDURE error(STRING(30) VALUE message);
    BEGIN
-      IOCONTROL(50001);  % redirect output to stderr (an Awe extension) %
-      WRITE(" ", predicate);
+      stderr;
+      WRITE(" ", expression);
       WRITE(" ");
       FOR i := 1 UNTIL position DO WRITEON(" ");
       WRITEON("^ ", message);
@@ -55,18 +56,18 @@ BEGIN
       PROCEDURE expect (STRING(1) VALUE c);
       BEGIN
          cursor := cursor + 1;
-         IF cursor >= predicate_len OR predicate(cursor|1) ~= c THEN
+         IF cursor >= expression_len OR expression(cursor|1) ~= c THEN
             BEGIN position := cursor; error("unexpected character") END
       END;
       
-      WHILE cursor <= predicate_len AND is_space(predicate(cursor|1)) DO
+      WHILE cursor <= expression_len AND is_space(expression(cursor|1)) DO
          cursor := cursor + 1;
       position := cursor;
-      IF cursor > predicate_len THEN
+      IF cursor > expression_len THEN
          next := CODE(0)
       ELSE BEGIN
          STRING(1) c;
-         c := predicate(cursor|1);
+         c := expression(cursor|1);
          next := IF      c = "F" THEN "0"
                  ELSE IF c = "T" THEN "1"
                  ELSE IF c = "-" THEN BEGIN expect(">"); ">" END
@@ -86,41 +87,40 @@ BEGIN
 
    PROCEDURE add(STRING(1) VALUE C);
    BEGIN
-      program(program_len|1) := c;
-      program_len := program_len + 1
+      rpn(rpn_len|1) := c;
+      rpn_len := rpn_len + 1
    END add;
    
    % The parser: %
+   PROCEDURE l0; BEGIN l1; add(","); WHILE match(",") DO BEGIN l1; add(",") END END;
    PROCEDURE l1; BEGIN l2; WHILE match("=") DO BEGIN l2; add("=") END END;
    PROCEDURE l2; BEGIN l3; WHILE match(">") DO BEGIN l3; add(">") END END;
    PROCEDURE l3; BEGIN l4; WHILE match("@") DO BEGIN l4; add("@") END END;
    PROCEDURE l4; BEGIN l5; WHILE match("+") DO BEGIN l5; add("+") END END;
    PROCEDURE l5; BEGIN l6; WHILE match(".") DO BEGIN l6; add(".") END END;
    PROCEDURE l6;
-   BEGIN
-      STRING(1) c;
       IF match("~") THEN
          BEGIN l6; add("~") END
       ELSE IF match("(") THEN
          BEGIN l1; IF NOT match(")") THEN error("expected a )") END
-      ELSE IF is_letter(next) THEN
+      ELSE IF next = "0" OR next = "1" OR is_letter(next) THEN
          BEGIN add(next); get_next END
       ELSE
-         error("syntax error")
-   END;
+         error("syntax error");
 
-   program := " ";
-   program_len := 0;
+   rpn := " ";
+   rpn_len := 0;
    cursor := 0;
    get_next;
-   l1; add(","); WHILE match(",") DO BEGIN l1; add(",") END;
+   l0;
    IF next ~= CODE(0) THEN error("syntax error")
 END compile;
 
  
 
-PROCEDURE print_table(STRING(100) VALUE predicate; INTEGER VALUE predicate_len;
-                      STRING(100) VALUE program;   INTEGER VALUE program_len);
+PROCEDURE run(STRING(100) VALUE expression; INTEGER VALUE expression_len;
+              STRING(100) VALUE rpn;   INTEGER VALUE rpn_len;
+              BOOLEAN VALUE test);
 BEGIN
    BOOLEAN ARRAY truth_values (DECODE("a") :: DECODE("Z"));
 
@@ -145,9 +145,9 @@ BEGIN
       BOOLEAN ARRAY stack (1::100);
       INTEGER top;
       top := 0; 
-      FOR i := 0 UNTIL program_len-1 DO BEGIN
+      FOR i := 0 UNTIL rpn_len-1 DO BEGIN
          STRING(1) c;
-         c := program(i|1);
+         c := rpn(i|1);
          IF c = "." THEN
             BEGIN stack(top-1) := stack(top-1) and stack(top); top := top - 1 END
          ELSE IF c = "+" THEN
@@ -166,6 +166,11 @@ BEGIN
             BEGIN top := top + 1; stack(top) := TRUE END
          ELSE IF is_letter(c) THEN
             BEGIN top := top + 1; stack(top) := truth_values(DECODE(c)) END
+         ELSE IF c = "," AND test THEN
+            BEGIN
+               IF ~stack(top) THEN BEGIN WRITE(stderr, "Failed:", expression); exit(1) END;
+               top := top - 1
+            END
          ELSE IF c = "," THEN
             BEGIN WRITEON(" ", IF stack(top) THEN "1" ELSE "0"); top := top - 1 END
          ELSE
@@ -173,11 +178,11 @@ BEGIN
       END
    END interpret;
 
-   % Make a list of the variables used in 'program' %
+   % Make a list of the variables used in 'rpn' %
    variables_len := 0;
-   FOR i := 0 UNTIL program_len-1 DO BEGIN
+   FOR i := 0 UNTIL rpn_len-1 DO BEGIN
       STRING(1) c;
-      c := program(i|1);
+      c := rpn(i|1);
       IF is_letter(c) THEN BEGIN
          FOR j := 0 UNTIL variables_len-1 DO
             IF c = variables(j|1) THEN GOTO continue_i;
@@ -187,40 +192,54 @@ BEGIN
    continue_i:
    END;
 
-   WRITE(" ");
-   WRITE(" ");
-   FOR i := 0 UNTIL variables_len-1 DO WRITEON(" ", variables(i|1));
-   WRITEON(" | ", predicate);
-   
-   FOR minterm := 0 UNTIL NUMBER(#1 SHL variables_len) - 1 DO BEGIN
+   IF test THEN BEGIN
+      FOR minterm := 0 UNTIL NUMBER(#1 SHL variables_len) - 1 DO BEGIN
+         set_variables(minterm);
+         interpret
+      END;
+   END
+   ELSE BEGIN  % print a table %
       WRITE(" ");
+      WRITE(" ");
+      FOR i := 0 UNTIL variables_len-1 DO WRITEON(" ", variables(i|1));
+      WRITEON(" | ", expression);
       
-      set_variables(minterm);
-
-      FOR i := 0 UNTIL variables_len-1 DO
-         WRITEON(" ", IF truth_values(DECODE(variables(i|1))) THEN "1" ELSE "0");
-      WRITEON(" |");
-
-      interpret;
-   END;
+      FOR minterm := 0 UNTIL NUMBER(#1 SHL variables_len) - 1 DO BEGIN
+         WRITE(" ");
+         
+         set_variables(minterm);
    
-   WRITE(" ")
-END print_table;
+         FOR i := 0 UNTIL variables_len-1 DO
+            WRITEON(" ", IF truth_values(DECODE(variables(i|1))) THEN "1" ELSE "0");
+         WRITEON(" |");
+   
+         interpret;
+      END;
+      
+      WRITE(" ")
+   END
+END run;
 
 
 PROCEDURE main;
 BEGIN
-   IF argc ~= 2 THEN
-      WRITE("usage: logic 'predicate'")
+   STRING(100) expression, rpn;
+   INTEGER expression_len, rpn_len;
+   IF argc = 2 THEN BEGIN
+      expression := argv(1);
+      expression_len := argv_len(1);
+      compile(expression, expression_len, rpn, rpn_len);
+      run(expression, expression_len, rpn, rpn_len, FALSE)
+   END
+   ELSE IF argc = 3 AND argv(1) = "-t" THEN BEGIN
+      expression := argv(2);
+      expression_len := argv_len(2);
+      compile(expression, expression_len, rpn, rpn_len);
+      run(expression, expression_len, rpn, rpn_len, TRUE)
+   END
    ELSE BEGIN
-      STRING(100) predicate, program;
-      INTEGER predicate_len, program_len;
-      
-      predicate := argv(1);
-      predicate_len := argv_len(1);
-      
-      compile(predicate, predicate_len, program, program_len);
-      print_table(predicate, predicate_len, program, program_len)
+      WRITE(stderr, "usage: logic [-t] 'expression'");
+      exit(1)
    END
 END main;
 

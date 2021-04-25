@@ -11,7 +11,7 @@ shown in the right hand columns.
 
 The program compiles an infix expression into RPN notion and
 interprets that on a stack machine. It is the toy program that I write
-when learnng a new computer language.  (I've included my Pascal and
+when learning a new computer language.  (I've included my Pascal and
 Algol 68 versions for comparison.)
 
 This program is also a demonstration of how to mix Algol W and C code.

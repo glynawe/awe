@@ -1,7 +1,7 @@
 {$MODE TP}  { FreePascal will compile this as a Turbo Pascal program. }
 program logic;
 
-function compile(predicate : string) : string;
+function compile(expression : string) : string;
 { Compiles a predicate (a boolean expression) into 'reverse Polish notation'.
   The RPN uses the one-character variants of the symbols }
 var
@@ -13,7 +13,7 @@ var
    procedure error(message : string);
    var i : integer;
    begin
-      writeln(predicate);
+      writeln(expression);
       for i := 1 to position - 1 do write(' ');
       writeln('^ ', message);
       halt(1)
@@ -24,27 +24,26 @@ var
       procedure expect (c : char);
       begin
          cursor := cursor + 1;
-         if (cursor > Length(predicate)) or not (predicate[cursor] = c) then
+         if (cursor > Length(expression)) or not (expression[cursor] = c) then
          begin position := cursor; error('expected a ' + c) end
       end;
    
    begin      
-      while (cursor <= Length(predicate)) and (predicate[cursor] in [' ', #8, #13]) do
+      while (cursor <= Length(expression)) and (expression[cursor] in [' ', #8, #13]) do
          cursor := cursor + 1;
       position := cursor;
-      if cursor > Length(predicate) then
+      if cursor > Length(expression) then
          next := chr(0)
       else begin
-         case predicate[cursor] of
+         case expression[cursor] of
            '-' : begin expect('>'); next := '>' end;
            '<' : begin expect('-'); expect('>'); next := '=' end;
            '\' : begin expect('/'); next := '+' end;
            '/' : begin expect('\'); next := '.' end;
            'F' : next := '0';
-           'T' : next := '1';
-           'A'..'E', 'G'..'S', 'U'..'Z', 'a'..'z',
-           '@', '=', '~', ',': next := predicate[cursor]
-           else error('unexpected character')
+           'T' : next := '1'
+         else
+            next := expression[cursor]
          end;
          cursor := cursor + 1
       end
@@ -86,7 +85,7 @@ begin
 end; {compile}
 
 
-procedure printtable(predicate : string; rpn : string);
+procedure run(rpn : string; expression : string; test : boolean);
 var
    truthvalues : array ['A'..'z'] of boolean;
    variables   : string;
@@ -103,7 +102,7 @@ var
 
    procedure interpret;
    { Print the right hand side of a row of the table by
-     interpreting the RPN rpn on a stack machine }
+     interpreting the RPN expression on a stack machine }
    var
       stack  : array [1..100] of boolean;
       top, i : integer;
@@ -121,7 +120,14 @@ var
            '0': begin top := top + 1; stack[top] := false end;
            '1': begin top := top + 1; stack[top] := true end;
            'A'..'Z', 'a'..'z': begin top := top + 1; stack[top] := truthvalues[rpn[i]] end;
-           ',': begin if stack[top] then write(' 1') else write(' 0'); top := top - 1 end
+           ',': if test then
+                   begin
+                      if not stack[top] then
+                          begin writeln('failed: ', expression); halt(1) end;
+                      top := top - 1
+                   end
+                else
+                   begin if stack[top] then write(' 1') else write(' 0'); top := top - 1 end
          end
    end;
 
@@ -133,32 +139,45 @@ begin
       if (rpn[i] in ['A'..'Z', 'a'..'z']) and (Pos(rpn[i], variables) = 0) then
          variables := variables + rpn[i];
    end;
-   
-   writeln;
-   for i := 1 to Length(variables) do write(' ', variables[i]);
-   writeln(' | ', predicate);
 
-   for minterm := 0 to (1 shl Length(variables)) - 1 do
-   begin
-      setvariables(minterm);
-      for i := 1 to Length(variables) do
-         if truthvalues[variables[i]] then write(' 1') else write(' 0');
-      write(' |');
-      interpret;
+   if test then begin
+      for minterm := 0 to (1 shl Length(variables)) - 1 do
+      begin
+         setvariables(minterm);
+         interpret
+      end
+   end
+   else begin
+      writeln; write(' ');
+      for i := 1 to Length(variables) do write(' ', variables[i]);
+         writeln(' | ', expression);
+      
+      for minterm := 0 to (1 shl Length(variables)) - 1 do
+      begin
+         setvariables(minterm);
+         write(' ');
+         for i := 1 to Length(variables) do
+            if truthvalues[variables[i]] then write(' 1') else write(' 0');
+         write(' |');
+         interpret;
+         writeln
+      end;
       writeln
-   end;
-   writeln
-end; {printtable}
+   end
+end; {run}
 
 
 var
-   predicate, rpn : string;
+   expression : string;
 begin
-   if ParamCount <> 1 then
-      writeln('usage: logic ''predicate''')
-   else begin
-      predicate := ParamStr(1);
-      rpn := compile(predicate);
-      printtable(predicate, rpn)
+   if ParamCount = 1 then begin
+      expression := ParamStr(1);
+      run(compile(expression), expression, false)
    end
+   else if (ParamCount = 2) and (ParamStr(1) = '-t') then begin
+      expression := ParamStr(2);
+      run(compile(expression), expression, true)
+   end
+   else
+      writeln('usage: logic [-t] ''expression''')
 end.
