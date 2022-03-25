@@ -1,0 +1,3449 @@
+% algolw.tex -- The 'ALGOL W Language Description', typeset in LaTeX    -*-latex-*- -*-outline-*-
+\documentclass[a4paper]{article}
+
+
+\pdfinfo{
+   /Title  (ALGOL W Language Description)
+   /Author (Henry Bauer, Sheldon Becker, Susan L. Graham, Edwin Satterthwaite, Richard L. Sites)
+}
+
+\usepackage{enumerate}
+\usepackage{multind}   
+\usepackage{listings}
+\usepackage{syntax}
+\usepackage{slashbox}
+\usepackage{longtable}
+\usepackage{threeparttable}
+\usepackage[mathscr]{euscript}
+
+% (In Debian Squeeze these packages are available after installing the
+% texlive-latex-extra package. You may need to download slashbox.sty
+% and multind.sty from CTAN https://www.ctan.org/)
+
+% Note: there are \newpage commands in this document to prevent
+% examples and tables from being split up, and hard column widths for
+% the syntax diagrams. These will matter if you change the font or
+% paper size.
+
+\def\ALGOLW{\textsc{Algol W}}
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Table of contents.
+
+\setcounter{secnumdepth}{4}  %Allow numbered paragraphs.
+\setcounter{tocdepth}{3}
+
+% A \quietsubsubsection is numbered but does not go into the contents page:
+\def\quietsubsubsection#1{\addtocounter{subsubsection}{1}\subsubsection*{\thesubsubsection. #1}}
+
+% These subsubsections are too short and numerous to go into the contents page:
+\def\Syntax{\quietsubsubsection{Syntax}}
+\def\Semantics{\quietsubsubsection{Semantics}}
+\def\Examples{\quietsubsubsection{Examples}}
+\def\Example{\quietsubsubsection{Example}}
+\def\SyntaxUnnumbered{\subsubsection*{Syntax}}
+\def\SemanticsUnnumbered{\subsubsection*{Semantics}}
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Index.   (Uses the "multind" package.)
+
+\makeindex{special}
+\makeindex{syntax}
+
+% "\IndexAlgolW{classification}{code}" indexes an Algol W identifier or
+% item of syntax in the source code listing format. (See below.)
+\def\IndexAlgolW#1{\index{special}{#1@\A{#1}}}
+\def\IndexReservedWord#1{\IndexAlgolW{#1}}
+\def\IndexField#1{\IndexAlgolW{#1}}
+\def\IndexRecord#1{\IndexAlgolW{#1}}
+
+% Some Algol W procedure and variable names contain underscores,
+% but the "listings" package produces unindexable TeX code for 
+% identifiers containing underscores. Hence the use of \texttt{x}
+% in place of \A!x! here.
+\def\IndexAlgolWID#1{\index{special}{#1@\texttt{#1}}}
+\def\IndexProcedure#1{\IndexAlgolWID{#1}}
+\def\IndexVariable#1{\IndexAlgolWID{#1}}
+\def\IndexType#1{}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% BNF syntax sections.  (Uses the "syntax" package.)
+
+\renewcommand{\ulitleft}{\normalfont\rmfamily\bfseries\frenchspacing}
+\renewcommand{\ulitright}{}
+\renewcommand{\litleft}{`\bgroup\normalfont\ttfamily\frenchspacing}
+\renewcommand{\litright}{\egroup'}
+
+\grammarparsep1pt     % put very little extra space between production rules
+\def\<#1>{\synt{#1}}  % \<x> = format x as a non-terminal production name
+
+%The T symbols that represent type affixes in production rules:
+\def\Tee{$\mathscr{T}$ }
+\def\TeeSub#1{$\mathscr{T}_{#1}$}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+% Formatted Algol W source code.  (Uses the "listings" package.)
+
+% Reserved words are bold lowercase because the "syntax" package will
+% not allow underlined uppercase.  Section 2.1. Basic Symbols has been 
+% altered (two words) to explain the correct substitution.
+
+\lstdefinelanguage{AlgolW}{%
+  keywords={true,false,null,integer,real,complex,logical,bits,string,%
+    reference,long,,array,procedure,record,begin,end,if,then,else,case,%
+    of,div,rem,shr,shl,is,abs,long,short,and,or,goto,go
+    to,for,step,until,%
+    do,while,comment,value,result,assert,algol,fortran},%
+  sensitive=false,% 
+  string=[d]{"},%
+  keywordcommentsemicolon={end}{else,end}{comment}, %this doesn't seem  to work!
+  literate={~}{$\lnot$}{1}{(LNOT)}{$\lnot$}{1},% the (LNOT) is for places where "~" would confuse LaTeX
+}[keywords,comments,keywordcomments]
+
+\lstdefinestyle{ReferenceManual}{%
+  basicstyle=\small\ttfamily,%
+  keywordstyle=\rmfamily\bfseries,%
+  flexiblecolumns=true,%
+  xleftmargin=\parindent,%
+  escapechar=`,%
+  mathescape=true}
+
+% These are the not and not-equals symbols used by ALgol W:
+\def\NOT{$\lnot$}
+\def\NE{${\lnot}{=}$}
+
+% Inline Algol W source code:
+\def\A{\lstinline[language=AlgolW,style=ReferenceManual]}
+
+% Inline Algol W reserved word:
+\def\R#1{\lstinline[language=AlgolW,style=ReferenceManual]{#1}}
+
+% Inline Algol W reserved word that should be indexed:
+\def\Ri#1{\IndexReservedWord{#1}\R{#1}}
+
+% Inline Algol W type name:
+% (The names of Algol types are in italics to match nonterminal production names. 
+\def\T#1{\textit{#1}}
+
+% Inline Algol W type name, to be indexed:
+\def\Ti#1{\IndexType{#1}\T{#1}}
+
+% "Quantities which transcend the ALGOL W language",
+% for use in algorithms demonstrating ALGOL W behaviour:
+\def\Transcendent#1{\textrm{\textit{\small #1}}}
+
+% Block of Algol W source code:
+\lstnewenvironment{AlgolW}{
+\lstset{language=AlgolW,style=ReferenceManual}
+}{}
+
+% Block of Algol W source code, example code for the manual:
+\lstnewenvironment{AlgolWExample}{
+\lstset{language=AlgolW,style=ReferenceManual}
+}{}
+
+% Algol W built-in procedure declaration:
+\lstnewenvironment{ProcedureDeclaration}[2]{
+\IndexProcedure{#2}
+\lstset{language=AlgolW,style=ReferenceManual}
+}{}
+
+% Algol W built-in variable declaration:
+\lstnewenvironment{VariableDeclaration}[2]{
+\lstset{language=AlgolW,style=ReferenceManual}
+\IndexVariable{#2}
+}{}
+
+
+%------------------------------------------------------------------------------------------------------
+
+\begin{document}
+
+\title{\ALGOLW\\Language Description}
+\author{by\\Henry Bauer\\Sheldon Becker\\Susan L. Graham\\Edwin Satterthwaite\\Richard L. Sites}{}
+\date{June 1972}
+
+\maketitle
+
+\newpage
+\tableofcontents
+
+
+%------------------------------------------------------------------------------------------------------
+
+\newpage
+\section{Terminology, Notation and Basic Definitions}
+
+The Reference Language is a phrase structure language, defined by a
+formal metalanguage. This metalanguage makes use of the notation and
+definitions explained below. The structure of the language \ALGOLW\ is
+determined by:
+
+\begin{enumerate}
+\item $\mathscr{V}_N$, the set of basic (or \emph{terminal}) constituents of the language,
+\item $\mathscr{V}_T$, the set of syntactic entities (or \emph{nonterminal symbols}), and
+\item $\mathscr{P}$, the set of syntactic rules (or productions)
+\end{enumerate}
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Notation}
+
+A syntactic entity is denoted by its name (a sequence of letters)
+closed in the brackets $\langle$ and $\rangle$. A syntactic rule has
+the form
+\begin{center}
+\syntax{<A> ::= x}
+\end{center}
+where \<A> is a member of $\mathscr{V}_T$, $x$ is any possible sequence of
+basic constituents and syntactic entities, simply to be called a
+``sequence''. In \ALGOLW, the set $P$ contains the syntactic rule \index{syntax}{\<bar>|textbf} %
+\begin{center}
+\syntax{<bar> ::= `|'}
+\end{center}
+implying that \syntax{`|'} is a basic symbol of the language. Adopting
+the convention that all references to this basic symbol in other
+syntactic rules shall be replaced by \<bar> permits the unambiguous
+use subsequently of the notation %
+\begin{center}
+  \syntax{<A> ::= x | y | \ldots | z}
+\end{center}
+as an abbreviation for the set of syntactic rules %
+\begin{center}
+  \syntax{<A> ::= x\\<A> ::= y\\$\ldots$\\<A> ::= z}
+\end{center}
+
+\noindent In the syntactic rule %
+\index{syntax}{\<empty>}
+\begin{center}
+  \syntax{<empty> ::= }
+\end{center}
+the sequence contains zero symbols, i.e. the empty sequence.
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{Definitions}
+
+\begin{enumerate}
+\item A sequence $x$ is said to {\em directly produce} a sequence $y$
+  if and only if there exist (possibly empty) sequences $u$ and $w$,
+  so that either (i) for some \<A> in $\mathscr{V}_T$, $x = u$\<A>$w$, $y =
+  uvw$, and \<A> $::= v$ is a rule in $\mathscr{P}$; or (ii) $x = uw$, $y =
+  uvw$ and $v$ is a ``comment'' (see below).
+
+\item A sequence $x$ is said to \emph{produce} a sequence $y$ if and
+  only if there exists an ordered set of sequences $s_0, s_1, ...,
+  s_n$, so that $x = s_0$, $s_n = y$, and $s_{i-1}$ directly produces
+  $s_i$ for all $i = 1, ... , n$.
+
+\item A sequence $x$ is said to be an \ALGOLW\ program if and only if
+  its constituents are members of the set $\mathscr{V}_N$, and $x$ can be
+  produced from the syntactic entity \<program>.
+\end{enumerate}
+
+The sets $\mathscr{V}_N$ and $\mathscr{V}_T - \{$`\verb!|!'$\}$ are
+defined through enumeration of their members given throughout in
+Section \ref{Sets of Basic Symbols and Syntactic Entities} and
+Appendix \ref{Syntactic Entities} of this Report (cf.~also
+\ref{Strings}). To provide explanations for the meaning of
+\ALGOLW\ programs, the letter sequences denoting syntactic entities
+have been chosen to be English words describing approximately the
+nature of that syntactic entity or construct. Where words which have
+appeared in this manner are used elsewhere in the text, they refer to
+the corresponding syntactic definition. Along with these letter
+sequences the symbol \Tee may occur. It is understood that this symbol
+must be replaced by any one of a finite set of English words (or word
+pairs). Unless otherwise specified in the particular section, all
+occurrences of the symbol \Tee within one syntactic rule must be
+replaced consistently, and the replacing words are
+\begin{quote}
+\begin{tabular}{ll}
+ \T{integer}       & \T{logical} \\
+ \T{real}          & \T{bit} \\
+ \T{long real}     & \T{string} \\
+ \T{complex}       & \T{reference} \\
+ \T{long complex}
+\end{tabular}
+\end{quote}
+
+\noindent For example, the production
+\begin{center}
+\syntax{<\Tee term> ::= <\Tee factor>}
+\end{center}
+corresponds to
+\begin{center}
+\syntax{<integer term> ::= <integer factor>\\
+<real term> ::= <real factor>\\
+<long real term> ::= <long real factor>\\
+<complex term> ::= <complex factor>\\
+<long complex term> ::= <long complex factor>}
+\end{center}
+The production
+\begin{center}
+\syntax{<\TeeSub0 primary> ::= "long" <\TeeSub1 primary>}
+\end{center}
+corresponds to
+\begin{center}
+\syntax{<long real primary> ::= "long" <real primary>\\
+<long integer primary> ::= "long" <integer primary> \\
+<long complex primary> ::= "long" <complex primary>}
+\end{center}
+
+It is recognized that typographical entities exist of lower order than
+basic symbols, called characters. The accepted characters are those of
+the IBM System 360 EBCDIC code.
+
+The symbol \Ri{comment} followed by any sequence of characters not
+containing semicolons, followed by a semicolon, is called a comment.
+A comment has no effect on the meaning of a program, and is ignored
+during execution of the program. An identifier (cf. \ref{Identifiers})
+immediately following the basic symbol \Ri{end} is also regarded as a
+comment.
+
+The execution of a program can be considered as a sequence of units of
+action. The sequence of these units of action is defined as the
+evaluation of expressions and the execution of statements as denoted
+by the program. In the definition of the implemented language the
+evaluation or execution of certain constructs is either (1) defined by
+System 360 operations, e.g., real arithmetic, or (2) left undefined,
+e.g., the order of evaluation of arithmetic primaries in expressions,
+or (3) said to be \emph{not valid} or \emph{not defined}.
+
+
+%------------------------------------------------------------------------------------------------------
+
+\newpage
+\section{Sets of Basic Symbols and Syntactic Entities}
+\label{Sets of Basic Symbols and Syntactic Entities}
+
+\subsection{Basic Symbols}
+
+\index{syntax}{\<bar>}
+\begin{quote}
+\begin{synshorts}
+`A' | `B' | `C' | `D' | `E' | `F' | `G' | `H' | `I' | `J' | `K' | `L' | `M' |
+`N' | `O' | `P' | `Q' | `R' | `S' | `T' | `U' | `V' | `W' | `X' | `Y' | `Z' | `_' | \\
+\\
+`0' | `1' | `2' | `3' | `4' | `5' | `6' | `7' | `8' | `9' | \\
+\\
+"true" | "false" | `"' | "null" | `#' | `\'' | \\
+"integer" | "real" | "complex" | "logical" | "bits" | "string" |
+"reference" | "long real" | "long complex" | "array" |
+"procedure" | "record" | \\
+`,' | `;' | `:' | `.' | `(' | `)' | "begin" | "end" | "if" | "then" | "else" |
+"case" | "of" | `+' | `-' | `*' | `/' | `**' | "div" | "rem" | "shr" | "shl" | "is" |
+"abs" | "long" | "short" | "and" | "or" | `\NOT' | <bar> | `<=' | `\NE' | `<' |
+`=' | `>' | `>=' | `::' | 
+`:=' | "goto" | "go to" | "for" | "step" | "until" | "do" | "while" |
+"comment" | "value" | "result" | "assert" | "algol" | "fortran"
+\end{synshorts}
+\end{quote}
+
+%All underlined words, which we call ``reserved words'', 
+All bold lowercase words, which we call ``reserved words'',
+are represented by the same words in capital letters in an 
+actual program, with no intervening blanks.
+
+Adjacent reserved words, identifiers (cf. \ref{Identifiers}) and
+numbers must include no blanks and must be separated by at least one
+blank space. Otherwise blanks have no meaning and can be used freely
+to improve the readability of the program.
+
+\subsection{Syntactic entities}
+\label{Syntactic entities}
+
+(See the \emph{Syntactic Entities} appendix on page \pageref{Syntactic Entities}.)
+
+
+%------------------------------------------------------------------------------------------------------
+
+\newpage
+\section{Identifiers}
+\label{Identifiers}
+
+\grammarindent1.8in
+\index{syntax}{\<\Tee array identifier>|textbf}
+\index{syntax}{\<\Tee field identifier>|textbf}
+\index{syntax}{\<\Tee function identifier>|textbf}
+\index{syntax}{\<\Tee variable identifier>|textbf}
+\index{syntax}{\<control identifier>|textbf}
+\index{syntax}{\<identifier>|textbf}
+\index{syntax}{\<identifier list>|textbf}
+\index{syntax}{\<label identifier>|textbf}
+\index{syntax}{\<procedure identifier>|textbf}
+\index{syntax}{\<record class identifier>|textbf}
+\begin{grammar}
+<identifier> ::= <letter>
+            \alt <identifier> <letter>
+            \alt <identifier> <digit>
+            \alt <identifier> `_'
+
+<\Tee variable identifier> ::= <identifier>
+
+<\Tee array identifier> ::= <identifier>
+
+<procedure identifier> ::= <identifier>
+
+<\Tee function identifier> ::= <identifier>
+
+<record class identifier> ::= <identifier>
+
+<\Tee field identifier> ::= <identifier>
+
+<label identifier> ::= <identifier>
+
+<control identifier> ::= <identifier>
+
+<letter> ::= `A' | `B' | `C' | `D' | `E' | `F' | `G'
+        \alt `H' | `I' | `J' | `K' | `L' | `M' | `N'
+        \alt `O' | `P' | `Q' | `R' | `S' | `T' | `U'
+        \alt `V' | `W' | `X' | `Y' | `Z'
+
+<digit> ::= `0' | `1' | `2' | `3' | `4' | `5' | `6' | `7' | `8' | `9'
+
+<identifier list> ::= <identifier>
+                 \alt <identifier list> `,' <identifier>
+\end{grammar}
+
+\SemanticsUnnumbered
+
+Variables, arrays, procedures, record classes and record fields are
+said to be quantities.  Identifiers serve to identify quantities, or
+they stand as labels, formal parameters or control identifiers.
+Identifiers have no inherent meaning, and can be chosen freely in the
+reference language.  In an actual program a reserved word cannot be
+used as an identifier.
+
+Every identifier used in a program must be defined. This is achieved
+through
+
+\begin{enumerate}[(a)]
+\item declaration (cf. Section \ref{Declarations}), if the identifier
+  identifies a quantity. It is then said to denote that quantity and
+  to be a \Tee variable identifier, \Tee array identifier, \Tee
+  procedure identifier, \Tee function identifier, record class
+  identifier or \Tee field identifier, where the symbol \Tee
+  stands for the appropriate word reflecting the type of the declared
+  quantity;
+
+\item a label definition (cf. \ref{Blocks}), if the identifier stands
+  as a label. It is then said to be a label identifier;
+
+\item its occurrence in a formal parameter list (cf. \ref{Procedure Declarations}). 
+  It is then said to be a formal parameter;
+
+\item its occurrence following the symbol \Ri{for} in a for clause
+  (cf. \ref{Iterative Statements}).  It is then said to be a control identifier;
+
+\item its implicit declaration in the language. Standard procedures,
+  standard functions, and predefined variables (cf. \ref{Standard Procedures} 
+  and \ref{Standard Functions and Predeclared Identifiers}) 
+  may be considered to be declared in a block containing the program.
+\end{enumerate}
+
+The recognition of the definition of a given identifier is determined
+by the following rules:
+
+\begin{enumerate}[{Step} 1.]
+\item If the identifier is defined by a declaration of a quantity or
+  by its standing as a label within the smallest block (cf.
+  \ref{Blocks}) embracing a given occurrence of that identifier, then
+  it denotes that quantity or label. A statement following a procedure
+  heading (cf. \ref{Procedure Declarations}) or a \R{for} clause (cf.
+  \ref{Iterative Statements}) is considered to be a block.
+
+\item Otherwise, if that block is a procedure body and if the given
+  identifier is identical with a formal parameter in the associated
+  procedure heading, then it stands as that formal parameter.
+
+\item Otherwise, if that block is preceded by a \R{for} clause
+  and the identifier is identical to the control identifier of that
+  \R{for} clause, then it stands as that control identifier.
+\end{enumerate}
+
+Otherwise, these rules are applied considering the smallest block
+embracing the block which has previously been considered.
+
+If either step 1 or step 2 could lead to more than one definition,
+then the identification is undefined.
+
+The scope of a quantity, a label, a formal parameter, or a control
+identifier is the set of statements in which occurrences of an
+identifier may refer by the above rules to the definition of that
+quantity, label, formal parameter or control identifier.
+
+\Examples
+
+\begin{AlgolWExample}
+I
+PERSON
+ELDERSIBLING
+X15, X20, X25
+NEW_PAGE
+\end{AlgolWExample}
+
+
+%------------------------------------------------------------------------------------------------------
+
+\newpage
+\section{Values and Types}
+\label{Values and Types}
+
+Constants and variables (cf.  \ref{Variables}) are said to possess a
+value.  The value of a constant is determined by the denotation of the
+constant.  In the language, all constants (except references) have a
+reference denotation (cf. \ref{Numbers} -- \ref{Strings}).  The value
+of a variable is the one most recently assigned to that variable. A
+value is (recursively) defined as either a simple value or a
+structured value (an ordered set of one or more values). Every value
+is said to be of a certain type.
+
+\index{general}{Data types} The following types of simple values are distinguished:
+\begin{quote}
+\begin{tabular}[t]{lp{3.5in}}
+\Ti{integer}      & the value is a 32 bit integer, \\
+\Ti{real}         & the value is a 32 bit floating point number, \\
+\Ti{long real}    & the value is a 64 bit floating point number, \\
+\Ti{complex}      & the value is a complex number composed of two numbers of type \T{real}, \\
+\Ti{long complex} & the value is a complex number composed of two \T{long real} numbers, \\
+\Ti{logical}      & the value is a logical value, \\
+\Ti{bits}         & the value is a linear sequence of 32 bits, \\
+\Ti{string}       & the value is a linear sequence of at most 256 characters, \\
+\Ti{reference}    & the value is a reference to a record.
+\end{tabular}
+\end{quote}
+
+The following types of structured values are distinguished:
+\begin{quote}
+\begin{tabular}[t]{lp{3.5in}}
+  \Ti{array}  & the value is an ordered set of values, all of identical simple type, \\
+  \Ti{record} & the value is an ordered set of simple values.
+\end{tabular}
+\end{quote}
+
+A procedure may yield a value, in which case it is said to be a
+function procedure, or it may not yield a value, in which case it is
+called a proper procedure. The value of a function procedure is
+defined as the value which results from the execution of the procedure
+body (cf. \ref{Function Designators, Semantics}).
+
+Subsequently, the reference denotation of constants is defined.  The
+reference denotation of any constant consists of a sequence of
+characters.  This, however, does not imply that the value of the
+denoted constant is a sequence of characters, nor that it has the
+properties of a sequence of characters, except, of course, in the case
+of strings.
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{Numbers}
+\label{Numbers}
+
+\Syntax
+
+\grammarindent1.8in
+\index{syntax}{\<\Tee constant>|textbf}
+\index{syntax}{\<integer constant>|textbf}
+\index{syntax}{\<real constant>|textbf}
+\index{syntax}{\<long real constant>|textbf}
+\index{syntax}{\<complex constant>|textbf}
+\index{syntax}{\<long complex constant>|textbf}
+\begin{grammar}
+<long complex constant> ::= <complex constant> `L'
+
+<complex constant> ::= <imaginary constant>
+
+<imaginary constant> ::= <real constant> `I'
+                  \alt  <integer constant> `I'
+
+<long real constant> ::= <real constant> `L'
+                  \alt <integer constant> `L'
+
+<real constant> ::=
+             <unscaled real>
+        \alt <unscaled real> <scale factor>
+        \alt <integer constant> <scale factor>
+        \alt <scale factor>
+
+<unscaled real> ::=
+             <integer constant> `.' <integer constant>
+        \alt `.' <integer constant>
+        \alt <integer constant> `.'
+
+<scale factor> ::=
+             `'' <integer constant>
+        \alt `'' <sign> <integer constant>
+
+<integer constant> ::=
+             <digit>
+        \alt <integer constant> <digit>
+
+<sign> ::= `+' | `-'
+\end{grammar}
+
+(Note: a long complex constant may have the \A!I! and \A!L! in either
+order in a program, but they must be in the order \A!IL! on data
+cards.)
+
+\Semantics
+
+Numbers are interpreted according to the conventional decimal
+notation. A scale factor denotes an integral power of 10 which is
+multiplied by the unscaled real or integer number preceding it. Each
+number has a uniquely defined type. (Note that all \<\Tee constant>s are
+unsigned.)
+
+\Examples
+
+\begin{AlgolWExample}
+1                 05                    11
+0100              1'3                   0.671
+3.1416            6.02486'+23           1IL
+2.718281828459045235360287L             2.3'-6
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{Logical Values}
+\label{Logical Values}
+
+\Syntax
+
+\IndexReservedWord{true}
+\IndexReservedWord{false}
+\IndexType{logical}
+
+\grammarindent0pt
+\index{syntax}{\<\Tee constant>|textbf}
+\index{syntax}{\<logical constant>|textbf}
+\begin{grammar}
+<logical constant> ::= "true" | "false"
+\end{grammar}
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Bit Sequences}
+\label{Bit Sequences}
+
+\Syntax
+
+\grammarindent1.2in
+\index{syntax}{\<\Tee constant>|textbf}
+\index{syntax}{\<bit constant>|textbf}
+\begin{grammar}
+<bit constant> ::=
+      `#' <hex digit>
+ \alt <bit constant> <hex digit>
+
+<hex digit> ::=
+      `0' | `1' | `2' | `3' | `4' | `5' | `6' | `7'
+ \alt `8' | `9' | `A' | `B' | `C' | `D' | `E' | `F'
+\end{grammar}
+
+\noindent Note that \syntax{`A' | \ldots | `F'} corresponds to $10_{10} | ... | 15_{10}$.
+
+\Semantics
+
+The number of bits in a bit sequence is 32, or 8 hex digits. The bit
+sequence is always represented by a 32 bit word with the specified bit
+sequence right justified in the word and zeros filled in on the left.
+
+\Examples
+
+\begin{AlgolWExample}
+    #4F `{\rm= 0000 0000 0000 0000 0000 0000 0100 1111}`
+    #9  `{\rm= 0000 0000 0000 0000 0000 0000 0000 1001}`
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Strings}
+\label{Strings}
+
+\Syntax
+
+\grammarindent1.4in
+\index{syntax}{\<\Tee constant>|textbf}
+\index{syntax}{\<string constant>|textbf}
+\begin{grammar}
+<string constant> ::= <string>
+
+<string> ::= `"' <open string> `"'
+
+<open string> ::= <character> | <open string> <character>
+\end{grammar}
+
+\Semantics
+
+Strings consist of any sequence of (at least one and at most 256)
+characters accepted by the System 360 enclosed by \lit{"}, the string
+quote. If the string quote appears in the sequence of characters it
+must be immediately followed by a second string quote which is then
+ignored.  The number of characters in a string is said to be the
+length of the string. The characters accepted by the IBM system 360
+are listed in Appendix \ref{Character Encodings}.
+
+\Example
+
+\begin{AlgolWExample}
+   "JOHN"
+   """"  `{\rm This is the string of length 1 consisting of the string quote.}`
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{References}
+\label{References}
+
+\Syntax
+
+\IndexReservedWord{null}
+
+\grammarindent0pt
+\index{syntax}{\<\Tee constant>|textbf}
+\index{syntax}{\<reference constant>|textbf}
+\begin{grammar}
+<reference constant> ::= "null"
+\end{grammar}
+
+\Semantics
+
+The reference value \Ri{null} fails to designate a record; if a
+reference expression occurring in a field designator (cf.~\ref{Variables}) 
+has this value, then the field designator is undefined.
+
+
+%------------------------------------------------------------------------------------------------------
+
+\newpage
+\section{Declarations}
+\label{Declarations}
+
+Declarations serve to associate identifiers with the quantities used
+in the program, to attribute certain permanent properties to these
+quantities (i.e:. type, structure), and to determine their scope.  The
+quantities declared by declarations are simple variables, arrays,
+procedures and record classes.
+
+Upon exit from a block, all quantities declared or defined within that
+block lose their value and significance (cf. \ref{Blocks, Semantics}
+and \ref{Goto Statements, Semantics}).
+
+\SyntaxUnnumbered
+
+\grammarindent1.1in
+\index{syntax}{\<declaration>|textbf}
+\index{syntax}{\<\Tee array declaration>}
+\index{syntax}{\<procedure declaration>}
+\index{syntax}{\<record class declaration>}
+\index{syntax}{\<simple variable declaration>}
+\begin{grammar}
+<declaration> ::=  <simple variable declaration>
+              \alt <\Tee array declaration>
+              \alt <procedure declaration>
+              \alt <record class declaration>
+\end{grammar}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Simple Variable Declarations}
+\label{Simple Variable Declarations}
+
+\IndexReservedWord{integer}
+\IndexReservedWord{real}
+\IndexReservedWord{long real}
+\IndexReservedWord{complex}
+\IndexReservedWord{long complex}
+\IndexReservedWord{logical}
+\IndexReservedWord{bits}
+\IndexReservedWord{string}
+\IndexReservedWord{reference}
+
+\Syntax
+
+\grammarindent1.1in
+\index{syntax}{\<simple type>|textbf}
+\index{syntax}{\<simple variable declaration>|textbf}
+\index{syntax}{\<integer constant>}
+\index{syntax}{\<identifier list>}
+\index{syntax}{\<record class identifier>}
+\begin{grammar}
+<simple variable declaration> ::=  <simple type> <identifier list>
+
+<simple type> ::=
+      "integer" | "real" | "long real" | "complex"
+ \alt "long complex" | "logical" |
+ \alt "bits" | "bits" `(' `32' `)'
+ \alt "string" | "string" `(' <integer constant> `)'
+ \alt "reference" `(' <record class identifier list> `)'
+
+<record class identifier list> ::=
+      <record class identifier>
+ \alt <record class identifier list>`,' <record class identifier>
+\end{grammar}
+
+\Semantics
+
+Each identifier of the identifier list is associated with a variable
+which is declared to be of the indicated type. A variable is called a
+simple variable, if its value is simple (cf. Section
+\ref{Declarations}). If a variable is declared to be of a certain
+type, then this implies that only values which are assignment
+compatible with this type (cf. \ref{Assignment Statements, Semantics})
+can be assigned to it. It is understood that the value of a variable
+is equal to the value of the expression most recently assigned to it.
+
+A variable of type \Ti{bits} is always of length 32 whether or not
+the declaration specification is included.
+
+A variable of type \Ti{string} has a length equal to the unsigned
+integer in the declaration specification. If the simple type is given
+only as \A!string!, the length of the variable is 16 characters.
+
+ A variable of type
+\Ti{reference} may refer only to records of the record classes whose
+identifiers appear in the record class identifier list of the
+reference declaration specification.
+
+\newpage
+\Example
+
+\begin{AlgolWExample}
+integer I, J, K, M, N
+real X, Y, Z
+long complex C
+logical L
+bits G, H
+string (10) S, T
+reference (PERSON) JACK, JILL
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Array Declarations}
+\label{Array Declarations}
+
+\IndexReservedWord{array}
+
+\Syntax
+
+\grammarindent1.6in
+\index{syntax}{\<\Tee array declaration>|textbf}
+\index{syntax}{\<\Tee expression>}
+\index{syntax}{\<identifier list>}
+\index{syntax}{\<simple type>}
+\begin{grammar}
+<\Tee array declaration> ::= <simple type> "array" <identifier list> \\
+                           `(' <bound pair list> `)'
+
+<bound pair list> ::= <bound pair>
+                  \alt <bound pair list> `,' <bound pair>
+
+<bound pair> ::= <lower bound> `::' <upper bound>
+
+<lower bound> ::= <integer expression>
+
+<upper bound> ::= <integer expression>
+\end{grammar}
+
+\Semantics
+
+Each identifier of the identifier list of an array declaration is
+associated with a variable which is declared to be of type \T{array}.
+A variable of type \T{array} is an ordered set of variables whose type is
+the simple type preceding the symbol array. The dimension of the array
+is the number of entries in the bound pair list.
+
+Every element of an array is identified by a list of indices. The
+indices are the integers between and including the values of the 
+lower bound and the upper bound. Every expression in the bound pair list is
+evaluated exactly once upon entry to the block in which the
+declaration occurs. The bound pair expressions can depend only on
+variables and procedures global to the block in which the declaration
+occurs. In order to be valid, for every bound pair, the value of the
+upper bound must not be less than the value of the lower bound.
+
+\Example
+
+\begin{AlgolWExample}
+integer array H(1::100)
+real array A, B(1::M, 1::N)
+string (12) array STREET, TOWN, CITY (J::K + 1)
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{Procedure Declarations}
+
+\label{Procedure Declarations}
+\IndexReservedWord{procedure}
+\label{Procedure Declarations, Syntax}
+
+\Syntax
+
+\grammarindent2.4in
+\index{syntax}{\<\Tee function procedure declaration>|textbf}
+\index{syntax}{\<formal parameter list>|textbf}
+\index{syntax}{\<procedure heading>|textbf}
+\index{syntax}{\<proper procedure declaration>|textbf}
+\index{syntax}{\<\Tee expression>}
+\index{syntax}{\<block body>}
+\index{syntax}{\<external reference>}
+\index{syntax}{\<formal array parameter>}
+\index{syntax}{\<formal type>}
+\index{syntax}{\<identifier>}
+\index{syntax}{\<identifier list>}
+\index{syntax}{\<simple type>}
+\index{syntax}{\<statement>}
+\begin{grammar}
+<procedure declaration> ::=
+      <proper procedure declaration>
+ \alt <\Tee function procedure declaration>
+
+<proper procedure declaration> ::=
+      "procedure" <procedure heading> `;' \\
+      <proper procedure body>
+
+<\Tee function procedure declaration> ::=
+      <simple type> \\
+      "procedure" <procedure heading> `;' \\
+      <\Tee function procedure body>
+
+<proper procedure body> ::=
+      <statement>
+ \alt <external reference>
+
+<\Tee function procedure body> ::=
+      <\Tee expression>
+ \alt <block body> <\Tee expression> "end"
+ \alt <external reference>
+
+<procedure heading> ::=
+      <identifier>
+ \alt <identifier> \\
+      `(' <formal parameter list> `)'
+
+<formal parameter list> ::=
+      <formal parameter segment>
+ \alt <formal parameter list> `;' \\
+      <formal parameter segment>
+
+<formal parameter segment> ::=
+      <formal type> <identifier list>
+ \alt <formal array parameter>
+
+\end{grammar}
+\IndexReservedWord{value}
+\IndexReservedWord{result}
+\index{syntax}{\<formal type>|textbf}
+\index{syntax}{\<identifier list>}
+\index{syntax}{\<simple type>}
+\begin{grammar}
+<formal type> ::=
+      <simple type>
+ \alt <simple type> "value"
+ \alt <simple type> "result"
+ \alt <simple type> "value" "result"
+ \alt <simple type> "procedure"
+ \alt "procedure"
+
+<formal array parameter> ::=
+      <simple type> "array" <identifier list> \\
+      `(' <dimension specification> `)'
+
+<dimension specification> ::=
+      `*'
+ \alt <dimension specification> `,' `*'
+
+\end{grammar}
+\IndexReservedWord{fortran}
+\IndexReservedWord{algol}
+\index{syntax}{\<external reference>|textbf}
+\index{syntax}{\<string constant>}
+\begin{grammar}
+<external reference> ::=
+      "fortran" <string constant>
+ \alt "algol" <string constant>
+\end{grammar}
+
+\Semantics
+\setcounter{paragraph}{0}
+\label{Procedure Declarations, Semantics}
+
+A procedure declaration associates the procedure body with the
+identifier immediately following the symbol \Ri{procedure}. The
+principal part of the procedure declaration is the procedure body.
+Other parts of the block in whose heading the procedure is declared
+can then cause this procedure body to be executed or evaluated. A
+proper procedure is activated by a procedure statement (cf.
+\ref{Procedure Statements}), a function procedure by a function
+designator (cf. \ref{Function Designators}). Associated with the
+procedure body is a heading containing the procedure identifier and
+possibly a list of formal parameters.
+
+\paragraph{Type specification of formal parameters.}  All formal
+parameters of a formal parameter segment are of the same indicated
+type.  The type must be such that the replacement of the formal
+parameter by the actual parameter of this specified type leads to
+correct \ALGOLW\ expressions and statements 
+(cf. \ref{Procedure Statements, Semantics}).
+
+\paragraph{} \label{Value/Result Semantics}The effect of the symbols
+\R{value} and \R{result} appearing in a formal type is explained by
+the following rule, which is applied to the procedure body before the
+procedure is invoked:
+
+\begin{enumerate}
+\item The procedure body is enclosed by the symbols \R{begin} and
+  \R{end};
+
+\item For every formal parameter whose formal type contains the symbol
+  \R{value} or \R{result} (or both),
+
+  \begin{enumerate}
+  \item a declaration followed by a semicolon is inserted after the
+    first \A!begin! of the procedure body, with a simple type as
+    indicated in the formal type, and with an identifier different
+    from any identifier valid at the place of the declaration.
+
+  \item throughout the procedure body, every occurrence of the formal
+    parameter identifier is replaced by the identifier defined in step 2(a);
+  \end{enumerate}
+
+\item If the formal type contains the symbol \Ri{value}, an assignment
+  statement (cf. \ref{Assignment Statements}) followed by a semicolon
+  is inserted after the declarations in the outermost block of the
+  procedure body. Its left part contains the identifier defined in
+  step 2a, and its expression consists of the formal parameter
+  identifier. The symbol \R{value} is then deleted;
+
+\item If the formal type contains the symbol \Ri{result}, an
+  assignment statement preceded by a semicolon is inserted before the
+  symbol \A!end! which terminates the procedure body. 
+  Its left part contains the formal parameter
+  identifier, and its expression consists of the identifier defined in
+  step 2a. The symbol \R{result} is then deleted.
+\end{enumerate}
+
+\paragraph{Specification of array dimensions.}  The number of \A!*!'s
+appearing in the formal array specification is the dimension of the
+array parameter.
+
+\paragraph{External references.} Use of an external reference as a
+procedure body indicates that the actual procedure body is specified
+by the environment in which the program is to be executed. The
+information in the external reference is used to locate and interpret
+that procedure body. The details of such use depend on the specific
+environment.
+
+\newpage
+\Examples
+
+\begin{AlgolWExample}
+procedure INCREMENT; X := X+1
+\end{AlgolWExample}
+
+\begin{AlgolWExample}
+real procedure MAX (real value X, Y);
+    if X < Y then Y else X
+\end{AlgolWExample}
+
+\begin{AlgolWExample}
+procedure COPY (real array U, V (*,*); integer value A, B);
+    for I := 1 until A do
+        for J := 1 until B do U(I,J) := V(I,J)
+\end{AlgolWExample}
+
+\begin{AlgolWExample}
+real procedure HORNER (real array A (*); integer value N; real value X);
+    begin real S; S := 0;
+        for I := 0 until N do S := S * X + A(I);
+        S
+    end
+\end{AlgolWExample}
+
+\begin{AlgolWExample}
+reference (PERSON) procedure YOUNGESTUNCLE (reference (PERSON) R);
+    begin reference (PERSON) P, M;
+        P := YOUNGESTOFFPRING (FATHER (FATHER (R)));
+        while (P ~= null) and (~ MALE (P)) or (P = FATHER(R)) do
+            P := ELDERSIBLING (P);
+        M := YOUNGESTOFFSPRING (MOTHER (MOTHER (R)));
+        while (M ~= null) and (~ MALE (M)) do
+            M := ELDERSIBLING (M);
+        if P = null then M else
+        if M = null then P else
+        if AGE(P) < AGE(M) then P else M
+    end
+\end{AlgolWExample}
+
+\label{PLOTSUBROUTINE}
+\begin{AlgolWExample}
+procedure PLOTSUBROUTINE (integer value I); fortran "PLOTSUB"
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Record Class Declarations}
+\label{Record Class Declarations}
+
+\Syntax
+
+\IndexReservedWord{record}
+\grammarindent1.8in
+\index{syntax}{\<record class declaration>|textbf}
+\index{syntax}{\<identifier>}
+\index{syntax}{\<simple variable declaration>}
+\begin{grammar}
+<record class declaration> ::=
+      "record" <identifier> `(' <field list> `)'
+
+<field list> ::=
+      <simple variable declaration>
+ \alt <field list> `;' <simple variable declaration>
+\end{grammar}
+
+\Semantics
+
+A record class declaration serves to define the structural properties
+of records belonging to the class. The principal constituent of a
+record-class declaration is a sequence of simple variable declarations
+which define the fields and their simple types for the records of this
+class and associate identifiers with the individual fields.  A record
+class identifier can be used in a record designator
+(cf. \ref{Arithmetic Expressions}) to construct a new record of the
+given class.
+
+\newpage
+\Examples
+
+\begin{AlgolWExample}
+record NODE (reference (NODE) LEFT, RIGHT)
+\end{AlgolWExample}
+
+\begin{AlgolWExample}
+record PERSON ( 
+    string NAME; 
+    integer AGE; 
+    logical MALE;
+    reference (PERSON) FATHER, MOTHER, YOUNGESTOFFSPRING, ELDERSIBLING 
+);
+\end{AlgolWExample}
+
+
+%------------------------------------------------------------------------------------------------------
+
+\newpage
+\section{Expressions}
+\label{Expressions}
+
+Expressions are rules which specify how new values are computed from
+existing ones. These new values are obtained by performing the
+operations indicated by the operators on the values of the operands.
+The operands are either constants, variables or function designators,
+or other expressions, enclosed by parentheses if necessary.  The
+evaluation of operands other than constants may involve smaller units
+of action such as the evaluation of other expressions or the execution
+of statements. The value of an expression between parentheses is
+obtained by evaluating that expression. If an operator has two
+operands, then these operands may be evaluated in any order with the
+exception of the logical operators discussed in \ref{Logical
+  Operators}.
+
+\label{Precedence of Operators}
+
+Expressions are distinguished by a type and precedence level, the
+former depending on the types of the operands and the latter resulting
+from the precedence hierarchy imposed upon operators in the syntactic
+rules which follow. The syntactic entities naming different kinds of
+expression in these rules display these attributes, the word
+``expression'' prefixed by the a type and, usually, postfixed by an
+integer indicating the precedence level. (higher precedence is implied
+by increasing magnitude of this integer.) The operators and their
+precedence levels are:
+
+\begin{center}
+\begin{tabular}{ll}
+\textbf{Level} & \textbf{Operators}\\
+    1       &  \R{or} \\
+    2       &  \R{and} \\
+    3       &  \A!~! \\
+    4       &  \A!<!, \A!<=!, \A!=!, \A!~=!, \A!>=!, \A!>!, \R{is} \\
+    5       &  \A!+!, \A!-! \\
+    6       &  \A!*!, \A!/!, \R{div}, \R{rem} \\
+    7       &  \R{shl}, \R{shr}, \A!**! \\
+    8       &  \R{long}, \R{short}, \R{abs} \\
+\end{tabular}
+\end{center}
+
+When the types allow an operator at level \emph{i} to be applied to
+operands, the resulting expression, which which belongs to the
+syntactic class \<\Tee expression i> has the intuitive meaning given
+in the second column of the following table.
+
+\begin{center}
+\begin{tabular}{lll}
+\textbf{Syntactic Entity} & \textbf{Meaning} & \textbf{Definitions}\\
+\<\Tee expression 1> & disjunction &  \ref{Expressions}, \ref{Logical Expressions}, \ref{Bit Expressions} \\
+\<\Tee expression 2> & conjunction &  \ref{Expressions}, \ref{Logical Expressions}, \ref{Bit Expressions} \\
+\<\Tee expression 3> & negation &  \ref{Expressions}, \ref{Logical Expressions}, \ref{Bit Expressions} \\
+\<\Tee expression 4> & relation &  \ref{Expressions}, \ref{Logical Expressions} \\
+\<\Tee expression 5> & sum &  \ref{Expressions}, \ref{Arithmetic Expressions} \\
+\<\Tee expression 6> & term &  \ref{Expressions}, \ref{Arithmetic Expressions} \\
+\<\Tee expression 7> & factor &  \ref{Expressions}, \ref{Arithmetic Expressions}, \ref{Bit Expressions} \\
+\<\Tee expression 8> & primary &  \ref{Expressions}, \ref{Arithmetic Expressions}, \ref{String Expressions} \\
+\end{tabular}
+\end{center}
+
+The third column of the table indicates sections where definitions of
+these syntactic entities occur.
+
+\newpage
+
+Throughout section \ref{Expressions} and its subsections the symbol
+\Tee has to be replaced consistently as described in Section 1, and
+where the triplets \TeeSub0, \TeeSub1, \TeeSub2 have to be either all
+three replaced by the same one of the words
+\begin{quote}
+    \T{logical}\\
+    \T{bit}\\
+    \T{string}\\
+    \T{reference}
+\end{quote}
+or (subject to specification to the contrary) in accordance with the
+following ``triplet rules''.
+
+\begin{enumerate}
+\item Given the qualities (\T{integer}, \T{real} or \T{complex}) of
+  \TeeSub1 and \TeeSub2, the corresponding quality of \TeeSub0 is
+  given in the table
+  \begin{center}
+    \begin{it}
+      \begin{tabular}{l|lll}
+        \backslashbox{\TeeSub1}{\TeeSub2} & integer   & real    & complex \\
+        \hline
+        integer & integer   & real    & complex \\
+        real    & real      & real    & complex \\
+        complex & complex   & complex & complex
+      \end{tabular}
+    \end{it}
+  \end{center}
+\item \TeeSub0 has the quality \T{long} either if both \TeeSub1 and
+  \TeeSub2 have that quality, or if one has the quality \T{long} and
+  the other is \T{integer}.
+\end{enumerate}
+
+\SyntaxUnnumbered
+
+\grammarindent1.5in
+\index{syntax}{\<\Tee block expression>|textbf}
+\index{syntax}{\<\Tee expression>|textbf}
+\index{syntax}{\<\Tee expression 1>|textbf}
+\index{syntax}{\<\Tee expression 2>|textbf}
+\index{syntax}{\<\Tee expression 3>|textbf}
+\index{syntax}{\<\Tee expression 4>|textbf}
+\index{syntax}{\<\Tee expression 5>|textbf}
+\index{syntax}{\<\Tee expression 6>|textbf}
+\index{syntax}{\<\Tee expression 7>|textbf}
+\index{syntax}{\<\Tee expression 8>|textbf}
+\index{syntax}{\<\Tee constant>}
+\index{syntax}{\<block body>}
+\index{syntax}{\<conditional \Tee expression>}
+\begin{grammar}
+<\Tee expression> ::= <\Tee expression 1> | <conditional \Tee expression>
+
+<\Tee expression 1> ::= <\Tee expression 2>
+
+<\Tee expression 2> ::= <\Tee expression 3>
+
+<\Tee expression 3> ::= <\Tee expression 4>
+
+<\Tee expression 4> ::= <\Tee expression 5>
+
+<\Tee expression 5> ::= <\Tee expression 6>
+
+<\Tee expression 6> ::= <\Tee expression 7>
+
+<\Tee expression 7> ::= <\Tee expression 8>
+
+<\Tee expression 8> ::= <\Tee constant> | `(' <\Tee expression> `)' | <\Tee block expression> 
+
+<\Tee block expression>  ::= <block body> <\Tee expression> "end"
+\end{grammar}
+
+\SemanticsUnnumbered
+
+There are 8 levels of precedence; an expression at one level of
+precedence is a valid expression at a lower level of precedence.
+
+A block expression introduces a new level of nomenclature and
+specifies the execution of statements in the block body as described
+for blocks (cf.\ref{Blocks, Semantics}). After execution of of the
+block body, the final expression is evaluated and the value of that
+expression becomes the value of the entire block expression.
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Variables}
+\label{Variables}
+
+\Syntax
+
+\grammarindent1.6in
+\index{syntax}{\<\Tee array designator>|textbf}
+\index{syntax}{\<\Tee field designator>|textbf}
+\index{syntax}{\<\Tee variable>|textbf}
+\index{syntax}{\<simple \Tee variable>|textbf}
+\index{syntax}{\<subscript>|textbf}
+\index{syntax}{\<\Tee array identifier>}
+\index{syntax}{\<\Tee expression>}
+\index{syntax}{\<\Tee field identifier>}
+\index{syntax}{\<\Tee variable identifier>}
+\index{syntax}{\<substring designator>}
+\begin{grammar}
+<simple \Tee variable> ::= <\Tee variable identifier>
+                      \alt <\Tee field designator> 
+                      \alt <\Tee array designator>
+
+<\Tee variable> ::= <simple \Tee variable>
+
+<string variable> ::= <substring designator>
+
+<\Tee field designator> ::= <\Tee field identifier> `(' <reference expression> `)'
+
+<\Tee array designator> ::= <\Tee array identifier> `(' <subscript list> `)'
+
+<subscript list> ::= <subscript>
+                 \alt <subscript list> `,' <subscript>
+
+<subscript> ::= <integer expression>
+\end{grammar}
+
+\Semantics
+
+An array designator denotes the variable whose indices are the current
+values of the expressions in the subscript list. The value of each
+subscript must lie within the declared bounds for that subscript
+position.
+
+A field designator designates a field in the record referred to by its
+reference expression. The simple type of the field designator is
+defined by the declaration of that field identifier in the record
+class designated by the reference expression of the field designator
+(cf.~\ref{Record Class Declarations}).
+
+\Examples
+
+\begin{AlgolWExample}
+X       A(I)     M(I+J, I-J)
+FATHER(JACK)     MOTHER(FATHER(JILL))
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{Function Designators}
+\label{Function Designators}
+
+\Syntax
+
+\grammarindent1.7in
+\index{syntax}{\<\Tee function designator>|textbf}
+\index{syntax}{\<\Tee function identifier>}
+\index{syntax}{\<actual parameter list>}
+\begin{grammar}
+<\Tee function designator> ::=  <\Tee function identifier>
+                         \alt <\Tee function identifier> `(' <actual parameter list> `)'
+\end{grammar}
+
+\Semantics
+\label{Function Designators, Semantics}
+
+A function designator defines a value which can be obtained by a
+process performed in the following steps:
+
+\begin{description}
+\item[Step 1.]  A copy is made of the body of the function procedure
+  whose procedure identifier is given by the function designator and
+  of the actual parameters of the latter.
+
+\item[Steps 2, 3, 4.]  As specified in \ref{Procedure Statements, Semantics}.
+
+\item[Step 5.]  The copy of the function procedure body, modified as
+  indicated in steps 2--4, is executed. Execution of the expression
+  which constitutes or is part of the modified procedure body consists
+  of evaluation of that expression, and the resulting value is the
+  value of the function designator.  The simple type of the function
+  designator is the simple type in the corresponding function
+  procedure declaration.
+\end{description}
+
+\Examples
+
+\begin{AlgolWExample}
+MAX (X ** 2, Y ** 2)
+SUM (I, 100, H(1))
+SUM (I, M, SUM (J, N, A(I,J)))
+YOUNGESTUNCLE (JILL)
+SUM (I, 10, X(1) * Y(1))
+HORNER (X, 10, 2.7)
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Arithmetic Expressions}
+\label{Arithmetic Expressions}
+
+\Syntax
+\label{Arithmetic Expressions, Syntax}
+
+\IndexReservedWord{div}
+\IndexReservedWord{rem}
+\IndexReservedWord{shl}
+\IndexReservedWord{shr}
+\IndexReservedWord{abs}
+\IndexReservedWord{long}
+\IndexReservedWord{short}
+\grammarindent1.7in
+\index{syntax}{\<\Tee expression 5>|textbf}
+\index{syntax}{\<\Tee expression 6>|textbf}
+\index{syntax}{\<\Tee expression 7>|textbf}
+\index{syntax}{\<\Tee expression 8>|textbf}
+\index{syntax}{\<control identifier>}
+\begin{grammar}
+<\TeeSub3 expression 5> ::=  `+' <\TeeSub3 expression 6> 
+                        \alt `-' <\TeeSub3 expression 6>
+
+<\TeeSub0 expression 5> ::=  <\TeeSub1 expression 5> `+' <\TeeSub2 expression 6>
+                        \alt <\TeeSub1 expression 5> `-' <\TeeSub2 expression 6>
+
+<\TeeSub0 expression 6> ::=  <\TeeSub1 expression 6> `*' <\TeeSub2 expression 7>
+                        \alt <\TeeSub1 expression 6> `/' <\TeeSub2 expression 7>
+
+<integer expression 6> ::=  <integer expression 6> "div" <integer expression 7>
+                       \alt <integer expression 6> "rem" <integer expression 7>
+
+<\TeeSub4 expression 7> ::=  <\TeeSub5 expression 7> `**' <integer expression 8>
+
+<\TeeSub4 expression 8> ::=  "abs"   <\TeeSub5 expression 8>
+                        \alt "long"  <\TeeSub5 expression 8>
+                        \alt "short" <\TeeSub5 expression 8>
+
+<integer expression 8> ::=  <control identifier>
+\end{grammar}
+
+\Semantics
+\label{Arithmetic Expressions, Semantics}
+
+An arithmetic expression is a rule for computing a number.  According
+to its simple type it is called an integer expression, real
+expression, long real expression, complex expression, or long complex
+expression.
+
+\setcounter{paragraph}{0}
+\paragraph{}  The operators
+\A!+!, \A!-!, \A!*!, and \A!/! have the conventional meanings of
+addition, subtraction, multiplication and division. 
+
+For the operator \A!*!, the second ``triplet rule'' is modified so
+that \TeeSub0 has the quality \T{long} unless both \TeeSub1 and
+\TeeSub2 are \T{integer}.
+
+For the operator \A!/!, the ``triplet rules'' except when both
+\TeeSub1 \TeeSub2 are \T{integer}, then \TeeSub0 is \T{long real}.
+
+\paragraph{} The operator \A!-! standing as the first symbol of a
+expression at priorty level 5 denotes the monadic operation of sign
+inversion. The type of the result is the type of the operand. The
+operator \A!+!  standing as the first symbol of a simple expression
+denotes the monadic operation of identity.
+
+In the relevant syntactic rules of \ref{Arithmetic Expressions, Syntax}, 
+every occurrence of the symbol \TeeSub3 must be systematically
+replaced by one of the following words (or word pairs):
+
+\begin{quote}
+\Ti{integer} \\
+\Ti{real}\\
+\Ti{long real}\\
+\Ti{complex}\\
+\Ti{long complex}
+\end{quote}
+
+\IndexReservedWord{div}
+\paragraph{} The operator \Ri{div} is mathematically defined (for
+${\tt B} \not= 0$) as
+\begin{AlgolW}
+A div B = SGN(A $\times$ B) $\times$ D(abs A, abs B)
+\end{AlgolW}
+(cf. \ref{Arithmetic Expressions, abs}) \A!A! and \A!B! both must be
+integer expressions.
+
+For the purpose of the definition above, \A!SGN! and \A!D! mean
+
+\begin{AlgolW}
+integer procedure SGN (integer value A);
+    if A < 0 then -1 else 1;
+
+integer procedure D (integer value A, B);
+    if A < B then 0 else D(A - B, B) + 1
+\end{AlgolW}
+
+\IndexReservedWord{rem}
+\paragraph{}  The operator \Ri{rem} (remainder) is mathematically defined as
+\begin{AlgolW}
+A rem B = A $-$ (A div B) $\times$ B
+\end{AlgolW}
+
+\paragraph{} The operator \A!**! denotes exponentiation of the first
+operand to the power of the second operand. In the relevant syntactic
+rule of \ref{Arithmetic Expressions, Syntax}. the symbols \TeeSub4,
+\TeeSub5 are to be replaced by any of the following combinations of words:
+\begin{center}
+    \begin{tabular}{l|l}
+      \TeeSub4 & \TeeSub5 \\
+      \hline
+      \T{long real}    & \T{integer} \\
+      \T{long real}    & \T{real} \\
+      \T{long complex} & \T{complex}
+    \end{tabular}
+\end{center}
+
+\noindent\TeeSub4 has the quality \T{long} whether or not \TeeSub5 has.
+
+\label{Arithmetic Expressions, abs}
+\IndexReservedWord{abs}
+\paragraph{} The monadic operator \Ri{abs} yields the absolute value
+or modulus of the operand. In the relevant syntactic rule of
+\ref{Arithmetic Expressions, Syntax}. the symbols \TeeSub4 and
+\TeeSub5 have to be replaced by any of the following combinations of words:
+\begin{center}
+    \begin{tabular}{l|l}
+      \TeeSub4 & \TeeSub5 \\
+      \hline
+      \T{integer} & \T{integer} \\
+      \T{real}    & \T{real} \\
+      \T{real}    & \T{complex}
+    \end{tabular}
+\end{center}
+
+\noindent\ If \TeeSub5 has the quality \T{long} then so does \TeeSub5.
+
+\paragraph{Precision of arithmetic.} If the result of an arithmetic
+operation is of simple type \T{real}, \T{complex}, \T{long real}, or
+\T{long complex} then it value is defined by System/360 arithmetic and
+is the mathematically understood result of the operation performed on
+operands which may deviate from actual operands.
+
+In the relevant syntactic rules of \ref{Arithmetic Expressions, Syntax} 
+the symbols \TeeSub4, \TeeSub5 must be replaced by the following
+combinations of words (or word pairs):
+
+\IndexReservedWord{long}
+
+\noindent\ \\Operator \A!long!
+\begin{center}
+\begin{tabular}{l|l}
+  \TeeSub4     & \TeeSub5 \\
+  \hline
+  \T{long real}    & \T{real} \\
+  \T{long real}    & \T{integer} \\
+  \T{long complex} & \T{complex} \\
+\end{tabular}
+\end{center}
+
+\IndexReservedWord{long}
+\noindent\ \\Operator \A!short!
+\begin{center}
+\begin{tabular}{l|l}
+  \TeeSub4     & \TeeSub5 \\
+  \hline
+  \T{real}    & \T{long real}  \\
+  \T{complex} & \T{long complex} \\
+\end{tabular}
+\end{center}
+
+\Examples
+
+\A!C + A(1) * B(1)! \\
+\A!EXP(-X/(2 * SIGMA)) / SQRT (2 * SIGMA)!
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Logical Expressions}
+\label{Logical Expressions}
+
+\Syntax
+\label{Logical Expressions, Syntax}
+
+In the following rules for \<relation> the symbols \TeeSub6 and
+\TeeSub7 must either be identically replaced by any one of the
+following words:
+\begin{quote}
+    \T{bit}\\
+    \T{string} \\
+    \T{reference}
+\end{quote}
+or by any of the words from:
+\begin{quote}
+    \T{complex} \\
+    \T{long complex} \\
+    \T{real} \\
+    \T{long real} \\
+    \T{integer}
+\end{quote}
+and the symbols \TeeSub8 and \TeeSub9 must be identically replaced by
+\T{string} or must be replaced by any of \T{real}, \T{long real},
+\T{integer}.
+
+\grammarindent1.6in
+\index{syntax}{\<\Tee expression 1>|textbf}
+\index{syntax}{\<\Tee expression 2>|textbf}
+\index{syntax}{\<\Tee expression 3>|textbf}
+\index{syntax}{\<equality operator>|textbf}
+\index{syntax}{\<inequality operator>|textbf}
+\index{syntax}{\<relation>|textbf}
+\index{syntax}{\<\Tee expression 4>}
+\index{syntax}{\<\Tee expression 5>}
+\index{syntax}{\<record class identifier>}
+\begin{grammar}
+<logical expression 1> ::=
+      <logical expression 1>
+ \alt <logical expression 1> "or" <logical expression 2>
+
+<logical expression 2> ::=
+      <logical expression 2>
+ \alt <logical expression 2> "and" <logical expression 3>
+
+<logical expression 3> ::= `\NOT' <logical expression 4>
+
+<relation> ::=
+      <\TeeSub6 expression 5> <equality operator>   <\TeeSub7 expression 5>
+ \alt <\TeeSub8 expression 5> <inequality operator> <\TeeSub9 expression 5>
+ \alt <reference expression 5> "is" <record class identifier>
+
+<equality operator> ::= `=' | `\NE'
+
+<inequality operator> ::= `<' | `<=' | `>=' | `>'
+
+\end{grammar}
+
+\Semantics
+
+A logical expression is a rule for computing a logical value.
+
+\setcounter{paragraph}{0}
+\paragraph{} The relational operators represent algebraic ordering for
+arithmetic arguments and EBCDIC ordering for string arguments. If two
+strings of unequal length are compared, the shorter string is
+considered to be extended to the length of the longer (for comparision
+only) by appending blanks to the right. The relational operators yield
+the logical value \Ri{true} if the relation is satisfied for the
+values of the two operands; \Ri{false} otherwise.  Two references are
+equal if and only if they are both \Ri{null} or both refer to the same
+record. The operator \Ri{is} yields the \Ti{logical} value \R{true} if
+the reference expression designates a record of the indicated record
+class; \R{false} otherwise.  The reference value \R{null} fails to
+designate a record of any record class.
+
+\label{Logical Operators}
+\IndexReservedWord{and}
+\IndexReservedWord{or}
+\paragraph{} The operators \A!~! (not), \Ri{and}, and \Ri{or},
+operating on logical values, are defined by the following
+equivalences:
+
+\begin{quote}
+\begin{tabular}{ll}
+ \A!~ X!     & \A!if X then false else true! \\
+ \A!X and Y! & \A!if X then Y else false! \\
+ \A!X or Y!  & \A!if X then true else Y!
+\end{tabular}
+\end{quote}
+
+\Examples
+
+\begin{AlgolWExample}
+P or Q
+(X < Y) and (Y < Z)
+YOUNGESTOFFSPRING (JACK) 1 = null
+FATHER (JILL) is PERSON
+\end{AlgolWExample}
+
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{Bit Expressions}
+\label{Bit Expressions}
+
+\Syntax
+
+\grammarindent1.4in
+\index{syntax}{\<\Tee expression 1>|textbf}
+\index{syntax}{\<\Tee expression 2>|textbf}
+\index{syntax}{\<\Tee expression 3>|textbf}
+\index{syntax}{\<\Tee expression 7>|textbf}
+\index{syntax}{\<\Tee expression 4>}
+\index{syntax}{\<\Tee expression 8>}
+\begin{grammar}
+<bit expression 1> ::= <bit expression 1> "or" <bit expression 2>
+
+<bit expression 2> ::= <bit expression 1> "and" <bit expression 3>
+
+<bit expression 3> ::= `\NOT' <bit expression 4>
+
+<bit expression 7> ::= <bit expression 7> "shl" <integer expression 8>
+                   \alt <bit expression 7> "shr" <integer expression 8>
+
+\end{grammar}
+
+\Semantics
+
+A bit expression is a rule for computing a bit sequence.
+
+\IndexReservedWord{and}
+\IndexReservedWord{or}
+The operators \R{and}, \R{or}, and \A!~! produce a result of type
+\Ti{bits}, every bit being dependent on the corresponding bit(s) in
+the operand(s) as follows:
+
+\begin{center}
+\begin{tabular}{cc|ccc}
+\A!X! & \A!Y! & \A!~X! & \A!X and Y! & \A!X or Y! \\
+\hline
+0          & 0          & 1           & 0                & 0 \\
+0          & 1          & 1           & 0                & 1 \\
+1          & 0          & 0           & 0                & 1 \\
+1          & 1          & 0           & 1                & 1
+\end{tabular}
+\end{center}
+
+\IndexReservedWord{shl}
+\IndexReservedWord{shr}
+The operators \Ri{shl} and \Ri{shr} denote the shifting operation to
+the left and to the right respectively by the number of bit positions
+indicated by the absolute value of the integer primary.  Vacated bit
+positions to the right or left respectively are assigned the bit value
+0.
+
+\Examples
+
+\begin{AlgolWExample}
+G and H or #38
+G and ~ (H or G) shr 8
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{String Expressions}
+\label{String Expressions}
+
+\Syntax
+
+\index{syntax}{\<bar>}
+\grammarindent1.5in
+\index{syntax}{\<substring designator>|textbf}
+\index{syntax}{\<integer constant>}
+\index{syntax}{\<\Tee expression>}
+\index{syntax}{\<\Tee variable>}
+\begin{grammar}
+<substring designator> ::= <string variable> \\ `(' <integer expression> <bar> <integer constant> `)'
+\end{grammar}
+
+\Semantics
+
+A string expression is a rule for computing a string (sequence of characters).
+
+\setcounter{paragraph}{0}
+ 
+\paragraph{} A substring designator denotes a sequence of characters
+of the string designated by the string variable. The integer
+expression preceding the \<bar> selects the starting character of the
+sequence.  The value of the expression indicates the position in the
+string variable.  The value must be greater than or equal to 0 and
+less than the declared length of the string variable.  The first
+character of the string has position 0. The integer number following
+the \<bar> indicates the length of the selected sequence and is the
+length of the string expression.  The sum of the integer expression
+and the integer number must be less than or equal to the declared
+length of the string variable.
+
+\Examples
+
+\begin{AlgolWExample}
+string (10) S;
+S(4|3)
+S(I+J|1)
+string (10) array T (1::M,2::N);
+T(4,6)(3|5)
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Reference Expressions}
+\label{Reference Expressions}
+
+\Syntax
+
+\grammarindent1.8in
+\index{syntax}{\<\Tee expression 8>|textbf}
+\index{syntax}{\<record designator>|textbf}
+\index{syntax}{\<\Tee expression>}
+\index{syntax}{\<empty>}
+\index{syntax}{\<record class identifier>}
+\begin{grammar}
+<reference expression 8> ::= <record designator>
+
+<record designator> ::=
+      <record class identifier>
+ \alt <record class identifier> `(' <expression list> `)'
+
+<expression list> ::= <empty> 
+                  \alt     <\Tee expression>
+                  \alt <expression list> `,' <\Tee expression>
+\end{grammar}
+
+\Semantics
+
+A reference expression is a rule for computing a reference to a
+record.
+
+The value of a record designator is the reference to a newly created
+record belonging to the designated record class.  If the record
+designator contains an expression list, then the length of the list
+must equal the number of fields specified in the class declaration. 
+Values of nonempty expressions in the expression list are
+assigned to the corresponding fields of the new record, and the simple
+types of the expressions must be assignment compatible with the simple
+types of the record fields (cf.\ref{Assignment Statements, Semantics}).
+
+\Example
+
+\begin{AlgolWExample}
+PERSON ("CAROL", 0, false, JACK, JILL, null, YOUNGESTOFFSPRING(JACK))
+NODE ( , null)
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{Conditional Expressions}
+\label{Conditional Expressions}
+
+\Syntax
+
+\IndexReservedWord{if}
+\IndexReservedWord{then}
+\IndexReservedWord{else}
+\IndexReservedWord{case}
+\IndexReservedWord{of}
+\grammarindent2.0in
+\index{syntax}{\<case clause>|textbf}
+\index{syntax}{\<conditional \Tee expression>|textbf}
+\index{syntax}{\<if clause>|textbf}
+\index{syntax}{\<\Tee expression>}
+\begin{grammar}
+<conditional \Tee expression> ::= <case clause> `(' <\Tee expression list> `)'
+
+<conditional \TeeSub0 expression> ::= <if clause> <\TeeSub1 expression> "else" <\TeeSub2 expression>
+
+<\Tee expression list> ::= <\Tee expression>
+
+<\TeeSub0 expression list> ::= <\TeeSub1 expression list> `,' <\TeeSub2 expression>
+
+<if clause> ::= "if" <logical expression> "then"
+
+<case clause> ::= "case" <integer expression> "of"
+\end{grammar}
+
+\Semantics
+
+The construction
+\begin{center}
+  \syntax{<if clause> <\TeeSub1 expression> "else" <\TeeSub2 expression>}
+\end{center}
+causes the selection and evaluation of an expression on the basis of
+the current value of the logical expression contained in the \Ri{if}
+clause.  If this value is \R{true}, the expression following the
+\R{if} clause is selected; if the value is \R{false}, the expression
+following \Ri{else} is selected. If \TeeSub1 and \TeeSub2 are type
+\Ti{string}, the length of the resulting expression is the maximum of
+the lengths of the component expressions; if necessary, blanks are
+appended on the right right of the shorter string. The construction
+\begin{center}
+  \syntax{<case clause> `(' <\Tee expression list> `)'}
+\end{center}
+causes the selection of the expression whose ordinal number in the
+expression list is equal to the current value of the integer
+expression contained in the \A!case! clause. In order that the
+\A!case!  expression be defined, the current value of
+this expression must be the ordinal number of some expression in the
+expression list. type If \Tee is type \Ti{string}, the length of the
+resulting expression is the maximum of the lengths of the stings in
+the expression list. If necessary, the length of any shorter element is
+increased by appending blanks on the right.
+
+\Examples
+
+\begin{AlgolWExample}
+X    -1    A*B    COLUMN rem 5    (X+Y)*3    long abs BALANCE
+if X=3 then Y+37 else Z*2.1
+case I of (3.14, 2.78, 448.9)
+case DECODE(C) - 128  of ("A", "B", "C", "D", "E", "F")
+\end{AlgolWExample}
+
+
+%------------------------------------------------------------------------------------------------------
+
+\newpage
+\section{Statements}
+\label{Statements}
+
+A statement denotes a unit of action. By the execution of a statement
+is meant the performance of this unit of action, which may consist of
+smaller units of action such as the evaluation of expressions or the
+execution of other statements.
+
+\SyntaxUnnumbered
+
+\grammarindent1.5in
+\index{syntax}{\<program>|textbf}
+\index{syntax}{\<simple statement>|textbf}
+\index{syntax}{\<statement>|textbf}
+\index{syntax}{\<\Tee assignment statement>}
+\index{syntax}{\<\Tee function procedure declaration>}
+\index{syntax}{\<assert statement>}
+\index{syntax}{\<block>}
+\index{syntax}{\<case statement>}
+\index{syntax}{\<empty>}
+\index{syntax}{\<goto statement>}
+\index{syntax}{\<if statement>}
+\index{syntax}{\<iterative statement>}
+\index{syntax}{\<procedure statement>}
+\index{syntax}{\<proper procedure declaration>}
+\index{syntax}{\<standard procedure statement>}
+\begin{grammar}
+<program> ::=
+      <statement> `.'
+ \alt <proper procedure declaration> `.'
+ \alt <\Tee function procedure declaration> `.'
+
+<statement> ::=
+      <simple statement>
+ \alt <iterative statement>
+ \alt <if statement>
+ \alt <case statement>
+
+<simple statement> ::=
+      <block>
+ \alt <\Tee assignment statement>
+ \alt <empty>
+ \alt <procedure statement>
+ \alt <goto statement>
+ \alt <standard procedure statement>
+ \alt <assert statement>
+\end{grammar}
+
+Programs which are procedure declarations cannot be executed directly,
+but the corrsponding procedure bodies can form part of the environment
+in which other \ALGOLW\ programs are executed (cf.\ref{Procedure Declarations}).
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Blocks}
+\label{Blocks}
+
+\Syntax
+
+\grammarindent1.4in
+\index{syntax}{\<block>|textbf}
+\index{syntax}{\<block body>|textbf}
+\index{syntax}{\<label definition>|textbf}
+\index{syntax}{\<declaration>}
+\index{syntax}{\<identifier>}
+\index{syntax}{\<statement>}
+\begin{grammar}
+<block> ::=
+      <block body> <statement> "end"
+
+<block body> ::=
+      <block head>
+ \alt <block body> <statement> `;'
+ \alt <block body> <label definition>
+
+<block head> ::=
+      "begin" 
+ \alt <block head> <declaration> `;'
+
+<label definition> ::=
+      <identifier> `:'
+\end{grammar}
+
+\Semantics
+
+\label{Blocks, Semantics}
+Every block introduces a new level of nomenclature. This is realized
+by execution of the block in the following steps:
+\begin{description}
+\item[Step 1.] If an identifier, say \A!A!, defined in the block head
+  or in a  label definition of the block body is
+  already defined at the place from which the block is entered, then
+  every occurrence of that identifier, A, within the block except for
+  occurrence in array bound expressions is systematically replaced by
+  another identifier, say $\texttt{A}'$, which is defined neither within
+  the block nor at the place from which the block is entered.
+\item[Step 2.] If the declarations of the block contain array bound
+  expressions, then these expressions are evaluated.
+\item[Step 3.] Execution of the statements contained in the block body
+  begins with the execution of the first statement following the block
+  head.
+\end{description}
+
+After execution of the last statement of the block body (unless it is
+a goto statement) a block exit occurs, and the statement following the
+entire block is executed.
+
+\Example
+
+\begin{AlgolWExample}
+begin real U;
+      U := X; X := Y; Y := Z; Z := U
+end
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Assignment Statements}
+\label{Assignment Statements}
+
+\Syntax
+
+In the following rules the symbols \TeeSub0 and \TeeSub1 must be
+replaced by words as indicated in Section 1, subject to the
+restriction that the type \TeeSub1 is assignment compatible with the
+type \TeeSub0 as defined in \ref{Assignment Statements, Semantics}.
+
+\grammarindent2.0in
+\index{syntax}{\<\Tee assignment statement>|textbf}
+\index{syntax}{\<\Tee expression>}
+\index{syntax}{\<\Tee variable>}
+\begin{grammar}
+<\TeeSub0 assignment statement> ::=
+      <\TeeSub0 left part> <\TeeSub1 expression>
+ \alt <\TeeSub0 left part> <\TeeSub1 assignment statement>
+
+<\Tee left part> ::= <\Tee variable> `:='
+\end{grammar}
+
+\Semantics
+\label{Assignment Statements, Semantics}
+
+The execution of a simple assignment statement
+\begin{center}
+\syntax{<assignment statement> ::= <\TeeSub0 left part> <\TeeSub1 expression>}
+\end{center}
+causes the assignment of the value of the expression to the variable.
+If a shorter string is to be assigned to a longer one, the shorter
+string is first extended to the right with blanks until the lengths
+are equal. In a multiple assignment statement
+\begin{center}
+\syntax{<assignment statement> ::= <\TeeSub0 left part> <\TeeSub1 assignment statement>}
+\end{center}
+the assignments are performed from right to left. For each left part
+variable, the simple type of the expression or assignment variable
+immediately to the right must be assignment compatible with the simple
+type of that variable.
+
+A simple type \TeeSub0 is said to be \emph{assignment compatible} with
+a simple type \TeeSub1 if either
+
+\begin{enumerate}[(1)]
+\item the two types are identical (except that if \TeeSub0 and
+  \TeeSub1 are \T{string}, the length of the \TeeSub0 variable
+  must be greater than or equal to the length of the \TeeSub1
+  expression or assignment), or
+
+\item \TeeSub0 is \T{real} or \T{long real}, and \TeeSub1 is
+  \T{integer}, \T{real} or \T{long real}, or
+
+\item \TeeSub0 is \T{complex} or \T{long complex}, and
+  \TeeSub1 is \T{integer}, \T{real}, \T{long real},
+  \T{complex} or \T{long complex}.
+\end{enumerate}
+
+In the case of a reference, the reference to be assigned must refer to
+a record of one of the classes specified by the record class
+identifiers associated with the reference variable in its declaration.
+
+\Examples
+
+\begin{AlgolWExample}
+z := AGE(JACK) := 28
+X := Y + abs Z
+C := I + X + C
+P := X1 ~= Y
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Procedure Statements}
+\label{Procedure Statements}
+
+\Syntax
+
+\grammarindent1.9in
+\index{syntax}{\<procedure statement>|textbf}
+\index{syntax}{\<actual parameter>|textbf}
+\index{syntax}{\<actual parameter list>|textbf}
+\index{syntax}{\<\Tee subarray designator>|textbf}
+\index{syntax}{\<\Tee array identifier>}
+\index{syntax}{\<\Tee expression>}
+\index{syntax}{\<\Tee function identifier>}
+\index{syntax}{\<procedure identifier>}
+\index{syntax}{\<statement>}
+\index{syntax}{\<subscript>}
+\begin{grammar}
+<procedure statement> ::=
+      <procedure identifier>
+ \alt <procedure identifier> \\ `(' <actual parameter list> `)'
+
+<actual parameter list> ::=
+      <actual parameter>
+ \alt <actual parameter list> `,' <actual parameter>
+
+<actual parameter> ::=
+      <\Tee expression>
+ \alt <statement>
+ \alt <\Tee subarray designator>
+ \alt <procedure identifier>
+ \alt <\Tee function identifier>
+
+<\Tee subarray designator> ::=
+      <\Tee array identifier>
+ \alt <\Tee array identifier> \\ `(' <subarray designator list> `)'
+
+<subarray designator list> ::=
+      <subscript>
+ \alt `*'
+ \alt <subarray designator list> `,' <subscript>
+ \alt <subarray designator list> `,' `*'
+\end{grammar}
+
+\Semantics
+\label{Procedure Statements, Semantics}
+
+The execution of a procedure statement is equivalent to a process
+performed in the following steps:
+
+\begin{enumerate}[{Step} 1.]
+\item A copy is made of the body of the proper procedure whose
+  procedure identifier is given by the procedure statement, and of the
+  actual parameters of the latter. The procedure statement is replaced
+  by the copy of the procedure body.
+\item If the procedure body is a block, then a systematic change of
+  identifiers in its copy is performed as specified by step 1 of
+  \ref{Blocks, Semantics}.
+\item The copies of the actual parameters are treated in an undefined
+  order as follows: If the copy is an expression
+  different from a variable, then it is enclosed by a pair of
+  parentheses, or if it is a statement it is enclosed by the symbols
+  \R{begin} and \R{end}.
+\item In the copy of the procedure body every occurrence of an
+  identifier identifying a formal parameter is replaced by the copy of
+  the corresponding actual parameter (cf. \ref{Procedure Statements, Semantics, Actual-formal correspondence}). 
+  In order for the
+  process to be defined, these replacements must lead to correct \ALGOLW\ 
+  expressions and statements.
+\item The copy of the procedure body, modified as indicated in steps
+  2-4, is executed.
+\end{enumerate}
+
+\setcounter{paragraph}{0}
+
+\paragraph{Actual-formal correspondence.}
+
+\label{Procedure Statements, Semantics, Actual-formal correspondence}
+The correspondence between the actual parameters and the formal
+parameters is established as follows: The actual parameter list of the
+procedure statement (or of the function designator) must have the same
+number of entries as the formal parameter list of the procedure
+declaration heading. The correspondence is obtained by taking the
+entries of these two lists in the same order.
+
+\paragraph{} The following table summarises the forms of actual
+parameters which may be substituted for each kind of formal
+parameter's specification.
+
+\begin{quote}
+\index{syntax}{\<\Tee expression>}
+\index{syntax}{\<\Tee variable>}
+\index{syntax}{\<\Tee function identifier>}
+\index{syntax}{\<\Tee subarray designator>}
+\index{syntax}{\<procedure identifier>}
+\index{syntax}{\<statement>}
+\begin{tabular}{l|l}
+\textbf{Formal type} & \textbf{Actual parameter} \\
+\hline
+\syntax{<\Tee type>}              & \<\Tee expression> \\
+\syntax{<\TeeSub0 type> "value"}  & \<\TeeSub1 expression> \\
+\syntax{<\TeeSub1 type> "result"} & \<\TeeSub0 variable> \\
+\syntax{<\TeeSub1 type> "value" "result"} & \<\TeeSub2 variable> \\
+\syntax{<\Tee type> "procedure"} & \syntax{<\Tee function identifier> | <\Tee expression>} \\
+\syntax{"procedure"}             & \syntax{<procedure identifier> | <statement>} \\
+\syntax{<\Tee type> "array"}     & \<\Tee subarray designator> \\
+\end{tabular}
+\end{quote}
+
+\noindent\ The type \TeeSub1 must be assignment compatible with type
+\TeeSub0. \TeeSub1 and \TeeSub2 must be mutually assignment compatible.
+
+
+\paragraph{Subarray designators.} A complete array may be passed to a
+procedure by specifying the name of the array if the number of
+subscripts of the actual parameter equals the number of subscripts of
+the corresponding formal parameter.  If the actual array parameter has
+more subscripts than the corresponding formal parameter, enough
+subscripts must be specified by integer expressions so that the number
+of \A!*!'s appearing in the subarray designator equals the number of
+subscripts of the corresponding formal parameter. The subscript
+positions of the formal array designator are matched with the
+positions with \A!*!'s in the subarray designator in the order they
+appear.
+
+\Examples
+\begin{AlgolWExample}
+INCREMENT
+COPY (A, B, M, N)
+INNERPRODUCT (IP, N, A(I,*), B(*,J))
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{Goto Statements}
+\label{Goto Statements}
+
+\grammarindent1.4in
+\index{syntax}{\<goto statement>|textbf}
+\index{syntax}{\<label identifier>}
+\begin{grammar}
+<goto statement> ::=
+      "goto" <label identifier>
+ \alt "go to" <label identifier>
+\end{grammar}
+
+\Semantics
+\label{Goto Statements, Semantics}
+
+An identifier is called a label identifier if it stands as a label.
+
+A \Ri{goto} statement determines that execution of the text be
+continued after the label definition of the label identifier. The
+identification of that label definition is accomplished in the
+following steps:
+\begin{enumerate}[{Step} 1.]
+\item If some label definition within the most recently activated but
+  not yet terminated block contains the label identifier, then this is
+  the designated label definition. Otherwise,
+\item The execution of that block is considered as terminated and Step
+  1 is taken as specified above.
+\end{enumerate}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{If Statements}
+\label{If Statements}
+
+\Syntax
+
+\grammarindent1.2in
+\index{syntax}{\<if clause>|textbf}
+\index{syntax}{\<if statement>|textbf}
+\index{syntax}{\<\Tee expression>}
+\index{syntax}{\<simple statement>}
+\index{syntax}{\<statement>}
+\begin{grammar}
+<if statement> ::=
+      <if clause> <statement>
+ \alt <if clause> <simple statement> "else" <statement>
+
+<if clause> ::= "if" <logical expression> "then"
+\end{grammar}
+
+\Semantics
+
+The execution of \Ri{if} statements causes certain statements to be
+executed or skipped depending on the values of specified logical
+expressions. An \R{if} statement of the form
+\begin{center}
+\syntax{<if clause> <statement>}
+\end{center}
+is executed in the following steps:
+\begin{enumerate}[{Step} 1.]
+\item The \Ti{logical} expression in the \R{if} clause is evaluated.
+\item If the result of Step 1 is true, then the statement following
+  the \R{if} clause is executed. Otherwise Step 2 causes no action to
+  be taken at all.
+\end{enumerate}
+
+An \R{if} statement of the form
+\begin{center}
+\syntax{<if clause> <simple statement> "else" <statement>}
+\end{center}
+is executed in the following steps:
+\begin{enumerate}[{Step} 1.]
+\item The \Ti{logical} expression in the \R{if} clause is evaluated.
+\item If the result of Step 1 is true, then the simple statement
+  following the \R{if} clause is executed. Otherwise the statement
+  following \Ri{else} is executed.
+\end{enumerate}
+
+\Examples
+\begin{AlgolWExample}
+if X = Y then goto L
+if X < Y then U := X else if Y < Z then U := Y else V := Z
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{Assert Statements}
+\label{Assert Statements}
+\IndexType{logical}
+
+\Syntax
+
+\grammarindent0pt
+\index{syntax}{\<assert statement>|textbf}
+\index{syntax}{\<\Tee expression>}
+\begin{grammar}
+<assert statement> ::= "assert" <logical expression>
+\end{grammar}
+
+\Semantics
+
+The \Ri{assert} statement is equivalent to the \R{if} statement:
+\begin{quote}
+  \A!if (!\<logical expression>\A!) then! \Transcendent{endexecution}
+\end{quote}
+where \Transcendent{endexecution} signifies a procedure which
+terminates the execution of an \ALGOLW\ program. The assert statement
+can be used both as a debugging aid (asserting conditions which should
+be true, but may not be if a bug exists), and as a program
+documentation aid.
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Case Statements}
+\label{Case Statements}
+
+\Syntax
+
+\grammarindent1.3in
+\index{syntax}{\<case clause>|textbf}
+\index{syntax}{\<case statement>|textbf}
+\index{syntax}{\<\Tee expression>}
+\index{syntax}{\<statement>}
+\begin{grammar}
+<case statement> ::= <case clause> "begin" <statement list> "end"
+
+<statement list> ::= <statement>
+                \alt <statement list> `;' <statement>
+
+<case clause> ::= "case" <integer expression> "of"
+\end{grammar}
+
+\Semantics
+
+The execution of a \Ri{case} statement proceeds in the following
+steps:
+\begin{enumerate}[Step 1.]
+\item The expression of the case clause is evaluated.
+\item The statement whose ordinal number in the statement list is
+  equal to the value obtained in Step 1 is executed. In order that the
+  case statement be defined, the current value of the expression in
+  the case clause must be the ordinal number of some statement of the
+  statement list.
+\end{enumerate}
+
+\Examples
+
+\begin{AlgolWExample}
+case I of
+begin X := X + Y;
+      Y := Y + Z;
+      Z := Z + X
+end
+\end{AlgolWExample}
+\begin{AlgolWExample}
+case J of
+begin H(1) := -H(I);
+      begin H(I-1) := H(I-1) + H(I); I := I - 1 end;
+      begin H(I-1) := H(I-1) * H(I); I := I - 1 end;
+      begin H(H(I-1)) := H(I); I := I - 2 end
+end
+\end{AlgolWExample}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{Iterative Statements}
+\label{Iterative Statements}
+
+\grammarindent1.6in
+\index{syntax}{\<iterative statement>|textbf}
+\index{syntax}{\<for clause>|textbf}
+\index{syntax}{\<while clause>|textbf}
+\index{syntax}{\<\Tee expression>}
+\index{syntax}{\<identifier>}
+\index{syntax}{\<statement>}
+\begin{grammar}
+<iterative statement> ::=
+      <for clause> <statement>
+ \alt <while clause> <statement>
+
+<for clause> ::=
+      "for" <identifier> `:=' <initial value> "step" <increment> "until" <limit> "do"
+ \alt "for" <identifier> `:=' <initial value> "until" <limit> "do"
+ \alt "for" <identifier> `:=' <for list> "do"
+
+<for list> ::= <integer expression>
+           \alt <for list> `,' <integer expression>
+
+<initial value> ::= <integer expression>
+
+<increment> ::= <integer expression>
+
+<limit> ::= <integer expression>
+
+<while clause> ::= "while" <logical expression> "do"
+\end{grammar}
+
+\Semantics
+
+The iterative statement serves to express that a statement be executed
+repeatedly depending on certain conditions specified by a \Ri{for}
+clause or a \Ri{while} clause. The statement following the \R{for}
+clause or the \R{while} clause always acts as a block, whether it has
+the form of a block or not. The value of the control identifier (the
+identifier following \Ri{for}) cannot be changed by assignment within
+the controlled statement.
+
+\begin{enumerate}[(a)]
+
+\item An iterative statement of the form
+\begin{quote}
+\IndexReservedWord{step}
+\IndexReservedWord{until}
+\begin{AlgolW}
+for `\<identifier>` := $E_1$ step $E_2$ until $E_3$ do `\<statement>`
+\end{AlgolW}
+\end{quote}
+is exactly equivalent to the block
+\begin{quote}
+\begin{AlgolW}
+begin `\<statement-0>`; `\<statement-1>`; `\ldots`
+       `\<statement-I>`; `\ldots`
+       `\<statement-N>`
+end
+\end{AlgolW}
+\end{quote}
+when in the $I^{th}$ statement every occurrence of the control
+identifier is replaced by the value of the expression $(E_1 + I\times\
+E_2)$.
+
+The index $N$ of the last statement is determined by $N < (E_3-E_1) /
+E2 < N+1$.  If $N < 0$, then it is understood that the sequence is
+empty. The expressions $E_1$, $E_2$, and $E_3$ are evaluated exactly
+once, namely before execution of \<statement-0>.  Therefore they can
+not depend on the control identifier.
+
+\newpage
+\item An iterative statement of the form
+\begin{quote}
+\begin{AlgolW}
+for `\<identifier>` := $E_1$ until $E_3$ do `\<statement>`
+\end{AlgolW}
+\end{quote}
+is exactly equivalent to the iterative statement
+\begin{quote}
+\begin{AlgolW}
+for `\<identifier>` := $E_1$ step 1 until $E_3$ do `\<statement>`
+\end{AlgolW}
+\end{quote}
+
+\item An iterative statement of the form
+\begin{quote}
+\begin{AlgolW}
+for `\<identifier>` := $E_1$, $E_2$, `\ldots`, $E_N$ do `\<statement>`
+\end{AlgolW}
+\end{quote}
+is exactly equivalent to the block
+\begin{quote}
+\begin{AlgolW}
+begin `\<statement-1>` ; `\<statement-2>`; `\ldots`
+      `\<statement-I>` ; `\ldots`
+      `\<statement-N>`
+end
+\end{AlgolW}
+\end{quote}
+when in the $I^{th}$ statement every occurrence of the control
+identifier is replaced by the value of the expression $E_I$.
+
+\item
+\IndexType{logical}
+\IndexReservedWord{while}
+An iterative statement of the form
+\begin{quote}
+\begin{AlgolW}
+while $E$ do `\<statement>`
+\end{AlgolW}
+\end{quote}
+is exactly equivalent to the block
+\begin{quote}
+\begin{AlgolW}
+begin
+$L$: if $E$ then
+      begin `\<statement>` ; goto $L$ end
+end
+\end{AlgolW}
+\end{quote}
+where it is understood the $L$ represents an identifier which is not
+defined at the place from which the \R{while} statement is entered.
+
+\end{enumerate}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{Standard Procedures}
+\label{Standard Procedures}
+
+Standard procedures are provided in \ALGOLW\ for the purpose of
+communication with the input/output system. A standard procedure
+differs from an explicitly declared procedure in that the number and
+type of its actual parameters need not be identical in every statement
+which invokes the standard procedure identifier
+appears.
+ 
+\SyntaxUnnumbered
+
+\grammarindent1.8in
+\index{syntax}{\<standard procedure statement>|textbf}
+\index{syntax}{\<\Tee expression>}
+\index{syntax}{\<\Tee variable>}
+\index{syntax}{\<simple statement>}
+\begin{grammar}
+<standard procedure statement> ::= 
+     `READ' `(' <input parameter list> ')'
+\alt `READON' `(' <input parameter list> ')'
+\alt `READCARD' `(' <input parameter list> ')'
+\alt `WRITE' `(' <transput parameter list> ')'
+\alt `WRITEON' `(' <transput parameter list> ')'
+\alt `IOCONTROL' `(' <transput parameter list> ')'
+
+<input parameter list> ::= 
+     <\Tee variable>
+\alt <simple statement>
+\alt <input parameter list> `,' <\Tee variable>
+\alt <input parameter list> `,' <simple statement>
+
+<transput parameter list> ::= 
+     <\Tee expression>
+\alt <simple statement>
+\alt <transput parameter list> `,' <\Tee variable>
+\alt <transput parameter list> `,' <simple statement>
+\end{grammar}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{The Input/Output System}
+\label{The Input/Output System}
+
+\ALGOLW\ provides a single legible input stream and a single legible
+output stream. These streams are conceived as sequences of records,
+each record consisting of a character sequence of fixed length. The
+input stream has the logical properties of a sequence of cards in a
+card reader; records consist of 80 characters. The output stream has
+the logical properties of a sequence of lines on a line printer;
+records consist of 132 characters, and the records are grouped into
+logical pages.  Each page consists of not less than one nor more than
+60 lines.
+
+Input records may be transmitted as strings without analysis.
+Alternatively, it is possible to invoke a procedure which will scan
+the sequence of records for data items to be interpreted as numbers,
+bit sequences, strings, or logical values.  If such analysis is
+specified, data items may be reference denotations of the
+corresponding constants (cf. Section \ref{Values and Types}).  In
+addition, the following forms of arithmetic expressions are acceptable
+data items, and the corresponding simple types are those determined by
+the rules for expressions (cf. \ref{Arithmetic Expressions}):
+\begin{enumerate}[(1)]
+\item \syntax{<sign> <\Tee constant>} where \Tee is one of:
+  \T{integer}, \T{real}, \T{long real}, \T{complex}, \T{long complex}
+\item 
+  \syntax{<\TeeSub0 constant> <sign> <\TeeSub1 constant> | <sign> <\TeeSub0 constant> <sign> <\TeeSub1 constant>} 
+  where \TeeSub0 is one of: \T{integer}, \T{real}, \T{long real}, \\
+  and \TeeSub1 is one of: \T{complex}, \T{long complex}
+\end{enumerate}
+
+Data items are separated by one or more blanks. Scanning for data
+items initially begins with the first character of the input stream;
+after the initial scan, it normally begins with the character
+following the one which terminated the most recent previous scan.
+Leading blanks are ignored. The scan is terminated by the first blank
+following the data item. In the process, new records are fetched as
+necessary; character position 80 of one record is considered to be
+immediately followed by character position 1 of the next record. There
+exist procedures to cause the scanning process to begin with the first
+character of a record; if scanning would not otherwise start there, a
+new record is fetched.
+
+Output items are assembled into records by an editing procedure.
+Items are automatically converted to character sequences and placed in
+fields according to the simple type of each item, as described below.
+The first field transmitted begins the output stream; thereafter, each
+field is normally placed immediately following the most recent
+previously transmitted field. If, however, the field corresponding to
+an item cannot be placed entirely within a non-empty record, that item
+is made the first field of the next record. In addition, there exist
+procedures to cause the field corresponding to an item to begin a new
+record. Each page group is automatically terminated after 60 records;
+procedures are provided for causing earlier termination.
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Read Statements}
+\label{Read Statements}
+\IndexProcedure{READ}
+\IndexProcedure{READON}
+\IndexProcedure{IOCONTROL}
+
+Both \A!READ! and \A!READON! designate free field input procedures.
+Input records are scanned as described in \ref{The Input/Output System}. 
+Values on input records are read, matched with the
+variables of the actual parameter list in order of appearance, and
+assigned to the corresponding variables.  The simple type of each data
+item must be assignment compatible with the simple type of the
+corresponding variable. For each \A!READ! statement, scanning for the
+first data item is caused to begin with the first character of a
+record; for a \A!READON! statement, scanning continues from the
+previous point of termination as determined by prior use of \A!READ!,
+\A!READON!, or \A!IOCONTROL! (cf. \ref{The Input/Output System}).
+
+\A!READCARD! designates a procedure transmitting 80 character input
+records without analysis. For each variable of the actual parameter
+list, the scanning process is set to begin at the first character of a
+record (by fetching a new record if necessary), all 80 characters of
+that record are assigned to the corresponding string variable, and
+subsequent input scanning is set to begin at the first character of
+the next sequential record.
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsubsection{Write Statements}
+\label{Write Statements}
+\IndexProcedure{WRITE}
+\IndexProcedure{WRITEON}
+
+\A!WRITE! and \A!WRITEON! designate output procedures with automatic
+format conversion.  Values of expressions of the actual parameter list
+are converted to character fields which are assembled into output
+records in order of appearance (cf. \ref{The Input/Output System}).
+For each \A!WRITE! statement, the field corresponding to the first
+value is caused to begin an output record; for a \A!WRITEON!
+statement, assembly continues from the previous point of termination.
+
+The values of a set of predeclared \emph{editing variables} controls
+the field widths and the formats of numerical quantities printed by
+the standard \ALGOLW\ output routines. These variables are initialized
+to appropriate default settings; their values can be inspected and
+modified in the course of the execution of the \ALGOLW\ program. Their
+attributes are given in the following table:
+
+\begin{longtable}{llcp{2.3in}}
+\textbf{Identifier} & \textbf{Type}    & \textbf{Initial Value} & \textbf{Interpretation} \\
+\A!I_W!          & \T{integer}   & \A!14!  & Width of \T{integer} fields. \\
+\A!R_FORMAT!     & \T{string(1)} & \A!"F"! & Format of \T{real}, \T{long real}, 
+                                             \T{complex} and \T{long complex} fields. \\
+\A!R_W!          & \T{integer}   & \A!14!  & Width of real and long real fields; 
+                                             width of complex and long complex fields 
+                                             $(2 \times {\tt R\_W} + 2)$ \\
+\A!R_D!          & \T{integer}   & \A!0!   & Places following the decimal point in 
+                                             \T{real}, \T{long real}, \T{complex} and 
+                                             \T{long complex} fields. \\
+\A!S_W!          & \T{integer}   & \A!2!   & Width of the fields of blanks appended 
+                                             to the end of each fields (excluding 
+                                             \T{string} fields).
+\end{longtable}
+
+\IndexVariable{I\_W}
+\IndexVariable{R\_W}
+\IndexVariable{R\_D}
+\IndexVariable{R\_FORMAT}
+\IndexVariable{S\_W}
+Values of \A!I_W! and \A!R_W! control the output field widths used for
+numerical quantities, in conjunction with the values of of \A!S_W! they
+determine the layout of each line of numerical output. Integer
+quantities are converted according to a standard format, but three
+different formats for the representation of \T{real}, \T{long real},
+\T{complex} and \T{long complex} values (strictly, rounded
+approximations of these values) are available. For a particular output
+value, the actual format is determined by the interrogation of the the
+variable \A!R_FORMAT!, which must specify one of the following:
+
+\begin{enumerate}[(1)]
+\item \emph{scaled} format (\A!R_FORMAT! = \A!"S"!), in which the
+  legible representation takes the form of a normalized mantissa
+  followed by an explicit scale factor;
+\item \emph{aligned} format (\A!R_FORMAT! = \A!"A"!), in which the
+  representation includes an integral part, a fractional part with the
+  specified number of digits, but no scale factor;
+\item \emph{free-point} format (\A!R_FORMAT! = \A!"F"!), in which the
+  representation is chosen to use a specified number of significant
+  digits, with the decimal point suitably positioned and with a scale
+  factor only if necessary.
+\end{enumerate}
+
+Scaled and aligned representations are sometimes said to use
+``scientific'' and `` fixed-point'' notation respectively. If scaled
+or free-point format is specified, the number of significant digits
+printed is given by \A!R_W! - 7. If (but only if) aligned format is
+specified, the number of digits following the decimal point is
+controlled by the value of \A!R_D!, and the magnitude of the numerical
+quantity determines then number of significant digits printed.
+
+The field in which an output item is placed depends on the type of the item, as follows:
+
+\begin{quote}
+\begin{tabular}{l|p{3.5in}}
+Simple Type           & Field Description \\
+\hline
+\T{integer}      & Right justified in a field of \A!I_W! characters and followed by \A!S_W! blanks. \\
+\T{real}         & Right justified in a field of \A!R_W! characters and followed by \A!S_W! blanks. \\
+\T{long real}    & Right justified in a field of \A!R_W! characters and followed by \A!S_W! blanks. \\
+\T{complex}      & Right justified in a field of $(2 \times {\tt R\_W} + 2)$ characters and followed by \A!S_W! blanks.\\
+\T{long complex} & Right justified in a field of $(2 \times {\tt R\_W} + 2)$ characters and followed by \A!S_W! blanks.\\
+\T{logical}      & Right justified in a field of 6 characters followed by  \A!S_W! blanks. \\
+\T{string}       & Field length is exactly the length of the string. \\
+\T{bits}         & Right justified in a field of 14 characters and followed by \A!S_W! blanks. 
+\end{tabular}
+\end{quote}
+
+Parameters corresponding to the syntactic class \<simple statement>
+are executed as they are encountered in the corresponding output lists;
+they cause no values to be transmitted but they can (and normally
+should) serve to change the values of the editing variables or the
+state of the input/output system. Furthermore, the values 
+of the five predeclared editing variables \A!I_W!, \A!R_W!, \A!R_D!,
+\A!R_FORMAT! and \A!S_W! are automatically saved at the beginning of
+execution of \A!WRITE! or \A!WRITEON! statements and restored at the
+end. Thus changes to the values of these variables within a output
+statement are localised and can affect only the editing of the
+remaining elements of the list, but assignments outside of such a list
+can affect all subsequent editing.
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Control Statements}
+\label{Control Statements}
+
+\IndexProcedure{IOCONTROL}
+
+\A!IOCONTROL! designates a procedure which affects the state of the
+input/output system. Argument values with defined effect are listed
+below; other values currently have no effect but are explicitly made
+available for local use or future expansion.
+
+\begin{longtable}{cp{3.5in}}
+\textbf{Value} &  \textbf{Action} (cf. \ref{The Input/Output System}) \endhead
+ 1 &  Subsequent input scanning begins with the first character of a record. \\
+ 2 &   Subsequent output assembly begins with 
+      the first field of a record. \\
+ 3 &  Subsequent output assembly begins with 
+      the first field of a record which, in turn, begins a new output page. \\
+ 4 &  Subsequent output assembly has no provision 
+      for automatic page skips. \\
+ 5 &  Subsequent output assembly 
+      contains control characters providing automatic page skips. 
+      (Initial option.)
+\end{longtable}
+
+\Examples
+
+\begin{AlgolWExample}
+READCARD(S, LINE(10|180))
+WRITE("AVERAGE =", SUM / N)
+WRITEON(X(1,J))
+IOCONTROL(2)
+\end{AlgolWExample}
+
+\IndexVariable{I\_W}
+\IndexVariable{R\_W}
+\IndexVariable{R\_D}
+\IndexVariable{R\_FORMAT}
+\IndexVariable{S\_W}
+\IndexProcedure{WRITE}
+\IndexProcedure{WRITEON}
+\IndexProcedure{IOCONTROL}
+\noindent Execution of the program,
+
+\begin{AlgolWExample}
+begin
+  procedure SCALED (integer value N);
+    begin R_FORMAT := "S"; R_W := N+7
+    end;
+  procedure ALIGNED (integer value N,D);
+    begin R_FORMAT := "A"; R_W := N+D+1; R_D := D
+    end;
+  procedure FREE_POINT (integer value N);
+    begin R_FORMAT := "F"; R_W := N+7
+    end;
+  procedure NEW_LINE; IOCONTROL(2);
+
+  FREE_POINT(5); I_W := 2; S_W := 1;
+
+  for I := -1, 0, 32 do
+    begin WRITE(S_W := 0, I, ":", NEW_LINE, I/3);
+    WRITEON("I  ", ALIGNED(3,2), I/3, "*", SCALED(12), I/3, "*")
+    end
+end.
+\end{AlgolWExample}
+
+\noindent will produce the following lines:
+
+\begin{quote}
+\begin{verbatim*}
+-1:
+    -0.33333I   -0.33 * -3.33333333333'-01 *
+ 0:
+           0I    0.00 *              0     *
+32:
+      10.667I   10.67 *  1.06666666667'+01 *
+\end{verbatim*}
+\end{quote}
+
+Note that the setting of \A!S_W! when the corresponding quantity is
+transmitted determines the number of trailing blanks; also, edited
+valued are always rounded.
+
+\IndexVariable{I\_W}
+\IndexVariable{R\_W}
+\IndexVariable{R\_D}
+\IndexVariable{R\_FORMAT}
+\IndexVariable{S\_W}
+Any values assigned to \A!I_W!, \A!R_W!, \A!S_W! in excess of 132 are
+treated as 132.  In the event that the values of \A!I_W!, \A!R_W!,
+\A!R_D!, \A!S_W!, or \A!R_FORMAT!  are erroneous or inconsistent with
+the magnitude or precision of the number to be transmitted then
+alternative values are used. These values ensure that an approximation
+to the number is always transmitted and that not more digits than are
+warranted by the precision of then number are transmitted.
+
+
+%------------------------------------------------------------------------------------------------------
+
+\newpage
+\section{Standard Functions and Predeclared Identifiers}
+\label{Standard Functions and Predeclared Identifiers}
+
+The \ALGOLW\ environment includes declarations and initialization of
+certain procedures and variables which supplement the language
+facilities previously described. Such declarations and initialization
+are considered to be included in a block which encloses each \ALGOLW\
+program (with terminating period eliminated).
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Standard Transfer Functions}
+\label{Standard Transfer Functions}
+
+Certain functions for conversion of values from one simple type to
+another are provided. These functions are predeclared; the
+corresponding implicit declaration headings are listed below:
+
+\begin{ProcedureDeclaration}{Transfer}{TRUNCATE}
+integer procedure TRUNCATE (real value X);
+comment `\rm the integer $i$ such that $i \leq |{\tt X}| < |i|$ and $i\times {\tt X} \geq 0$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{ENTIER}
+integer procedure ENTIER (real value X);
+comment `\rm the integer $i$ such that $i \leq {\tt X} < i + 1$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{ROUND}
+integer procedure ROUND (real value X);
+comment `\rm the value of the expression`;
+if X < 0 then TRUNCATE(X-0.5) else TRUNCATE(X+0.5);
+\end{ProcedureDeclaration}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{c|c|c|c}
+\A!X!  &  \A!TRUNCATE(X)!  &  \A! ENTIER(X)! &   \A!ROUND(X)! \\
+\hline
+  2.3  &       2       &      2      &      2 \\
+  2.5  &       2       &      2      &      3 \\
+  2.7  &       2       &      2      &      3 \\
+ -2.3  &      -2       &     -3      &     -2 \\
+ -2.5  &      -2       &     -3      &     -3 \\
+ -2.7  &      -2       &     -3      &     -3
+\end{tabular}
+\end{center}
+\caption{Values for \A!TRUNCATE!, \A!ENTIER!, and \A!ROUND!}
+\end{table}
+
+\begin{ProcedureDeclaration}{Transfer}{EXPONENT}
+integer procedure EXPONENT (real value X);
+comment `\rm $0$ if ${\tt X} = 0$, otherwise the largest integer $i$ such that $i \le log_{16}(|{\tt X}|) + 1$. This function obtains the exponent used in the S/360 representation of the real number` ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{ROUNDTOREAL}
+real procedure ROUNDTOREAL  (long real value X);
+comment `\rm the properly rounded value of {\tt X}` ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{REALPART}
+real procedure REALPART (complex value Z);
+comment `\rm the real component of {\tt Z}` ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{LONGREALPART}
+long real procedure LONGREALPART (long complex value Z);
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{IMAGPART}
+real procedure IMAGPART (complex value Z);
+comment `\rm the imaginary component of {\tt Z}` ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{LONGIMAGPART}
+long real procedure LONGIMAGPART (long complex value Z);
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{IMAG}
+complex procedure IMAG (real value X);
+comment `\rm the complex number $0 + {\tt X} i$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{LONGIMAG}
+long complex procedure LONGIMAG (long real value X);
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{ODD}
+logical procedure ODD (integer value N);
+comment `\rm the logical value`; N rem 2 = 1;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{BITSTRING}
+bits procedure BITSTRING  (integer value N);
+comment `\rm two's complement representation of {\tt N}` ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{NUMBER}
+integer procedure NUMBER (bits value X);
+comment `\rm integer with two's complement representation {\tt X}` ;
+\end{ProcedureDeclaration}
+
+\label{DECODE}
+\begin{ProcedureDeclaration}{Transfer}{DECODE}
+integer procedure DECODE (string(1) value S);
+comment `\rm numeric code for the character {\tt S} (cf. Appendix \ref{EBCDIC})` ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{CODE}
+string(1) procedure  CODE (integer value N);
+comment `\rm character with numeric code given by {\bf abs \tt (N \bf rem \tt 256)} (cf. Appendix \ref{EBCDIC}) ;
+\end{ProcedureDeclaration}
+
+In the following comments, the significance of characters in the prototype
+formats is as follows:
+\begin{quote}
+\begin{tabular}[t]{lp{\linewidth}}
+{\tt D} & decimal digit in a mantissa or integer \\
+{\tt E} & decimal digit in an exponent \\
+{\tt A} & hexadecimal digit in a mantissa or integer \\
+{\tt B} & hexadecimal digit in an exponent \\
+${\tt{\pm}}$ & sign (blank for positive mantissa or integer) \\
+${\tt{_\sqcup}}$  & blank
+\end{tabular}
+\end{quote}
+Each exponent is unbiased. Decimal exponents represent powers of 10;
+hexadecimal exponents represent powers of 16. Each mantissa (except 0)
+represents a normalized fraction less than one. Leading zeroes are not
+suppressed.
+
+\begin{ProcedureDeclaration}{Transfer}{BASE10}
+string(12) procedure BASE10 (real value X);
+comment `\rm string encoding of {\tt X} with format ${\tt{_\sqcup}{\pm}EE{\pm}DDDDDDD}$ ;`
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{BASE16}
+string(12) procedure BASE16 (real value X);
+comment `\rm string encoding of {\tt X} with format ${\tt{_\sqcup}{_\sqcup}{\pm}BB{\pm}AAAAAA}$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{LONGBASE10}
+string(20) procedure LONGBASE10 (long real value X);
+comment `\rm string encoding of {\tt X} with format ${\tt{_\sqcup}{\pm}EE{\pm}DDDDDDDDDDDDDDD}$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{LONGBASE16}
+string(20) procedure LONGBASE16 (long real value X);
+comment `\rm string encoding of {\tt X} with format ${\tt{_\sqcup}{_\sqcup}{\pm}BB{\pm}AAAAAAAAAAAAAA}$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{INTBASE10}
+string(12) procedure INTBASE10 (integer value N);
+comment `\rm string encoding of {\tt N} with format ${\tt{_\sqcup}{\pm}DDDDDDDDDD}$ ;`
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Transfer}{INTBASE16}
+string(12) procedure INTBASE16 (integer value N);
+comment `\rm  unsigned, two's complement string encoding of {\tt N} with format \\ ${\tt{_\sqcup}{_\sqcup}{_\sqcup}{_\sqcup}AAAAAAAA}$ ;`
+\end{ProcedureDeclaration}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Standard Functions of Analysis}
+\label{Standard Functions of Analysis}
+
+The following functions of analysis are provided in the system
+environment. In some cases, they are partial functions; action for
+arguments outside of the allowed domain is described in 8.5. These
+functions are predeclared; the corresponding implicit declaration
+headings are listed below:
+
+\begin{ProcedureDeclaration}{Analysis}{SQRT}
+real procedure SQRT (real value X);
+comment `\rm the positive square root of {\tt X}, domain : ${\tt X} \ge 0$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Analysis}{LONGSQRT}
+long real procedure LONGSQRT (long real value X);
+comment `\rm the positive square root of {\tt X}, domain : ${\tt X} \ge 0$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Analysis}{EXP}
+real procedure EXP (real value X);
+comment `\rm $e^{\tt X}$, domain : ${\tt X} < 174.67$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Analysis}{LONGEXP}
+long real procedure LONGEXP (long real value X);
+comment `\rm $e^{\tt X}$, domain : ${\tt X} < 174.67$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Analysis}{LN}
+real procedure LN (real value X);
+comment `\rm logarithm of {\tt X} to the base $e$, domain : ${\tt X} \ge 0$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Analysis}{LONGLN}
+long real procedure LONGLN (long real value X);
+comment `\rm logarithm of {\tt X} to the base $e$, domain : ${\tt X} \ge 0$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Analysis}{LOG}
+real procedure LOG (real value X);
+comment `\rm logarithm of {\tt X} to the base 10, domain : ${\tt X} \ge 0$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Analysis}{LONGLOG}
+long real procedure LONGLOG (long real value X);
+comment `\rm logarithm of {\tt X} to the base 10, domain : ${\tt X} \ge 0$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Analysis}{SIN}
+real procedure SIN (real value X);
+comment `\rm sine of {\tt X} (radians), domain : $-823550 < {\tt X} < 823550$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Analysis}{LONGSIN}
+long real procedure LONGSIN (long real value X);
+comment `\rm sine of {\tt X} (radians), domain : $-3.537{\times}10^{15} < {\tt X} < 3.537{\times}10^{15}$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Analysis}{COS}
+real procedure COS (real value X);
+comment `\rm cosine of {\tt X} (radians), domain : $-823550 < {\tt X} < 823550$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Analysis}{LONGCOS}
+long real procedure LONGCOS (long real value X);
+comment `\rm cosine of {\tt X} (radians), domain : $-3.537{\times}10^{15} < {\tt X} < 3.537{\times}10^{15}$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Analysis}{ARCTAN}
+real procedure ARCTAN (real value X);
+comment `\rm arctangent (radians) of {\tt X}, range : $-\pi/2 < {\tt ARCTAN(X)} < \pi/2$ ;
+\end{ProcedureDeclaration}
+
+\begin{ProcedureDeclaration}{Analysis}{LONGARCTAN}
+long real procedure LONGARCTAN (long real value X);
+comment `\rm arctangent (radians) of {\tt X}, range : $-\pi/2 < {\tt LONGARCTAN(X)} < \pi/2$ ;
+\end{ProcedureDeclaration}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsection{Time Function}
+\label{Time Function}
+
+The \ALGOLW\ environment includes a clock which measures elapsed time
+since the beginning of program execution. The resolution of that clock
+is $1/60$ second. A predeclared function is provided for reading the
+clock.
+
+\begin{ProcedureDeclaration}{Miscellaneous}{TIME}
+integer procedure TIME (integer value N);
+\end{ProcedureDeclaration}
+
+\begin{tabular}{c|ll}
+Argument \A!N! & Result & Units \\
+\hline
+ -1 & time of day & seconds/60 \\
+ 0 & elapsed execution time & minutes/100 \\
+ 1 & elapsed execution time & seconds/60 \\
+ 2 & elapsed execution time & seconds/38400
+\end{tabular}
+\\
+
+\noindent The result for any other argument is not defined.
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{Predeclared Variables}
+\label{Predeclared Variables}
+
+The following variables are to be considered declared and initialized
+by assignment in the conceptual block enclosing the entire \ALGOLW\
+program.
+
+The values indicated for \T{real} and \T{long real} quantities are to
+be understood as decimal approximations to the actual machine-format
+values provided.
+
+\begin{VariableDeclaration}{Input/Output System}{I\_W}
+integer I_W;
+comment `\rm initialized to 14, controls output field size for integers (cf. \ref{The Input/Output System})` ;
+\end{VariableDeclaration}
+
+\begin{VariableDeclaration}{Input/Output System}{R\_W}
+integer R_W;
+comment `\rm initialized to 14, controls output field size for \T{real}, \T{long real}, \T{complex} and \T{long complex} quantities (cf. \ref{The Input/Output System})` ;
+\end{VariableDeclaration}
+
+\begin{VariableDeclaration}{Input/Output System}{R\_D}
+integer R_D;
+comment `\rm initialized to 0, specifies the number of fraction digits in aligned formats (cf. \ref{The Input/Output System})` ;
+\end{VariableDeclaration}
+
+\begin{VariableDeclaration}{Input/Output System}{R\_FORMAT}
+integer R_FORMAT;
+comment `\rm initialized to \tt "F"\rm, controls output format for \T{real}, \T{long real}, \T{complex} and \T{long complex} quantities (cf. \ref{The Input/Output System})` ;
+\end{VariableDeclaration}
+
+\begin{VariableDeclaration}{Input/Output System}{S\_W}
+integer S_W; 
+comment `\rm initialized to 2, specifies the number of blanks append to to the end of an ouput numeric field (cf. \ref{The Input/Output System})` ;
+\end{VariableDeclaration}
+
+\begin{VariableDeclaration}{Implementation limits}{MAXINTEGER}
+integer MAXINTEGER;
+comment `\rm initialized to 2147483647, the maximum positive \T{integer} allowed by the implementation` ;
+\end{VariableDeclaration}
+
+\begin{VariableDeclaration}{Implementation limits}{EPSILON}
+real EPSILON;
+comment `\rm initialized to $9.536743{\times}10^{-7}$, the largest positive \T{real} number $\epsilon$ provided by the implementation such that $1 + \epsilon = 1$ ;
+\end{VariableDeclaration}
+
+\begin{VariableDeclaration}{Implementation limits}{LONGEPSILON}
+long real LONGEPSILON;
+comment `\rm initialized to $2.22044604925031{\times}10^{-16}$, the largest positive \T{long real} number $\epsilon$ provided by the implementation such that $1 + \epsilon = 1$ ;
+\end{VariableDeclaration}
+
+\begin{VariableDeclaration}{Implementation limits}{MAXREAL}
+long real MAXREAL;
+comment `\rm initialized to $7.23700557733226{\times}10^{75}$, the largest positive \T{long real} number provided by the implementation` ;
+\end{VariableDeclaration}
+
+\begin{VariableDeclaration}{Miscellaneous}{PI}
+low real PI;
+comment `\rm initialized to 3.14159265358979` ;
+\end{VariableDeclaration}
+
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\newpage
+\subsection{Exceptional Conditions}
+\label{Exceptional Conditions}
+
+The facilities described below are provided in \ALGOLW\ to allow
+detection and control of certain exceptional conditions arising in the
+evaluation of arithmetic expressions and standard functions.
+
+\IndexRecord{EXCEPTION} \IndexField{XCPNOTED} \IndexField{XCPLIMIT}
+\IndexField{XCPACTION} \IndexField{XCPMARK} \IndexField{XCPMSG}
+Implicit declarations:
+\begin{AlgolW}
+record EXCEPTION (
+    logical XCPNOTED;
+    integer XCPLIMIT, XCPACTION;
+    logical XCPMARK;
+    string(64) XCPMSG );
+\end{AlgolW}
+\IndexVariable{ENDFILE}
+\IndexVariable{OVFL}
+\IndexVariable{UNFL}
+\IndexVariable{DIVZERO}
+\IndexVariable{INTOVFL}
+\IndexVariable{INTDIVZERO}
+\IndexVariable{SQRTERR}
+\IndexVariable{EXPERR}
+\IndexVariable{LNLOGERR}
+\IndexVariable{SINCOSERR}
+\begin{AlgolW}
+reference(EXCEPTION)
+    OVFL, UNFL, DIVZERO,
+    INTOVFL, INTDIVZERO,
+    SQRTERR, EXPERR, LNLOGERR, SINCOSERR;
+\end{AlgolW}
+
+Associated with each exceptional condition which can be processed is a
+predeclared reference variable to which references to records of the
+class \A!EXCEPTION! can be assigned. Fields of such records control
+the processing of exceptions. The association between conditions and
+reference variables is as follows:
+
+\begin{longtable}{lp{3.5in}}
+\textbf{Reference Variable} &  \textbf{Conditions} \endhead
+\A!ENDFILE!     &  end of file detected in input \\
+\A!OVFL!        &  \T{real}, \T{long real}, \T{complex}, \T{long complex} (exponent) overflow \\
+\A!UNFL!        &  \T{real}, \T{long real}, \T{complex}, \T{long complex} (exponent) underflow \\
+\A!DIVZERO!     &  \T{real}, \T{long rea}l, \T{complex}, \T{long complex} division by zero \\
+\A!INTOVFL!     &  \T{integer} overflow \\
+\A!INTDIVZERO!  &  \T{integer} division by zero \\
+\A!SQRTERR!     &  negative argument for \A!SQRT!, \A!LONGSQRT! \\
+\A!EXPERR!      &  argument of \A!EXP!, \A!LONGEXP! out of domain (cf. \ref{Standard Functions of Analysis}) \\
+\A!LNLOGERR!    &  argument of \A!LN!, \A!LOG!, \A!LONGLN!, \A!LONGLOG! out of domain (cf. \ref{Standard Functions of Analysis}) \\
+\A!SINCOSERR!   &  argument of \A!SIN!, \A!COS!, \A!LONGSIN!, \A!LONGCOS! out of domain (cf. \ref{Standard Functions of Analysis})
+\end{longtable}
+
+When one of the conditions listed above is detected, the corresponding
+reference variable is interrogated, and one of the alternatives
+described below is chosen.
+
+\begin{table}
+\begin{threeparttable}[b]
+\caption{Results for Exceptional Conditions}
+\begin{tabular}{l|llll}
+condition      & \A!XCPACTION!  & \A!XCPACTION!    & \A!XCPACTION! &  Reference \\
+               & $\not=$ 1 or 2 & = 1              & = 2           &  = \R{null} \\
+\hline
+\A!ENDFILE!\tnote{1}   & 0              & 0                & 0             & 0 \\
+\A!OVFL!       & exponent 128   & $\pm$\A!MAXREAL! & 0             & exponent 128\\
+               & too small      &                  &               & too small \\
+\A!UNFL!       & exponent 128   & 0                & 0             & 0 \\
+               & too large      &                  &               &   \\
+\A!DIVZERO!    & dividend       & $\pm$\A!MAXREAL! & 0             & dividend \\
+\A!INTOVFL!    & true result    & true result      & true result   & true result \\
+               & $\pm 2^{32}$   &  $\pm 2^{32}$    &  $\pm 2^{32}$ &  $\pm 2^{32}$ \\
+\A!INTDIVZERO! & dividend       & dividend         & dividend      & dividend \\
+\A!SQRTERR!    & 0              & \A!SQRT(abs X)!  & 0             & 0 \\
+\A!EXPERR!     & 0              & \A!MAXREAL!      & 0             & 0 \\
+\A!LNLOGERR!   & 0              & -\A!MAXREAL!     & 0             & 0 \\
+\A!SINCOSERR!  & 0              & 0                & 0             & 0
+\end{tabular}
+\begin{tablenotes}
+\item[1] {\small When an \A!ENDFILE! condition occurs on attempting to read a \T{string}, a string of blanks is supplied; for a logical value \A!false! is supplied.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+If the value of the reference variable interrogated is \R{null}, the
+condition is ignored and execution of the \ALGOLW\ program continues.
+In such situations, a value of 0 is returned as the value of a
+standard function.  For other conditions the result is that provided
+by the underlying IBM System/360 hardware. In determining such a
+result, it is to be noted that in those cases in which the detection
+of exceptional conditions can be inhibited at the hardware level,
+namely integer overflow and exponent underflow, detection is so
+inhibited when the corresponding reference is \R{null}.
+
+\newpage
+If the value of the reference variable interrogated is not \R{null},
+the fields of the record designated by that reference are
+interrogated, and processing action is that described by the algorithm
+given below in the form of an extended \ALGOLW\ procedure.  Identifiers
+in \Transcendent{lower case} represent quantities which transcend the
+\ALGOLW\ language; they are explained subsequently.
+
+\begin{AlgolW}
+procedure PROCESSEXCEPTION (reference(EXCEPTION) value CONDITION);
+   begin
+      XCPNOTED(CONDITION) := true;
+      XCPLIMIT(CONDITION) := XCPLIMIT(CONDITION) - 1;
+      if (XCPLIMIT(CONDITION) < 0) or XCPMARK(CONDITION) then
+         WRITE( "***** ERROR NEAR COORDINATE `\Transcendent{nnnn}` - ", 
+                 XCPMSG(CONDITION) );
+      if XCPLIMIT(CONDITION) < 0 then `\Transcendent{endexecution}` else
+      if `\Transcendent{specialcondition}` then
+      `\Transcendent{resultant}` := `\Transcendent{default}` else
+      `\Transcendent{resultant}` := if XCPACTION(CONDITION) = 1 then `\Transcendent{adjustment}`
+                   else if XCPACTION(CONDITION) = 2 then 0L
+                   else `\Transcendent{default}`
+   end PROCESSEXCEPTION
+\end{AlgolW}
+
+This procedure is invoked with the value of the reference variable
+appropriate to the condition as actual parameter. The significance of
+the special identifiers used is as follows:
+
+\begin{description}
+\item[\Transcendent{nnnn}] approximate coordinate of the source code
+  which was being executed when the exceptional condition was detected
+\item[\Transcendent{endexecution}] procedure to terminate execution of
+  the \ALGOLW\ program
+\item[\Transcendent{specialcondition}] logical value which is true if,
+  and only if, the condition being processed is one of those listed below
+\item[\Transcendent{default}] result of the operation or function
+  provided by the \ALGOLW\ system prior to invocation of the exception
+  processing procedure; this is defined by the hardware for arithmetic
+  operations and is the value 0 for standard functions
+\item[\Transcendent{resultant}] value to be returned as the result of
+  the arithmetic evaluation or standard function invocation
+\item[\Transcendent{adjustment}] adjusted result of the operation
+  according to the following table:
+
+  \begin{tabular}{l|l}
+    \textbf{Special Condition}     &  \textbf{Adjustment} \\
+    \hline
+    &\\
+    Exponent overflow,     &  \\
+    division by zero       &  \A!if! \Transcendent{default} \A!< 0 then -MAXREAL else MAXREAL! \\
+    &\\
+    Exponent underflow     &  \A!0L! \\
+    &\\
+    \multicolumn{2}{l}{Argument \A!X! out of domain for:} \\
+    \A!SQRT!, \A!LONGSQRT! &  \A!SQRT(abs X), LONGSQRT(abs X)! \\
+    \A!EXP!,  \A!LONGEXP!  &  \A!MAXREAL! \\
+    \A!LN!,  \A!LONGLN!    &  \A!-MAXREAL! \\
+    \A!LOG!, \A!LONGLOG!   &  \A!-MAXREAL! \\
+    \A!SIN!, \A!LONGSIN!   &  \A!0L! \\
+    \A!COS!, \A!LONGCOS!   &  \A!0L! \\
+    &\\
+    \multicolumn{2}{l}{\A!ENDFILE! on input; according to type:} \\
+    numerical              &  \A!0! \\
+    \T{logical}            &  \A!false! \\
+    \T{string}             &  \A!" "! \\
+    \T{bits}               &  \A!#0!
+  \end{tabular}
+\end{description}
+
+The reference variable \A!UNFL! is initialized by the system to
+\R{null}.  All other reference variables listed above are initialized
+to references to a special record which is accessible only by the
+system. Interrogation of this record by the procedure described above
+has the effect of causing the \ALGOLW\ program to be terminated with a
+message indicating the type of exception. Any other attempt to access
+any field of this record will result in a reference error.
+
+\Example
+
+It is desired to allow up to ten overflows, but to each time replace
+the result with \A!MAXREAL! and to print a warning message. \\
+
+\noindent The values needed for this are:
+
+\begin{quote}
+\begin{tabular}{lll}
+\A!XCPNOTED!  & \R{false} & this will be changed to \R{true} if an overflow occurs. \\
+\A!XCPLIMIT!  & \A!10!    & allow up to ten overflows before being cut off. \\
+\A!XCPACTION! & \A!1!     & replace the result with \A!+MAXREAL!. \\
+\A!XCPMARK!   & \R{true}  & print a message each time an overflow occurs. \\
+\A!XCPMSG!    & \A!"..."! & message to be printed.
+\end{tabular}
+\end{quote}
+
+\noindent The following assignment statement will establish the proper
+environment:
+
+\begin{AlgolWExample}
+OVFL := EXCEPTION(false, 10, 1, true, "OVERFLOW FIXED UP");
+\end{AlgolWExample}
+
+
+%------------------------------------------------------------------------------------------------------
+
+\newpage
+\appendix
+\section{Character Encodings}
+\label{Character Encodings}
+\label{EBCDIC}
+
+The following table presents the correspondence between printable
+string characters and their (EBCDIC) integer encodings. This encoding
+establishes the ordering relation on characters and thus on strings.
+Those characters in parentheses are not available on the line printer.
+Integer codes not listed below do not correspond to any established
+character. (Also see \A!CODE!, \A!DECODE! on page \pageref{DECODE}.)
+
+\def\cents{\hbox{\rm\rlap/c}} %(Cents sign from the TeXBook.)
+
+\begin{center}
+\begin{tabular*}{0.75\textwidth}{@{\extracolsep{\fill}}rlrlrlrl}
+ 64 & \emph{space} &  129  &  (\verb|a|)  &  193  &  \verb|A|  &  240  &  \verb|0| \\
+    &              &  130  &  (\verb|b|)  &  194  &  \verb|B|  &  241  &  \verb|1| \\
+ 74 &  (\cents)    &  131  &  (\verb|c|)  &  195  &  \verb|C|  &  242  &  \verb|2| \\
+ 75 &  \verb|.|    &  132  &  (\verb|d|)  &  196  &  \verb|D|  &  243  &  \verb|3| \\
+ 76 &  \verb|<|    &  133  &  (\verb|e|)  &  197  &  \verb|E|  &  244  &  \verb|4| \\
+ 77 &  \verb|(|    &  134  &  (\verb|f|)  &  198  &  \verb|F|  &  245  &  \verb|5| \\
+ 78 &  \verb|+|    &  135  &  (\verb|g|)  &  199  &  \verb|G|  &  246  &  \verb|6| \\
+ 79 &  \verb+|+    &  136  &  (\verb|h|)  &  200  &  \verb|H|  &  247  &  \verb|7| \\
+ 80 &  \verb|&|    &  137  &  (\verb|i|)  &  201  &  \verb|I|  &  248  &  \verb|8| \\
+    &              &       &              &       &            &  249  &  \verb|9| \\
+ 90 &  (\verb|!|)  &  145  &  (\verb|j|)  &  209  &  \verb|J|  &       &           \\
+ 91 &  \verb|$|    &  146  &  (\verb|k|)  &  210  &  \verb|K|  &       &           \\
+ 92 &  \verb|*|    &  147  &  (\verb|l|)  &  211  &  \verb|L|  &       &           \\
+ 93 &  \verb|)|    &  148  &  (\verb|m|)  &  212  &  \verb|M|  &       &           \\
+ 94 &  \verb|;|    &  149  &  (\verb|n|)  &  213  &  \verb|N|  &       &           \\
+ 95 &  $\lnot$     &  150  &  (\verb|o|)  &  214  &  \verb|O|  &       &           \\
+ 96 &  \verb|-|    &  151  &  (\verb|p|)  &  215  &  \verb|P|  &       &           \\
+ 97 &  \verb|/|    &  152  &  (\verb|q|)  &  216  &  \verb|Q|  &       &           \\
+    &              &  153  &  (\verb|r|)  &  217  &  \verb|R|  &       &           \\
+107 &  \verb|,|    &       &              &       &            &       &           \\
+108 &  \verb|%|    &  162  &  (\verb|s|)  &  226  &  \verb|S|  &       &           \\
+109 &  \verb|_|    &  163  &  (\verb|t|)  &  227  &  \verb|T|  &       &           \\
+110 &  \verb|>|    &  164  &  (\verb|u|)  &  228  &  \verb|U|  &       &           \\
+111 &  \verb|?|    &  165  &  (\verb|v|)  &  229  &  \verb|V|  &       &           \\
+    &              &  166  &  (\verb|w|)  &  230  &  \verb|W|  &       &           \\
+122 &  \verb|:|    &  167  &  (\verb|x|)  &  231  &  \verb|X|  &       &           \\
+123 &  \verb|#|    &  168  &  (\verb|y|)  &  232  &  \verb|Y|  &       &           \\
+124 &  \verb|@|    &  169  &  (\verb|z|)  &  233  &  \verb|Z|  &       &           \\
+125 &  \verb|'|    &       &              &       &            &       &           \\
+126 &  \verb|=|    &       &              &       &            &       &           \\
+127 &  \verb|"|    &       &              &       &            &       &           
+\end{tabular*}
+\end{center}  %$
+
+
+%------------------------------------------------------------------------------------------------------
+
+\newpage
+\label{Syntactic Entities}
+\printindex{syntax}{Syntactic Entities}
+
+\label{Special}
+\printindex{special}{Words with Special Meanings in Algol W}
+
+\end{document}
+
