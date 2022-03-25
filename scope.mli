@@ -54,7 +54,7 @@ exception Undefined of Table.Id.t
 exception Redefined of Table.Id.t * Type.definition_t
 
 
-(* A empty global scope. *)
+(* An empty global scope. *)
 
 val empty : t
 
@@ -76,9 +76,9 @@ val pop : t -> t
 val get : t -> Table.Id.t -> Type.definition_t        
 
 
-(* 'set scope identifier definition' gives 'identifier' a 'definition' of in the local scope.  
+(* 'set scope identifier definition' gives 'identifier' a 'definition' in the local scope.  
     Returns the modified scope.
-    Raises Redefined if 'identifier' is already defined in the local scope *)
+    Raises 'Redefined' if 'identifier' is already defined in the local scope *)
 
 val set : t -> Table.Id.t -> Type.definition_t -> t
 

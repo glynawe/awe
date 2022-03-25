@@ -970,11 +970,11 @@ The FALSE value is 0, all other values are TRUE.
   what we want.
 
 `STRING(1)`
- is a single character, represented by a C `unsigned char`
-  lvalue. ISO 8859-1 character codes range from 0 to 255.
+  is a single character, represented by a C `unsigned char`
+  value. ISO 8859-1 character codes range from 0 to 255.
 
 `STRING(n)`.
- String types where n > 1 are represented by `_awe_str`, a pointer
+  String types where n > 1 are represented by `_awe_str`, a pointer
   to a unique array of n `unsigned char` elements. ALGOL W strings
   are not compatible with C strings: they are of a fixed length,
   padded with spaces and are never zero-terminated.  `awe.h`
@@ -1060,7 +1060,7 @@ side-effects.
 
 **PROCEDURE** parameters are represented by functions that return values,
 or void functions. If a PROCEDURE parameter has parameters of its own
-then those are included in its function argument, recursively,
+then those are included in its function prototype, recursively,
 following the same formal parameter rules. For example:
 
 ```

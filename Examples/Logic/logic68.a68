@@ -12,7 +12,7 @@ PROC is space = (CHAR c) BOOL:
 
 PROC compile = (STRING expression) STRING:
 BEGIN
-   STRING rpn; { in RPN, using one-character symbols }
+   STRING rpn;  # expression in RPN, using one-character symbols #
    INT cursor, position;
    CHAR next;
 
@@ -80,7 +80,7 @@ BEGIN
    l0;
    IF next /= eof char THEN error("syntax error") FI;
    rpn
-END; { compile }
+END; # compile #
 
 
 PROC run = (STRING rpn, STRING expression, BOOL test) VOID:
@@ -108,7 +108,7 @@ BEGIN
    PROC interpret = VOID:
    BEGIN
       [1:100]BOOL stack;
-      INT top := 0; { top of stack }
+      INT top := 0;  # top of stack #
       FORALL c IN rpn DO
          (  c = "." | stack[top-1] := stack[top-1] &  stack[top]; top -:= 1
          |: c = "+" | stack[top-1] := stack[top-1] OR stack[top]; top -:= 1
@@ -130,7 +130,7 @@ BEGIN
          set variables(minterm);
          interpret
       OD
-   ELSE  { print a table }
+   ELSE  # print a table #
       print((newline, " "));
       FORALL c IN variables DO print((" ", c)) OD;
       print((" | ", expression, newline));
@@ -146,11 +146,11 @@ BEGIN
       OD;
       print(newline)
    FI
-END; { run }
+END; # run #
 
 
 BEGIN
-   open(LOC FILE, "", arg channel); { initialize argc and argv }
+   open(LOC FILE, "", arg channel);  # initialize argc and argv #
 
    STRING expression;
    

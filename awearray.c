@@ -43,7 +43,7 @@ _awe_array_initialize ( _awe_loc loc,
     for (int i = 0; i < array->ndimensions; ++i) {
         const int lwb = array->bounds[i].lower, upb = array->bounds[i].upper;
         const int width = upb - lwb + 1;
-        if (width < 0)  /* dimensions 0 elements wide are allowed ("empty arrays", see awe.txt) */
+        if (width < 0)  /* dimensions with 0 elements are allowed ("empty arrays", see awe.txt) */
             _awe_error(loc, "array dimension error: dimension %d is (%d::%d)", i + 1, lwb, upb);
         else
             array->nelements *= width;

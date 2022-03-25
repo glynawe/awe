@@ -94,8 +94,8 @@ void *_awe_allocate_record(_awe_loc l, int size);
    Its allows the runtime to tell if a field designator is being called on an 
    uninitialized reference. */
 
-extern int _awe_you_should_not_pointing_here;  
-#define _awe_uninitialized_reference ((void*)&_awe_you_should_not_pointing_here)
+extern int _awe_you_should_not_be_pointing_here;  
+#define _awe_uninitialized_reference ((void*)&_awe_you_should_not_be_pointing_here)
 
 
 /* The header of  all Algol records
@@ -156,7 +156,7 @@ typedef struct _awe_array_bound {
 } _awe_array_bound_t;
 
 
-typedef struct _awe_array {
+typedef struct _awe_array {  /* array descriptor */
     void *element_data;  /* storage for the elements of the array */
     long  nelements;     /* total number of elements in element_data */
     long  element_size;  /* the size of one element */
@@ -250,6 +250,7 @@ _awe_array_element_pointer ( _awe_loc loc,
 #define _awe_array_FILL_WITH_SPACES(array)                              \
     for (int i = 0; i < array->nelements * array->element_size; ++i)    \
         ((char*)(array->element_data))[i] = ' '
+
 
 /* Statements. - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 

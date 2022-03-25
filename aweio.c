@@ -260,7 +260,7 @@ _awe_read_integer (_awe_loc loc, int *recipient)
   if (!Scanner_scan_for(_awe_active_scanner, loc, Integer)) {
     *recipient = 0;
     return;
-  };
+  }
   i = strtol((char *)_awe_active_scanner->buffer, &tailptr, 10);
   if (tailptr == (char *)_awe_active_scanner->buffer && _awe_active_scanner->buffer[0] == '-')
     Scanner_error(_awe_active_scanner, loc, "Integer too low");
@@ -280,7 +280,7 @@ _awe_read_bits (_awe_loc loc, unsigned int *recipient)
   if (!Scanner_scan_for(_awe_active_scanner, loc, Bits)) {
     *recipient = 0;
     return;
-  };
+  }
   i = strtoul((char *)_awe_active_scanner->buffer, &tailptr, 16);
   if (tailptr == (char *)_awe_active_scanner->buffer)
     Scanner_error(_awe_active_scanner, loc, "Bits constant too high");
@@ -293,9 +293,9 @@ void
 _awe_read_string (_awe_loc loc, _awe_str recipient, int length)
 {
   if (!Scanner_scan_for(_awe_active_scanner, loc, String)) {
-      _awe_str_cpy(recipient, length, (_awe_str)" ", 1); /* empty string */
+    _awe_str_cpy(recipient, length, (_awe_str)" ", 1); /* empty string */
     return;
-  };
+  }
   if (_awe_active_scanner->buflen > length)
     Scanner_error(_awe_active_scanner, loc, "String too long");
   else
@@ -309,7 +309,7 @@ _awe_read_char (_awe_loc loc, unsigned char *recipient)
   if (!Scanner_scan_for(_awe_active_scanner, loc, String)) {
       *recipient = ' ';
       return;
-  };
+  }
   if (_awe_active_scanner->buflen > 1)
       Scanner_error(_awe_active_scanner, loc, "String too long");
   else if (_awe_active_scanner->buflen == 0)
@@ -325,7 +325,7 @@ _awe_read_logical (_awe_loc loc, int *recipient)
   if (!Scanner_scan_for(_awe_active_scanner, loc, Logical)) {
     *recipient = 0;
     return;
-  };
+  }
   *recipient = (_awe_active_scanner->buffer[0] == 'T' || _awe_active_scanner->buffer[0] == 't');
 }
 

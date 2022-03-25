@@ -28,15 +28,15 @@ type definition_t =
   | Array of simple_t * int                (* ARRAY variables. *)
   | Name of simple_t                       (* Name parameter variables. *)
   | Result of simple_t                     (* RESULT or VALUE RESULT parameter variables. *)
-  | Control                                (* FOR statment control variables. *)
+  | Control                                (* FOR statement control variables. *)
   | Procedure of procedure_t               (* Procedures, PROCEDURE parameter variables. *)
-  | Standard of standard                   (* The Standard I/O procedures. See section 7.9. These are varadic. *)
+  | Standard of standard                   (* The Standard I/O procedures. See section 7.9. These are variadic. *)
   | Analysis of simple_t                   (* The Standard Functions of Analysis. See section 8.2. These need runtime checks. *)
   | Field of simple_t * Class.t            (* RECORD field selectors. *)
   | Record of Class.t * simple_t list      (* RECORD classes, and their fields. *)
   | Label                                  (* GOTO labels. *)
 
-and procedure_t = simple_t * formal_t list (* a PROCEDURE has a return type and a list of format parameters *)
+and procedure_t = simple_t * formal_t list (* a PROCEDURE has a return type and a list of formal parameters *)
 
 and formal_t =
   | By_name         of simple_t
@@ -55,7 +55,6 @@ and simple_t =
   | Null                     (* NULL has a special record class compatible with all others. See section 4.5 *)
   | Statement                (* FOR and WHILE loops and calls to procedures without return types are "statements".
                                 A statement cannot be used in an assignment. Analogous to C's "void" type. *)
-
 and  domain =
   | Integer
   | Real

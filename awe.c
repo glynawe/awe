@@ -172,7 +172,7 @@ _awe_is (void *ref, const char *class)
 }
 
 
-int _awe_you_should_not_pointing_here;
+int _awe_you_should_not_be_pointing_here;
 
 
 void 

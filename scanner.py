@@ -43,9 +43,10 @@ s  case ' ':
 w  case ' ': case '\n': case EOF:
 
 d  case '0' ... '9':          //parts of numbers
-+  case '-': case '+':
+-  case '-': case '+':
 .  case '.':
-e  case '\'': case 'e': case 'E':
+e  case '\'': case 'e': case 'E':  //exponent sign
+
                               //hexadecimal for BITS
 #  case '#':
 h  case '0' ... '9': case 'A' ... 'F': case 'a' ... 'f': 
@@ -63,7 +64,6 @@ F  case 'F': case 'f':
 A  case 'A': case 'a':
 L  case 'L': case 'l':
 S  case 'S': case 's':
-E  case 'E': case 'e':
 """ #"
 
 
@@ -71,7 +71,7 @@ E  case 'E': case 'e':
 #
 # See aweio.c for the meanings of the Scanner_* actions.
 # (Basically, they are filling a buffer with the C versions of 
-# the Algol W constants which will be scanned with 'strtol' and friends.)
+# the Algol W constants which will be rescanned with 'strtod' and friends.)
 
 default_action = 'Scanner_addchar(scanner, c);'
 
@@ -82,7 +82,7 @@ transition_data = r'''
   0  d  101  Scanner_start(scanner); Scanner_addchar(scanner, c);         //These enter the number reading states.
   0  e  103  Scanner_start(scanner); Scanner_addstring(scanner, "1.0e");
   0  .  107  Scanner_start(scanner); Scanner_addstring(scanner, "0.");
-  0  +  100  Scanner_start(scanner); Scanner_addchar(scanner, c);
+  0  -  100  Scanner_start(scanner); Scanner_addchar(scanner, c);
 
   0  "  301  Scanner_start(scanner);                   //These enter string, bits, and TRUE/FALSE constant states.
   0  #  401  Scanner_start(scanner); 
@@ -92,7 +92,7 @@ transition_data = r'''
   0  s    0  ;              //Leading spaces are ignored
   0  n    0  ;              //Newlines are ignored, but increment the line count
   0  !    0  Scanner_close_buffer(scanner); return Eof;
-                            //The end of file, when expecting a constant, raises an exception.
+                            //An end of file when expecting a constant raises an exception.
 
 // Numbers: integer, real, or imaginary.
 // Algol W lets a ridiculous number of real constant parts be optional.
@@ -102,32 +102,41 @@ transition_data = r'''
 100  .  107  Scanner_addstring(scanner, "0.");
 100  d  101
 100  e  103  Scanner_addstring(scanner, "1.0e");
+
 101  d  101
 101  .  102
 101  e  103  Scanner_addstring(scanner, ".0e");
 101  I  105  ;
 101  L  109  ;
-101  +  200
+101  -  200
 101  w    0  Scanner_close_buffer(scanner); return Integer;
+
 102  d  102
 102  e  103  Scanner_addstring(scanner, "0e");
 102  w    0  Scanner_close_buffer(scanner); return Real;
 102  I  105  Scanner_addstring(scanner, "0");
 102  L  109  Scanner_addstring(scanner, "0");
-102  +  200
+102  -  200
+
 103  d  104
-103  +  108
+103  -  108
+
 104  d  104
 104  I  105  ;
 104  L  109  ;
-104  +  200
+104  -  200
 104  w    0  Scanner_close_buffer(scanner); return Real;
+
 105  L  106  ;
 105  w    0  Scanner_close_buffer(scanner); return Imaginary;
+
 106  w    0  Scanner_close_buffer(scanner); return Imaginary;
+
 107  d  102
+
 108  d  104
-109  +  200
+
+109  -  200
 109  w    0  Scanner_close_buffer(scanner); return Real;
 
 // Numbers, the imaginary part of a complex number.
@@ -136,28 +145,38 @@ transition_data = r'''
 200  d  201
 200  e  203  Scanner_addstring(scanner, "1.0e");
 200  .  207  Scanner_addstring(scanner, "0.");
+
 201  d  201
 201  .  202
 201  I  205  ;
 201  e  203  Scanner_addstring(scanner, ".0e");
+
 202  d  202
 202  e  203  Scanner_addstring(scanner, "0e");
 202  I  205  Scanner_addstring(scanner, "0");
+
 203  d  204
-203  +  209
+203  -  209
+
 204  d  204
 204  I  205  ;
 204  w    0  Scanner_close_buffer(scanner); return Complex;
+
 205  L  206  ;
 205  w    0  Scanner_close_buffer(scanner); return Complex;
+
 206  w    0  Scanner_close_buffer(scanner); return Complex;
+
 207  d  202
+
 209  d  204
 
-// Strings, two double quotes represent a double quote.
+// Quoted strings. 
+// Two double quotes are the escape for a double quote character.
 
 301  c  301
 301  "  302  ;
+
 302  "  301  Scanner_addstring(scanner, "\"\"");
 302  w    0  Scanner_close_buffer(scanner); return String; 
 

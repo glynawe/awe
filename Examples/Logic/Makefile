@@ -26,4 +26,4 @@ logicpas: logicpas.pas
 	./logicpas '~a \/ b, a -> b' > actual.output
 	diff expected.output actual.output
 
-include awe.mk
+include ../../awe.mk

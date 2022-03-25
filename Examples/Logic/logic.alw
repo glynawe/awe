@@ -39,7 +39,7 @@ COMMENT
    The RPN uses the one-character variants of the symbols;
 BEGIN
    INTEGER cursor, position;
-   STRING(1) dummy, next;
+   STRING(1) next;
 
    PROCEDURE error(STRING(30) VALUE message);
    BEGIN

@@ -28,7 +28,7 @@ type t =
   | Id of Table.Id.t
   | String of string
   | Add of t * t
-  | Add_comma of t *  t  (* separate with commas when no-empty *)
+  | Add_comma of t * t  (* separate with commas when non-empty *)
   | Concat of string * t list
   | Template of string * t list
 

@@ -3,20 +3,20 @@
 
 ## Requirements
 
-A Debian-like operating system, Gnu C, Python 2, OCaml 4.05 or later,
+A Debian-like operating system, Gnu C, Python 3, OCaml 4.05 or later,
 make, ar, Python markdown and the Boehm GC.
 
 On Windows use the Windows 10 Linux Subsystem.
 
 On Debian, Ubuntu or Windows install these packages:
 
-     gcc ocaml-nox python3 python3-markdown binutils libgc-dev
+     gcc ocaml-nox python3 python3-markdown binutils make libgc-dev
 
 
 ## Building Awe
 
 These are commands to compile and install Awe, to be run from within
-the "awe/" source code directory:
+the `awe/` source code directory:
 
 `make`
 
@@ -27,7 +27,7 @@ the "awe/" source code directory:
    This installs Awe. 
 
    The default destination is the standard "/usr/local" directories.
-   Edit Makefile if you do not want this.
+   Edit `Makefile` if you do not want this.
 
 `man awe`
 

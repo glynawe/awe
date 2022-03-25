@@ -1363,8 +1363,8 @@ and binary_expression (loc      : Location.t)
 
 (* This function creates the C code for a procedure call and finds its Algol simple type.
 
-   A call to a procedure with no parameters or non-STRING VALUE parameters only is
-   translated into C in a straightforward manner - C function arguments are values.
+   A call to a procedure with no parameters or only non-STRING VALUE parameters is
+   translated into C in a straightforward manner, because C function arguments are values.
 
    A call to a procedure that requires non-VALUE parameters requires a "pre/post call block",
    i.e. it must be translated into a C block which will contain several kinds of 
@@ -1378,7 +1378,7 @@ and binary_expression (loc      : Location.t)
    "Thunks" are temporary functions passed as auguments to functions, they calculate 
    the addresses of parameters, which are often held in temporary variables. 
    In a proper Algol runtime thunks are supposed to be untyped (have a undefined return 
-   type and undefined number of arguments) and used consistently for every type of parameter, 
+   type and undefined number of arguments) and are used for every type of parameter, 
    which is what allows parameters-to-procedure-parameters to go undeclared in Algol 60. 
    Awe does not use that scheme.
 
