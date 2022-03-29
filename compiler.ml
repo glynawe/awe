@@ -230,7 +230,7 @@ let get (loc : Location.t) (scope : Scope.t) (id : Id.t) : Type.definition_t =
 
 let simple (scope : Scope.t) (tree : Tree.t) : Type.simple_t =
   match tree with
-  | Tree.INTEGER              -> Number (Long, Integer)
+  | Tree.INTEGER              -> Number (Short, Integer)
   | Tree.REAL                 -> Number (Short, Real)
   | Tree.LONG_REAL            -> Number (Long, Real)
   | Tree.COMPLEX              -> Number (Short, Complex)
@@ -381,10 +381,10 @@ let cast (loc : Location.t) (t : simple_t) (e : typed_code_t) : Code.t =
 
 let default (t : simple_t) : Code.t =
   match t with
-  | Number (Short, Integer) -> failwith "default: Number(Short, Integer) shouldn't exist"
+  | Number (Long, Integer) -> failwith "default: Number(Long, Integer) shouldn't exist"
   | Statement               -> failwith "default: Statements cannot be initialized"
   | Null                    -> failwith "default: NULL cannot be initialized"
-  | Number (Long, Integer)  -> Code.string "0"
+  | Number (Short, Integer)  -> Code.string "0"
   | Number (Short, Real)    -> Code.string "0.0"
   | Number (Long, Real)     -> Code.string "0.0"
   | Number (Short, Complex) -> Code.string "0.0"
@@ -410,8 +410,8 @@ let default (t : simple_t) : Code.t =
 
 let ctype (t : simple_t) : Code.t =
   match t with
-  | Number (Short, Integer) -> failwith "ctype: Number(Short, Integer) shouldn't exist"
-  | Number (Long, Integer)  -> Code.string "int"
+  | Number (Long, Integer) -> failwith "ctype: Number(Long, Integer) shouldn't exist"
+  | Number (Short, Integer)  -> Code.string "int"
   | Number (Short, Real)    -> Code.string "double"
   | Number (Long, Real)     -> Code.string "double"
   | Number (Short, Complex) -> Code.string "_Complex double"  (* <complex.h> is not included *)
@@ -716,7 +716,7 @@ and expression (scope : Scope.t) (tree : Tree.t) : typed_code_t =
       ( try
           let i = Int64.of_string s in  (* might fail *)
           if i >= -2147483648L && i <= 2147483647L then
-            {t = Number(Long, Integer); c = Code.string s}
+            {t = Number(Short, Integer); c = Code.string s}
           else
             error loc "integer %s will not fit in a 32 bit word" s
         with Failure _ ->
@@ -1065,7 +1065,7 @@ and expression (scope : Scope.t) (tree : Tree.t) : typed_code_t =
 
 
 (* 'expression_expect' is used when we already know the type the expression should have, 
-   e.g. FOR loops bounds are always Number(Long,Integer). This returns the C code only. *)
+   e.g. FOR loops bounds are always Number(Short,Integer). This returns the C code only. *)
 
 and expression_expect (t : simple_t) (scope : Scope.t) (tree : Tree.t) : Code.t =
   let ce = expression scope tree in
@@ -1246,10 +1246,10 @@ and binary_expression (loc      : Location.t)
           | _ -> failwith "triplet rule fails for division" )
 
     | Tree.IDIV, Number(_,Integer), Number(_,Integer) ->
-        { t = Number(Long,Integer); c = "_awe_div($, $, $)" $$ [cl; ca; cb] }
+        { t = Number(Short,Integer); c = "_awe_div($, $, $)" $$ [cl; ca; cb] }
 
     | Tree.REM, Number(_,Integer), Number(_,Integer) ->
-        { t = Number(Long,Integer); c = "_awe_rem($, $, $)" $$ [cl; ca; cb] }
+        { t = Number(Short,Integer); c = "_awe_rem($, $, $)" $$ [cl; ca; cb] }
 
     (* Power operator, **. See section 6.3.2.5 *)
 

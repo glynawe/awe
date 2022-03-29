@@ -74,7 +74,7 @@ and standard =
   | Iocontrol
 
 
-val integer : simple_t  (* equal to Number(Long, Integer) *)
+val integer : simple_t  (* equal to Number(Short, Integer) *)
 
 
 (* 'assignment_compatible dest src' returns true if a value of simple type

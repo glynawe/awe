@@ -73,7 +73,7 @@ and standard =
   | Readcard
   | Iocontrol
 
-let integer = Number(Long,Integer)
+let integer = Number(Short,Integer)
 
 
 exception Incompatible
@@ -149,8 +149,8 @@ let rec describe_definition =
 and string_of_simple =
   function
   | Statement              -> "statement"
-  | Number(Short, Integer) -> failwith "string_of_simple (Number(Short,Integer))"
-  | Number(Long, Integer)  -> "INTEGER"
+  | Number(Long, Integer) -> failwith "string_of_simple (Number(Long, Integer))"
+  | Number(Short, Integer)  -> "INTEGER"
   | Number(Short, Real)    -> "REAL"
   | Number(Long, Real)     -> "LONG REAL"
   | Number(Short, Complex) -> "COMPLEX"
