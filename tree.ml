@@ -83,7 +83,7 @@ type t =
   | ARRAY of loc * t * id list * (t * t) list
   | PROCEDURE of loc * t option * id * t list * t
   | INTEGER
-  | BITS
+  | BITS of int option
   | STRING of int option
   | REAL
   | COMPLEX
@@ -252,7 +252,8 @@ let rec str : t -> string =
       )
         
   | INTEGER -> "INTEGER"
-  | BITS -> "BITS"
+  | BITS None -> "BITS"
+  | BITS (Some width) -> sprintf "BITS(%i)" width
   | STRING (Some len) -> sprintf "STRING(%i)" len
   | STRING None -> sprintf "STRING"
   | REAL -> "REAL"

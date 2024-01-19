@@ -1,4 +1,4 @@
-PROGRAM logic68 CONTEXT VOID
+PROGRAM logic68 CONTEXT VOID  # this is in the Algol 68RS dialect #
 USE standard
 BEGIN
 
@@ -98,8 +98,8 @@ BEGIN
    BEGIN
       BITS bits = BIN minterm;
       FOR i TO UPB variables DO
-         INT bit = bits width - UPB variables + i;
-         truth values[ABS variables[i]] := bit ELEM bits
+         INT bit number = bits width - UPB variables + i;
+         truth values[ABS variables[i]] := bit number ELEM bits
       OD
    END;
 

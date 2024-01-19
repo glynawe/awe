@@ -49,7 +49,7 @@ and formal_t =
 and simple_t =
   | Number of precision * domain
   | Logical
-  | Bits
+  | Bits of int              (* int is the word width *)
   | String of int            (* int is the length *)
   | Reference of ClassSet.t
   | Null                     (* NULL has a special record class compatible with all others. See section 4.5 *)

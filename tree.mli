@@ -96,7 +96,7 @@ type t =
 
   (* Simple types *)
   | INTEGER
-  | BITS
+  | BITS of int option
   | STRING of int option
   | REAL
   | COMPLEX

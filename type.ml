@@ -49,7 +49,7 @@ and formal_t =
 and simple_t =
   | Number of precision * domain
   | Logical
-  | Bits
+  | Bits of int
   | String of int
   | Reference of ClassSet.t
   | Null
@@ -87,7 +87,7 @@ let assignment_compatible dest src =
   |  Reference x,       Reference y       -> ClassSet.inter x y <> ClassSet.empty
   |  Reference _,       Null              -> true
   |  Logical,           Logical           -> true
-  |  Bits,              Bits              -> true
+  |  Bits _,            Bits _            -> true
   |  _,                 _                 -> false
 
 
@@ -126,7 +126,7 @@ let triplet_rule t1 t2 =
   | Reference c,       Null              -> Reference c
   | Reference c1,      Reference c2      -> Reference (ClassSet.union c1 c2)
   | Logical,           Logical           -> Logical
-  | Bits,              Bits              -> Bits
+  | Bits w1,           Bits w2           -> Bits (max w1 w2)
   | Statement,         Statement         -> Statement
   | _,                 _                 -> raise Incompatible
 
@@ -157,14 +157,15 @@ and string_of_simple =
   | Number(Long, Complex)  -> "LONG COMPLEX"
   | Logical                -> "LOGICAL"
   | Null                   -> "NULL"
-  | Bits                   -> "BITS"
+  | Bits 32                -> "BITS"
+  | Bits width             -> sprintf "BITS(%i)" width
   | String length          -> sprintf "STRING(%i)" length
   | Reference set -> 
       sprintf "REFERENCE(%s)" (String.concat ", " (List.map Class.to_string (ClassSet.elements set)))
 
 and describe_simple = 
   function
-  | Bits -> "BITS"
+  | Bits 32 -> "BITS"
   | Number(_, Integer) as t  -> "an " ^ string_of_simple t
   | t -> "a " ^ string_of_simple t
 

@@ -235,10 +235,11 @@ let simple (scope : Scope.t) (tree : Tree.t) : Type.simple_t =
   | Tree.LONG_REAL            -> Number (Long, Real)
   | Tree.COMPLEX              -> Number (Short, Complex)
   | Tree.LONG_COMPLEX         -> Number (Long, Complex)
-  | Tree.BITS                 -> Bits
   | Tree.LOGICAL              -> Logical
   | Tree.STRING (Some length) -> String length
   | Tree.STRING (None)        -> String 16
+  | Tree.BITS None            -> Bits 32
+  | Tree.BITS (Some width)    -> Bits width
   | Tree.REFERENCE (loc, [])  -> 
       failwith "Compiler.simple: tree is Tree.REFERENCE with no ids."
   | Tree.REFERENCE (loc, [id]) ->
@@ -390,7 +391,7 @@ let default (t : simple_t) : Code.t =
   | Number (Short, Complex) -> Code.string "0.0"
   | Number (Long, Complex)  -> Code.string "0.0"
   | Logical                 -> Code.string "0"
-  | Bits                    -> Code.string "0"
+  | Bits _                  -> Code.string "0"
   | String 1                -> Code.string "' '"
   | String n                -> blank_string n
   | Reference(_)            -> Code.string "_awe_uninitialized_reference"
@@ -418,12 +419,29 @@ let ctype (t : simple_t) : Code.t =
   | Number (Long, Complex)  -> Code.string "_Complex double"
   | Statement               -> Code.string "void"   (* i.e. returns nothing *)
   | Logical                 -> Code.string "int"
-  | Bits                    -> Code.string "unsigned int"
   | String 1                -> Code.string "unsigned char"
   | String _                -> Code.string "_awe_str"
   | Reference(_)            -> Code.string "void *"
   | Null                    -> Code.string "void *"
+  | Bits w when w < 1       -> failwith (sprintf "ctype: BITS(%i) is impossible" w)
+  | Bits w when w <= 8      -> Code.string "unsigned char"
+  | Bits w when w <= 16     -> Code.string "unsigned short int"
+  | Bits w when w <= 32     -> Code.string "unsigned int"
+  | Bits w when w <= 64     -> Code.string "unsigned long long int"
+  | Bits w                  -> failwith (sprintf "ctype: BITS(%i) has no C representation" w)
       
+
+(* A C bit mask constant to limit a word's width *)
+
+let bit_width_mask (width : int) : Code.t =
+  Code.string (
+      if width = 1 then "1"
+      else if width <= 31 then sprintf "0x%x" (Int.shift_left 1 width - 1)
+      else if width = 32 then "0xffffffff"
+      else if width <= 63 then sprintf "0x%LxL" (Int64.sub (Int64.shift_left 1L width) 1L)
+      else "0xffffffffffffffffL" )
+
+
 
 (* The size of the C type for an Algol simple type. *)
 
@@ -718,18 +736,19 @@ and expression (scope : Scope.t) (tree : Tree.t) : typed_code_t =
           if i >= -2147483648L && i <= 2147483647L then
             {t = Number(Short, Integer); c = Code.string s}
           else
-            error loc "integer %s will not fit in a 32 bit word" s
+            raise (Failure "")
         with Failure _ ->
           error loc "integer %s will not fit in a 32 bit word" s )
 
   | Tree.Bits (loc, s) -> 
       ( try
           let hex = "0x" ^ s in
-          let i = Int64.of_string hex in  (* might fail *)
-          if i >= 0L && i <= 4294967295L then
-            {t = Bits; c = Code.string hex}
+          let i = Int64.of_string hex in  (* range check, might fail *)
+          if i <= 0xffffffffL then
+            {t = Bits 32; c = Code.string hex}
           else
-            error loc "BITS constant #%s will not fit in a 32 bit word" s
+            raise (Failure "")
+            (* {t = Bits 64; c = Code.string hex} *)
         with Failure _ ->
           error loc "BITS constant #%s will not fit in a 32 bit word" s )
 
@@ -1137,9 +1156,9 @@ and unary_expression (loc      : Location.t)
 
 (* *** Bit expressions. cf .6.3 *)
 
-  | Tree.NOT, Bits ->
-      { t = Bits;
-        c = "(~ $)" $$ [ca] }
+  | Tree.NOT, Bits width ->
+      { t = Bits width;
+        c = "((~ $) & $)" $$ [ca; bit_width_mask width] }
 
     (* All remaining combinations of unary operators and operand types are erroneous. *)
           
@@ -1280,7 +1299,7 @@ and binary_expression (loc      : Location.t)
        Allowing the comparison of LOGICAL values was a Standford ALGOLW extension to
        Algol W.   *)
 
-    | (Tree.EQ | Tree.NE), Bits, Bits ->
+    | (Tree.EQ | Tree.NE), Bits _, Bits _ ->
         { t = Logical; 
           c = "($ $ $)" $$ [ca; c_equality operator; cb] }
 
@@ -1335,23 +1354,25 @@ and binary_expression (loc      : Location.t)
         { t = Logical; 
           c = "((($) != 0) $ (($) != 0))" $$ [ca; c_inequality operator; cb] }
 
-(* *** Bit expressions. See section 6.5 *)
+(* *** Bit expressions. See section 6.5 and Awe manual *)
 
-    | Tree.AND, Bits, Bits -> 
-        { t = Bits; 
-          c = "($ & $)" $$ [ca; cb]  }
+    | Tree.AND, Bits w1, Bits w2 ->
+       let w = max w1 w2 in   (* i.e. width of shortest word *)
+       { t = Bits w;   
+         c = "($ & $ & $)" $$ [ca; cb; bit_width_mask w]  }
 
-    | Tree.OR, Bits, Bits -> 
-        { t = Bits; 
-          c = "($ | $)" $$ [ca; cb]  }
+    | Tree.OR, Bits w1, Bits w2 -> 
+       let w = max w1 w2 in   (* i.e. width of widest word *)
+       { t = Bits w;    
+         c = "(($ | $) & $)" $$ [ca; cb; bit_width_mask w]  }
 
-    | Tree.SHL, Bits, Number(_,Integer) -> 
-        { t = Bits; 
-          c = "_awe_shl($, $)" $$ [ca; cb]  }
+    | Tree.SHL, Bits w, Number(_,Integer) -> 
+        { t = Bits w; 
+          c = "(_awe_shl($, $) & $)" $$ [ca; cb; bit_width_mask w]  }
 
-    | Tree.SHR, Bits, Number(_,Integer) -> 
-        { t = Bits; 
-          c = "_awe_shr($, $)" $$ [ca; cb]  }
+    | Tree.SHR, Bits w, Number(_,Integer) -> 
+        { t = Bits w; 
+          c = "(_awe_shr($, $) & $)" $$ [ca; cb; bit_width_mask w]  }
 
     (* All remaining combinations of binary operators and operand types are erroneous. *)
           
@@ -1929,7 +1950,7 @@ and standard_procedure (loc : Location.t) (scope : Scope.t)
       | Number(Short, Complex) -> "_awe_write_complex($, $);\n" $$ [code_of_loc loc; pa.c]
       | Number(Long, Complex)  -> "_awe_write_long_complex($, $);\n" $$ [code_of_loc loc; pa.c]
       | Logical ->                "_awe_write_logical($, $);\n" $$ [code_of_loc loc; pa.c]
-      | Bits ->                   "_awe_write_bits($, $);\n" $$ [code_of_loc loc; pa.c]
+      | Bits n when n <= 32 ->    "_awe_write_bits($, $);\n" $$ [code_of_loc loc; pa.c]
       | String 1 ->               "_awe_write_char($, $);\n" $$ [code_of_loc loc; pa.c]
       | String length ->          "_awe_write_string($, $, $);\n" $$ [code_of_loc loc; pa.c; code_of_int length]
       | Reference _ ->            "_awe_write_reference($, $);\n" $$ [code_of_loc loc; pa.c]
@@ -1972,7 +1993,7 @@ and standard_procedure (loc : Location.t) (scope : Scope.t)
           | Number(_,Integer) -> "_awe_read_integer($, $);\n" $$ [code_of_loc loc; d.c]
           | Number(_,Real) ->    "_awe_read_real($, $);\n" $$ [code_of_loc loc; d.c]
           | Number(_,Complex) -> "_awe_read_complex($, $);\n" $$ [code_of_loc loc; d.c]
-          | Bits ->              "_awe_read_bits($, $);\n" $$ [code_of_loc loc; d.c]
+          | Bits w when w <= 32 -> "_awe_read_bits($, $);\n" $$ [code_of_loc loc; d.c]
           | Logical ->           "_awe_read_logical($, $);\n" $$ [code_of_loc loc; d.c]
           | t -> error loc "%s cannot be read" (describe_simple t)
           )
@@ -2371,7 +2392,7 @@ and add_record_declaration (loc : Location.t)
 
    There needs to be two scans of a block for procedures: the first to add procedure 
    declarations to the block's scope and build the prototypes; the second to build the 
-   code for the procedure's bodies (which require the procedure declarations added by the 
+   code for the procedure's bodies (which requires the procedure declarations added by the 
    first scan.)
 
    Algol procedures are local to their blocks, so their corresponding C functions need to be 

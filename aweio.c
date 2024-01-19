@@ -97,7 +97,7 @@ Scanner_result_string (Scanner_result result)
 
 
 /* This is the only function that reads characters for a scanner. 
-   '\r' characters are silently ignored to handle handle Windows '\r\n' linebreaks. */
+   '\r' characters are silently ignored to handle Windows '\r\n' linebreaks. */
 
 static
 int
@@ -566,11 +566,11 @@ Printer_page_break (_awe_Printer *printer, _awe_loc loc)
 {
   /* If the page height has been reached, and hard_page_breaks is on, then 
      replace the last line feed of the page with a form feed. */
-  assert(printer->line >= 1 && printer->line <= printer->page_height);
-  while (printer->line < printer->page_height) {
+    assert(printer->line >= 1 && printer->line <= printer->page_height);
+    while (printer->line < printer->page_height) {
         fputc('\n', printer->output);
-      ++printer->line;
-   }
+        ++printer->line;
+    }
     if (printer->hard_page_breaks || printer->pretty_page_breaks)
         if (printer->pretty_page_breaks)
             { 

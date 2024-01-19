@@ -270,7 +270,7 @@ do_branch
 ;
 
 
-/* These might be control identifiers, designators or procedures calls. */
+/* These might be control identifiers, designators or procedure calls. */
 
 designator 
 : Identifier  
@@ -337,8 +337,8 @@ simple_type
 | LONG_REAL                          { Tree.LONG_REAL }
 | LONG_COMPLEX                       { Tree.LONG_COMPLEX }
 | LOGICAL                            { Tree.LOGICAL }
-| BITS                               { Tree.BITS }
-| BITS BRA Integer KET               { Tree.BITS }
+| BITS                               { Tree.BITS None }
+| BITS BRA Integer KET               { Tree.BITS (Some (int_of_string $3)) }
 | STRING                             { Tree.STRING None }
 | STRING BRA Integer KET             { Tree.STRING (Some (int_of_string $3)) }
 | REFERENCE BRA identifier_list KET  { Tree.REFERENCE (pos 1, lst $3) }

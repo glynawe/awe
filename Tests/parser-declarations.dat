@@ -39,7 +39,7 @@ BITS a
 BITS a
 
 BITS(32) a
-BITS a
+BITS(32) a
 
 BITS(a) a
      ^Syntax Error
