@@ -82,6 +82,7 @@ let scope =
     ; "sin",        Analysis real
     ; "cos",        Analysis real
     ; "arctan",     Analysis real
+    ; "gamma",      Analysis real
     ; "longsqrt",   Analysis long_real
     ; "longexp",    Analysis long_real
     ; "longln",     Analysis long_real
@@ -89,6 +90,7 @@ let scope =
     ; "longsin",    Analysis long_real
     ; "longcos",    Analysis long_real
     ; "longarctan", Analysis long_real
+    ; "longgamma",  Analysis real
 
     (* Predeclared variables. *)
 

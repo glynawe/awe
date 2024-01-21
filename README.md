@@ -7,7 +7,7 @@ The main requirements for compiling Awe are a Unix-like environment, GCC, Python
 
 ## Thank You
 
-Thank you to: Hendrick Boom, Tony Marsland, Carey Bloodworth and John Boutland for a great deal of expert advice, encouragement and testing; the authors of the *Algol W Language Description* for creating such an unambiguous work.
+Thank you to: Hendrick Boom, Tony Marsland, Carey Bloodworth, John Boutland and Nicolas Brouard for a great deal of expert advice, encouragement and testing; and the authors of the *Algol W Language Description* for creating such an unambiguous work.
 
 ## By the Way
 

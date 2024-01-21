@@ -14,7 +14,7 @@ elbow:
 
 A LaTeX-formatted PDF:
 
-<http://www.tiddly-pom.com/~glyn/algolw.pdf>
+<https://github.com/glynawe/awe/blob/main/algolw.pdf>
         
 A scanned original can be found here:
 
@@ -95,10 +95,6 @@ functions of analysis will have changed. C's `double` type,
 used to represent both `REAL` and `LONG REAL`, can have a three
 digit exponent.
 
-Functions and conditions too dependent on System/360 to be
-reliably or consistently reimplemented (`UNFL`, `OVFL`, `INTOVFL`, `BASE16`
-and `LONGBASE16`) have been omitted.
-
 ▸ In section 8.2 Standard Functions of Analysis, remove the "domain:"
   parts from the procedure comments.
 
@@ -119,6 +115,18 @@ and `LONGBASE16`) have been omitted.
 >             X in the format ±EEE±DDDDDDDDDDDDDDD,
 >             otherwise X in the format ⊔±EE±DDDDDDDDDDDDDDD ;
 
+There are two additional functions `GAMMA` and `LONGGAMMA`.
+
+▸ In section 8.2 Standard Functions of Analysis, add:
+
+>     REAL PROCEDURE GAMMA (REAL VALUE X);
+>     COMMENT Returns the gamma function of X;
+>
+>     LONG REAL PROCEDURE LONGGAMMA (LONG REAL VALUE X);
+>     COMMENT Returns the gamma function of X;
+
+Functions and conditions too dependent on System/360 to be
+reliably reimplemented have been omitted.
 
 ▸ In section 8.5 Exceptional Conditions, remove all mention of `UNFL`,
   `OVFL` and `INTOVFL`.
@@ -126,6 +134,16 @@ and `LONGBASE16`) have been omitted.
 ▸ In section 8.1, Standard Transfer Functions, remove all metion of `BASE16` and
   `LONGBASE16`.
 
+`ROUNDTOREAL` rounds a `REAL` number number down the precision of C's `float`.
+
+▸ In section 8.1, Standard Transfer Functions, replace ROUNDTOREAL with:
+
+>     REAL PROCEDURE ROUNDTOREAL(LONG REAL VALUE X);
+>     COMMENT Returns the properly rounded real (short precision) value of the
+>             long precision value X;
+
+(Awe uses C `double` for both `REAL` and `LONG REAL`, but nevertheless this
+is the correct behaviour according to Nicolas Brouard.)
 
 ### TIME Function
 
@@ -1171,11 +1189,10 @@ REFERENCE(file) fopen (STRING(255) VALUE path;
             ALGOL "fopen_wrapper";
 ```
 
-These references point to C structures rather than valid ALGOL W
-records, so a dummy record class must be the sole member of a
-reference's class identifier list, a dummy record class's field
-identifiers should never be used and ALGOL W should not allocate new
-dummy class records.
+These references point to C structures rather than valid ALGOL W records, so:
+* dummy record class must be the sole member of a reference class identifier list;
+* a dummy record class's dummy fields should never be accessed or assigned to;
+* ALGOL W code should never allocate new dummy class records.
 
 ---
-Glyn Webster, 2019
+Glyn Webster, 2024

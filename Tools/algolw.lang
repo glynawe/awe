@@ -152,6 +152,7 @@ Copy this to ~/.local/share/gtksourceview-3.0/language-specs/algolw.lang
       <keyword>sin</keyword>
       <keyword>cos</keyword>
       <keyword>arctan</keyword>
+      <keyword>gamma</keyword>
       <keyword>longsqrt</keyword>
       <keyword>longexp</keyword>
       <keyword>longln</keyword>
@@ -159,6 +160,7 @@ Copy this to ~/.local/share/gtksourceview-3.0/language-specs/algolw.lang
       <keyword>longsin</keyword>
       <keyword>longcos</keyword>
       <keyword>longarctan</keyword>
+      <keyword>longgamma</keyword>
       <keyword>maxinteger</keyword>
       <keyword>pi</keyword>
       <keyword>epsilon</keyword>

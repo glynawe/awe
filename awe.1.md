@@ -46,6 +46,9 @@ If an ALGOL W program contains procedures with external references
 will write C prototypes for them to stdout. You will need to 
 provide C functions for those, and link them into your program.
 
+The syntax for a separately compiled procedure is an ALGOL W procedure
+declaration followed by a fullstop.
+
 The most convenient way to maintain moderately complex ALGOL W
 programs is to write a Makefile that uses the ready-make targets 
 in *awe.mk*.  See **awe.mk**(7).

@@ -436,6 +436,7 @@ double _awe_log (_awe_loc, double);
 double _awe_sin (_awe_loc, double);
 double _awe_cos (_awe_loc, double);
 double _awe_arctan (_awe_loc, double);
+double _awe_gamma (_awe_loc, double);
 #define _awe_longsqrt _awe_sqrt  /* LONG REAL and REAL are identical */
 #define _awe_longexp _awe_exp
 #define _awe_longln _awe_ln
@@ -443,6 +444,7 @@ double _awe_arctan (_awe_loc, double);
 #define _awe_longsin _awe_sin
 #define _awe_longcos _awe_cos
 #define _awe_longarctan _awe_arctan
+#define _awe_longgamma _awe_gamma
 
 int time_ (int n);
 

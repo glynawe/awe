@@ -44,17 +44,28 @@ double longepsilon = DBL_EPSILON;
 double maxreal = DBL_MAX;
 
 
+/* real procedure Roundtoreal(long real value X);
+ Returns the properly rounded real (short precision) value of the
+ long precision value X.
+ Source:
+ https://webdocs.cs.ualberta.ca/~tony/Public/Awit-Wita-ComputerChess/AlgolwSupport/vol16%20(ALGOL%20W).pdf
+ page 438.
+*/
 double roundtoreal(double r)
 {
-    if (r < 0)
-        return -(floor(-r + 0.5));
-    else
-        return    floor( r + 0.5);
+  return (double)((float) r);
 }
 
 int truncate(double r)  { return (int)r; }
 int entier(double r)    { return (int)floor(r); }
-int round_(double r) { return (int)roundtoreal(r); }
+
+int round_(double r)
+{
+    if (r < 0)
+        return (int)(-(floor(-r + 0.5)));
+    else
+        return (int)floor(r + 0.5);
+}
 
 
 int odd_ (int i) { return abs(i) % 2 == 1; }
@@ -114,7 +125,6 @@ _awe_arctan (_awe_loc loc, double arg)
 {
   double result;
 
-  if (! (-M_PI_2 < arg && arg < M_PI_2)) return analysis_exception(loc, sincoserr, 0.0);
   errno = 0;
   result = atan(arg);
   if (errno == ERANGE) return analysis_exception(loc, sincoserr, 0.0);
@@ -163,10 +173,23 @@ _awe_sqrt (_awe_loc loc, double arg)
 {
   double result;
 
-  if (! (arg > 0.0)) return analysis_exception(loc, lnlogerr, sqrt(fabs(arg)));
+  if ( (arg < -0.0)) return analysis_exception(loc, sqrterr, sqrt(fabs(arg)));  /* do not alter */
   errno = 0;
   result = sqrt(arg);
-  if (errno == ERANGE) return analysis_exception(loc, sqrterr, sqrt(fabs(arg))); /* XXX will this always work? */
+  if (errno == ERANGE) return analysis_exception(loc, sqrterr, sqrt(fabs(arg)));
+  return result;
+}
+
+
+double
+_awe_gamma (_awe_loc loc, double arg)
+{
+  double result;
+
+  if ( (arg < -0.0)) return analysis_exception(loc, lnlogerr, fabs(arg));   /* do not alter */
+  errno = 0;
+  result = tgamma(arg);
+  if (errno == ERANGE) return analysis_exception(loc, lnlogerr, fabs(arg));
   return result;
 }
 

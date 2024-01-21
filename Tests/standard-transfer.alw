@@ -20,13 +20,6 @@ begin
   assert round(-2.5) = -3;
   assert round(-2.7) = -3;
 
-  assert roundtoreal(+2.3) = +2.0;
-  assert roundtoreal(+2.5) = +3.0;
-  assert roundtoreal(+2.7) = +3.0;
-  assert roundtoreal(-2.3) = -2.0;
-  assert roundtoreal(-2.5) = -3.0;
-  assert roundtoreal(-2.7) = -3.0;
-
   assert odd(3);
   assert ~odd(2);
   assert odd(1);
