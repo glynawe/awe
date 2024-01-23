@@ -4,11 +4,9 @@
 ## Requirements
 
 A Debian-like operating system, Gnu C, Python 3, OCaml 4.05 or later,
-make, ar, Python markdown and the Boehm GC.
+make, ar, markdown and the Boehm GC.
 
-On Windows use the Windows 10 Linux Subsystem.
-
-On Debian, Ubuntu or Windows install these packages:
+On Debian or Ubuntu install these packages:
 
      gcc ocaml-nox python3 python3-markdown binutils make libgc-dev
 
@@ -40,4 +38,4 @@ Feel free to ask me any questions.
 My email address is in the distribution files.
 
 ---
-Glyn Webster, 2020
+Glyn Webster, 2024

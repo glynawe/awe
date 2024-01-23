@@ -410,7 +410,7 @@ the same as the procedure's identifier then Awe will give a warning.
 
 Programs compiled with Awe will use the ISO 8859-1 (Latin1) character
 set internally and for I/O. This is for the sake of compatibility with
-the GNU C library, Linux and Windows. For most ALGOL W programs the
+the GNU C library and modern operating systems. For most ALGOL W programs the
 change in character representation will be completely invisible.
 
 The ALGOL W Language Description explicitly requires EBCDIC numeric

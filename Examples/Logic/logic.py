@@ -3,8 +3,8 @@ r""" logic.py -- toy program to interpret logic propositions
 
 You can run it from the command line:
 
-| $ python logic.py "A^~B v B^~A + ~C^B,  A v C,  A^(B v C)"
-| 
+| $ python3 logic.py "A^~B v B^~A + ~C^B,  A v C,  A^(B v C)"
+|
 |  A B C
 |  0 0 0  0 0 0
 |  0 0 1  0 1 0
@@ -29,16 +29,16 @@ The syntax for logic propositions, in order of binding strength:
     Equivalence: a ↔ b    <->
     Mat. imp.:   a ⇒ b    =>
     Mat. equ.:   a ⇔ b    <=>
-    
-    Multiple results: a, b, c ...    
-    
+
+    Multiple results: a, b, c ...
+
     Variables can be any letter.
 
 The two useful Python functions in this module are 'table' and 'valid':
 
 | >>> import logic
 | >>> logic.table("(A ∧ ¬B) ∨ (B ∧ ¬A) ∨ (C ⊕ ¬B)")
-| 
+|
 |  A B C
 |  0 0 0  1
 |  0 0 1  0
@@ -48,7 +48,7 @@ The two useful Python functions in this module are 'table' and 'valid':
 |  1 0 1  1
 |  1 1 0  0
 |  1 1 1  1
-| 
+|
 | >>> logic.valid("x v y^z <=> (x v y)^(x v z)")
 | True
 
@@ -56,7 +56,7 @@ Though the 'valuations' iterator could be pretty handy too:
 
 | >>> for v in logic.valuations('AB'):
 | ...     print v
-| ... 
+| ...
 | {'A': False, 'B': False}
 | {'A': False, 'B': True}
 | {'A': True,  'B': False}
@@ -95,10 +95,10 @@ A ∧ ¬A  ⇔  F  //Excluded Middle
 A ∨ ¬A  ⇔  T
 
 A ∧ T  ⇔  A   //Identity
-A ∨ F  ⇔  A       
+A ∨ F  ⇔  A
 
 A ∧ F  ⇔  F   //Domination
-A ∨ T  ⇔  T   
+A ∨ T  ⇔  T
 
 A → B  ⇔  ¬A ∨ B     //Conditional
 

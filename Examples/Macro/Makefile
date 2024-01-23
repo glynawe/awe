@@ -23,7 +23,7 @@ uninstall:
 	rm -f $(MANDIR)/macro.1
 
 macro.1:
-	python man.py macro.1.md macro.1
+	python3 man.py macro.1.md macro.1
 
 clean::
 	rm -f test.output macro.1

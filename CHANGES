@@ -1,8 +1,15 @@
+Wednesday, January 24 2024:
+
+* Improvements to analysis functions thank to Nicholas Brouard.
+* Python updated to Python 3 everywhere.
+* Removed the mention of Windows. Awe might compile under WSL, but I have
+  not tested it.
+
 Saturday, August 8 2020:
 
 * Changed array indexing to a more conventional system that uses
   array descriptor records rather than look up functions.
-* Updated the Ocaml code to compile under Ocaml 4.05.0 
+* Updated the Ocaml code to compile under Ocaml 4.05.0
 * Python scripts are explicitly run by Python 2
 
 * Bugfix: NULL is now correctly recognised as not belonging to a record class
@@ -56,4 +63,4 @@ Thursday, Jun 15 2012: This revision of Aw2c to Awe has some minor changes, most
  * "Windows Funpak" distribution is gone.  (Couldn't be linked to a garbage collector)
  * Records are now allowed as parameters to external procedures.
 
-Glyn Webster  
+Glyn Webster
