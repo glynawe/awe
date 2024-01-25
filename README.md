@@ -3,7 +3,9 @@ ALGOL W is a successor to Algol 60 closely based on A Contribution to the Develo
 
 Awe is a new compiler for the ALGOL W language. It is a complete implementation of the language described in the [ALGOL W Language Description, June 1972](algolw.pdf). Awe should be able to compile code intended for the OS/360 ALGOL W compilers with little or no modification. For details read the [Awe manual](awe.md), [awe](awe.1.md)(1) and [awe.mk](awe.mk.7.md)(7).
 
-The main requirements for compiling Awe are a Unix-like environment, GCC, Python3, OCaml and Boehm GC. For details read [INSTALL](INSTALL.md) and awe(1).
+The main requirements for compiling Awe are Linux, GCC, Python3, OCaml and Boehm GC. For details read [INSTALL](INSTALL.md) and awe(1).
+
+Unfortunately, Awe only works in Linux for now. Awe uses GCC nested functions, which are forbidden by Windows and Mac/OS. [The issuse is described here.](https://thephd.dev/lambdas-nested-functions-block-expressions-oh-my)
 
 ## Thank You
 
