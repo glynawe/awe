@@ -56,7 +56,7 @@ let scope =
     ; "entier",       Procedure (integer,   [By_value(real)])
     ; "truncate",     Procedure (integer,   [By_value(real)])
     ; "round",        Procedure (integer,   [By_value(real)])
-    ; "roundtoreal",  Procedure (long_real, [By_value(long_real)])
+    ; "roundtoreal",  Procedure (real, [By_value(long_real)])
     ; "realpart",     Procedure (real, [By_value(Number(Short,Complex))])
     ; "imagpart",     Procedure (real, [By_value(Number(Short,Complex))])
     ; "longrealpart", Procedure (long_real, [By_value(Number(Long,Complex))]) 

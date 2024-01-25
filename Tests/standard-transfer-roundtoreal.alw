@@ -1,0 +1,18 @@
+begin
+    real array x (1::5);
+    x(1) := -0.05459357;
+    x(2) := 0.11644;
+    x(3) := -0.01825297;
+    x(4) := 0.5555555555555;
+    x(5) := 0.3333333333333;
+    for i := 1 until 5 do
+        writeon(roundtoreal(x(i)));
+    iocontrol(2);
+    write("roundtoreal(0.5555555555555) ", roundtoreal(0.5555555555555));
+    write("roundtoreal(0.3333333333333) ", roundtoreal(0.3333333333333));
+end.
+----stdout
+   -0.05459357         0.11644     -0.01825297       0.5555556       0.3333333
+roundtoreal(0.5555555555555)      0.5555556
+roundtoreal(0.3333333333333)      0.3333333
+----end
