@@ -3,8 +3,12 @@
 
 ## Requirements
 
-A Debian-like operating system, Gnu C, Python 3, OCaml 4.05 or later,
+A Unix-like operating system, Gnu C, Python 3, OCaml 4.05 or later,
 make, ar, markdown and the Boehm GC.
+
+Ubuntu or Debian Linux are ideal.  The Windows Subsystem for Linux should be
+used on Windows; Awe has not been tested on Cygwin. Awe will successfully
+compile and run its tests on macOS, but it should be considered experimental.
 
 On Debian or Ubuntu install these packages:
 

@@ -156,7 +156,7 @@ let command_line () : string list * operation_t * string =
     [ ("-o", Arg.String (target Compile),       " executable Compile to an executable.");
       ("-c", Arg.String (target Intermediate),  " object.c   Compile to a C intermediate file.");
       ("-p", Arg.String (target Procedure),     " object.c   Separately compile a single Algol procedure.");
-      ("-i", Arg.Set Options.initialize_all,    " Initialize all variables.");
+      ("-n", Arg.Clear Options.initialize_all,  " Do not pre-initialize variables to zero.");
       ("-t", Arg.Set Options.add_tracing_hooks, " Add tracing hooks.") ] 
   in
 

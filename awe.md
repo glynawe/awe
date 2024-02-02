@@ -41,6 +41,7 @@ Language:
 - modern handing of ambiguous IF/ELSE statements;
 - arrays may have dimensions of zero width;
 - compiler directives block comments.
+- numeric variables are initialized to zero, string variables to spaces
 
 Standard Library:
 
@@ -60,6 +61,12 @@ declare procedure formal parameters or rely on an exact representation
 of System/360 floating-point math. The differences exist for the sake
 of compatibility with Linux and GCC and backwards-compatibility with
 undocumented features of previous compilers.
+
+Initialisation of variables to zero is not requires by Algol W, but it
+seems to have been a side effect of the OS/360 operating system's
+loader. Hence missing initialisation statements could go undetected.
+It makes more sense to emulate that behaviour than ask people to hunt
+down subtle bugs.
 
 ▸ This documentation describes Awe's dialect in the form of edits to
 the ALGOL W Language Description in order to borrow its unambiguous

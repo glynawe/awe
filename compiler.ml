@@ -2676,7 +2676,7 @@ and add_array_declaration (loc     : Location.t)
       | Reference _ ->
          "_awe_array_FILL(void*, $, _awe_uninitialized_reference);\n" $$ [Code.id id]
       | String n when n > 1 && !Options.initialize_all ->
-         "_awe_array_FILL_WITH_SPACES($)" $$ [Code.id id]
+         "_awe_array_FILL_WITH_SPACES($);\n" $$ [Code.id id]
       | _ when !Options.initialize_all ->
          "_awe_array_FILL($, $, $);\n" $$ [ctype elttype; Code.id id; default elttype]
       | _ ->

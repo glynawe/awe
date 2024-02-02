@@ -33,15 +33,15 @@ default: test
 
 install:
 	install -m 755 -d $(BINDIR) $(LIBDIR) $(INCDIR) $(DOCDIR) $(MANDIR1) $(MANDIR7)
-	install -m 755 -t $(BINDIR) awe
-	install -m 644 -t $(INCDIR) awe.h
-	install -m 644 -t $(INCDIR) aweio.h
-	install -m 644 -t $(LIBDIR) libawe.a 
-	install -m 644 -t $(INCDIR) awe.mk
-	install -m 644 -t $(DOCDIR) awe.html
-	install -m 644 -t $(DOCDIR) github-markdown.css
-	install -m 644 -t $(MANDIR1) awe.1
-	install -m 644 -t $(MANDIR7) awe.mk.7
+	install -m 755 awe      $(BINDIR)
+	install -m 644 awe.h    $(INCDIR)
+	install -m 644 aweio.h  $(INCDIR)
+	install -m 644 libawe.a $(LIBDIR)
+	install -m 644 awe.mk   $(INCDIR)
+	install -m 644 awe.html $(DOCDIR)
+	install -m 644 awe.1    $(MANDIR1)
+	install -m 644 awe.mk.7 $(MANDIR7)
+	install -m 644 github-markdown.css $(DOCDIR)
 
 uninstall:
 	rm -f $(BINDIR)/awe 

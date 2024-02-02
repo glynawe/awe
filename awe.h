@@ -16,7 +16,6 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU Limited General Public
 License along with Awe.  If not, see <http://www.gnu.org/licenses/>.
-
 */
 
 #ifndef __AWE_H
@@ -244,12 +243,12 @@ _awe_array_element_pointer ( _awe_loc loc,
 
 
 #define _awe_array_FILL(element_type, array, filler)                   \
-    for (int i = 0; i < array->nelements; ++i)                         \
-        ((element_type*)(array->element_data))[i] = (filler)
+    for (int _i_ = 0; _i_ < array->nelements; ++_i_)                         \
+        ((element_type*)(array->element_data))[_i_] = (filler)
 
 #define _awe_array_FILL_WITH_SPACES(array)                              \
-    for (int i = 0; i < array->nelements * array->element_size; ++i)    \
-        ((char*)(array->element_data))[i] = ' '
+    for (int _i_ = 0; _i_ < array->nelements * array->element_size; ++_i_)    \
+        ((char*)(array->element_data))[_i_] = ' '
 
 
 /* Statements. - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

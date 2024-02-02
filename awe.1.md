@@ -21,7 +21,7 @@ into a C function.
 
 The following flags are meant for debugging purposes only:
 
-**-i** adds code that initializes all numbers to zero and all strings
+**-n** leave out the code that pre-initializes numbers to zero and strings
 to spaces.
 
 **-t** adds tracing hooks to all procedure calls. (Experimental.)
