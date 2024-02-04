@@ -56,7 +56,7 @@ double roundtoreal(double r)
   return (double)((float) r);
 }
 
-int truncate(double r)  { return (int)r; }
+int truncate_(double r)  { return (int)r; }
 int entier(double r)    { return (int)floor(r); }
 
 int round_(double r)
@@ -224,7 +224,7 @@ base10 (double x)
     assert(c_repr[0] == '+' || c_repr[0] == '-');
     sign = c_repr[0];
 
-    assert(isdigit(c_repr[1]));
+    assert(isdigit((int)c_repr[1]));
     first_digit = c_repr[1];
 
     assert(c_repr[2] == '.');
@@ -261,7 +261,7 @@ longbase10 (double x)
     assert(c_repr[0] == '+' || c_repr[0] == '-');
     sign = c_repr[0];
 
-    assert(isdigit(c_repr[1]));
+    assert(isdigit((int)c_repr[1]));
     first_digit = c_repr[1];
 
     assert(c_repr[2] == '.');

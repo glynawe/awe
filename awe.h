@@ -34,8 +34,8 @@ License along with Awe.  If not, see <http://www.gnu.org/licenses/>.
 /* Every C function that implements an action that can cause a runtime error has an _awe_loc argument. */
 
 typedef struct _awe_LOC {
-  const char *file; 
-  int line; 
+  const char *file;
+  int line;
   int column;
 } *_awe_loc;
 
@@ -390,8 +390,9 @@ void _awe_init_awestd (void);
 
 
 /* These functions must have entries in the global Algol W scope defined in 'predeclared.ml' */
+/* (Some will be renamed. See 'table.ml'.) */
 
-int truncate(double r);
+int truncate_(double r);
 
 int entier(double r);
 

@@ -32,7 +32,7 @@ List.iter (fun s -> Hashtbl.add gnuc_keywords s ())
     "typeof"; "union"; "unsigned"; "void"; "volatile"; "while" ;
     "_Complex";
     (* these get renamed to prevent the Awe runtime and C standard library names clashing: *)
-    "time"; "round"; "odd"; "argc"; "argv"; 
+    "time"; "round"; "odd"; "argc"; "argv"; "truncate";
     (* GCC thinks that all functions named "main" should return an int, not 
        just the outermost one, so let's rename that too to keep GCC happy: *)
     "main"
