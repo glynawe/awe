@@ -5,7 +5,7 @@ EXTRA_FILES    = README expected.output
 
 test : build
 	./$(PROGRAM) 1 3999 849 '  + 83 ' 4890 -1 lolwut > actual.output
-	diff expected.output actual.output
+	diff --strip-trailing-cr expected.output actual.output
 	rm actual.output
 
 clean::

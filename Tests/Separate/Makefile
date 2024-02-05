@@ -7,7 +7,7 @@ LDLIBS =   -lawe -lm -lgc
 
 test : clean program
 	./program > actual.output
-	diff expected.output actual.output
+	diff --strip-trailing-cr expected.output actual.output
 	echo "testprograms: separate compilation test passed!"
 
 program :  separate.c program.c

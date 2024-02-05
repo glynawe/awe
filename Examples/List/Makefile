@@ -8,6 +8,6 @@ include awe.mk
 
 test : clean build
 	./list test1.txt test2.txt test3.txt test4.txt > actual.output
-	diff expected.output actual.output
+	diff --strip-trailing-cr expected.output actual.output
 	rm actual.output
 	echo "Success!"

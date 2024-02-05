@@ -64,7 +64,7 @@ undocumented features of previous compilers.
 
 Initialisation of variables to zero is not requires by Algol W, but it
 seems to have been a side effect of the OS/360 operating system's
-loader. Hence missing initialisation statements could go undetected.
+loader. Hence missing initialisation statements would go undetected.
 It makes more sense to emulate that behaviour than ask people to hunt
 down subtle bugs.
 
@@ -657,10 +657,14 @@ The Awe run-time dynamically allocates records during the execution of
 reference expressions (cf. 6.7 of the Language Description). It does
 not use dynamic allocation for any other purpose.
 
-The Awe run-time library uses the Boehm GC function `GC_ALLOC` to
+The Awe run-time library normally uses the Boehm GC function `GC_ALLOC` to
 allocate records, and allows Boehm GC to garbage collect a record when
 no references to it remain. Awe programs should be linked to `libgc`.
 
+Garbage collection and GCC nested functions do not work together
+in a program compiled by Cygwin GCC. The Cyywin version of Awe uses
+the standard C `malloc` function to allocate records. No garbage collection
+is performed.
 
 
 ### Allocation numbers

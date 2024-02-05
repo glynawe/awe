@@ -127,7 +127,7 @@ default: build
 
 test: build
         ./parse < GRAMMAR > actual.output
-        diff expected.output actual.output
+        diff --strip-trailing-cr expected.output actual.output
 
 clean::
         rm -f actual.output

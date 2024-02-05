@@ -11,7 +11,7 @@ build: macro macro.1 test
 
 test: macro
 	./macro < test.input > test.output
-	diff test.expected test.output
+	diff --strip-trailing-cr test.expected test.output
 
 install:
 	install -m 755 -d $(BINDIR) $(MANDIR)

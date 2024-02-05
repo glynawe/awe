@@ -5,7 +5,7 @@ OTHER_FILES    = expected.output
 
 test : clean program
 	./program Argument1 Arg2 'argument 3' > actual.output
-	diff expected.output actual.output
+	diff --strip-trailing-cr expected.output actual.output
 
 # an additional cleaning rule:
 clean ::

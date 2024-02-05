@@ -38,7 +38,7 @@ build:
 
 test : clean build
 	./awnest < awnest-test-file.alw > actual.output
-	diff expected.output actual.output
+	diff --strip-trailing-cr expected.output actual.output
 	rm actual.output
 	echo "Success!"
 

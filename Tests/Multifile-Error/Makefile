@@ -9,7 +9,7 @@ LDLIBS=-lm -lgc $(LIBAWE)
 .PHONY: test clean
 
 test : clean
-	$(AWE) begin.alw argv-headers.alw program.alw end.alw 2> actual.output || diff expected.output actual.output
+	$(AWE) begin.alw argv-headers.alw program.alw end.alw 2> actual.output || diff --strip-trailing-cr expected.output actual.output
 	echo "testprograms: argv test passed!"
 
 clean:

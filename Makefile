@@ -180,6 +180,7 @@ clean:
 	make -f Makefile.awe clean
 	for d in $(TESTS) ; do make clean -I $(shell pwd) -C $$d ; done
 	for d in $(EXAMPLES) ; do make clean -I $(shell pwd) -C $$d ; done
+	make -C Tools clean
 	rm -f Tests/*.awe.c 
 	rm -f scanner.inc scanner.dot
 	rm -f *.o *.a

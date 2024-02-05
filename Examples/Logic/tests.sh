@@ -1,5 +1,4 @@
-#1/bin/sh
-set -e
+#/bin/bash
 $1 -t 'A  =  A'
 $1 -t '~F  =  T'
 $1 -t '~T  =  F'

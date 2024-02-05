@@ -6,7 +6,7 @@ OTHER_FILES    = original-parse.alw expected.output
 
 test: clean parse
 	./parse < GRAMMAR > actual.output
-	diff expected.output actual.output
+	diff --strip-trailing-cr expected.output actual.output
 	echo "testprograms: run of PARSE passed!"
 
 parse.alw: original-parse.alw

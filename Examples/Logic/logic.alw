@@ -29,7 +29,7 @@ BOOLEAN PROCEDURE is_letter(STRING(1) VALUE c);
    c >= "S" AND c <= "Z";
 
 BOOLEAN PROCEDURE is_space(STRING(1) VALUE c);
-   c = " " OR c = CODE(5) OR c = CODE(37); 
+   c = " " OR c = CODE(5) OR c = CODE(37) OR c = CODE(13);  % space, tab, lf, cr %
 
 
 PROCEDURE compile(STRING(100) VALUE expression; INTEGER VALUE expression_len;
