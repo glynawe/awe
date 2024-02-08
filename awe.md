@@ -380,8 +380,8 @@ comment.
 
 and:
 
-> The symbol '¬' may be substituted with the symbols '~' or NOT.
-> The symbol '¬=' may be substituted with the symbol '~='.
+> The symbol '¬' may be substituted with the symbols '\~' or NOT.
+> The symbol '¬=' may be substituted with the symbol '\~='.
 > The symbol '|' may be substituted with the symbol '//'.
 
 
