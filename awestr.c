@@ -31,25 +31,7 @@ License along with Awe.  If not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
 #include <assert.h>
 
-#ifndef AWESTRING_TEST
 #include "awe.h"
-#endif
-
-#ifdef AWESTRING_TEST
-#include <stdio.h>
-#include <stdarg.h>
-typedef int _awe_loc;
-typedef unsigned char *_awe_str;
-void
-_awe_error (_awe_loc l, const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-    fprintf(stderr, "%d: ", l);
-    vfprintf(stderr, format, args);
-    va_end(args);
-}
-#endif
 
 
 /* String manipulation -------------------------------------------------------------------- */
@@ -301,105 +283,5 @@ _awe_str_cmp_cs ( unsigned char c, const _awe_str str2, int str2len )
     unsigned char str1 = c;
     return _awe_str_cmp(&str1, 1, str2, str2len);
 }
-
-
-#ifdef AWESTRING_TEST
-void print (_awe_str s, int n)
-{
-    int i;
-    putchar('"');
-    for (i = 0; i < n; ++i) putchar(s[i]);
-    putchar('"');
-    putchar('\n');
-}
-int 
-main (void)
-{
-    int i;
-    for (i = 0; i < 256; ++i) {
-        assert(_awe_latin1_of_ebcdic[_awe_ebcdic_of_latin1[i]] == i);
-        assert(_awe_ebcdic_of_latin1[_awe_latin1_of_ebcdic[i]] == i);
-    }
-
-    unsigned char c;
-    _awe_str s5 [5];
-    _awe_str s3 [3];
-    _awe_str s;
-
-    /* XXX this not complete and methodical */
-
-    assert(memcmp(s5, "     ", 5) == 0);
-    assert(memcmp(s3, "   ", 3) == 0);
-
-    _awe_str_cpy(s5, 5, "abc", 3);
-    assert(memcmp(s5, "abc  ", 5) == 0);
-
-    _awe_str_cpy(s3, 3, "AB", 2);
-    s = _awe_str_cpy(s5, 5, s3, 3);
-    assert(s == s3);
-    assert(memcmp(s5, "AB   ", 5) == 0);
-
-    _awe_str_cpy(s5, 5, "abc", 3);
-    s = _awe_str_sub(__LINE__, s5, 5, 3, 2);
-    assert(s == s5 + 3);
-    assert(memcmp(s, "  ", 2) == 0);
-
-    s = _awe_str_cpy(s5, 5, "abcx", 3);
-    assert(memcmp(s5, "abc  ", 5) == 0);
-    assert(memcmp(s, "abcx", 4) == 0);
-
-
-    _awe_str_cpy(s5, 5, "abcde", 5);
-    _awe_str_cpy(s3, 3, "12", 2);
-    s = _awe_str_sub(__LINE__, s5, 5, 1, 3);
-    assert(memcmp(s, "bcd", 3) == 0);
-    _awe_str_cpy(_awe_str_sub(__LINE__, s5, 5, 1, 3), 3, s3, 3);
-    assert(memcmp(s5, "a12 e", 5) == 0);
-
-    c = _awe_str_cpy_sc(s5, 5, ' ');
-    assert(c == ' ');
-    assert(memcmp(s5, "     ", 5) == 0);
-
-
-    /* Runtime errors: */
-    _awe_str_sub(__LINE__, s5, 5, 2, 4);
-    _awe_str_sub(__LINE__, s5, 5, 3, 3);
-    _awe_str_sub(__LINE__, s5, 5, -3, 3);
-
-    assert(_awe_str_cmp("abc", 3, "abc", 3) == 0);
-    assert(_awe_str_cmp("abc", 3, "bcd", 3) < 0);
-    assert(_awe_str_cmp("bcd", 3, "abc", 3) > 0);
-
-    assert(_awe_str_cmp("abc ", 4, "abc", 3) == 0);
-    assert(_awe_str_cmp("abc ", 4, "bcd", 3) < 0);
-    assert(_awe_str_cmp("bcd ", 4, "abc", 3) > 0);
-
-    assert(_awe_str_cmp("abc", 3, "abc  ", 5) == 0);
-    assert(_awe_str_cmp("abc", 3, "bcd  ", 5) < 0);
-    assert(_awe_str_cmp("bcd", 3, "abc  ", 5) > 0);
-
-    assert(_awe_str_cmp("abc.", 4, "abc", 3) > 0);
-    assert(_awe_str_cmp("abc.", 4, "bcd", 3) < 0);
-    assert(_awe_str_cmp("bcd.", 4, "abc", 3) > 0);
-
-    assert(_awe_str_cmp("abc", 3, "abc. ", 5) < 0);
-    assert(_awe_str_cmp("abc", 3, "bcd. ", 5) < 0);
-    assert(_awe_str_cmp("bcd", 3, "abc. ", 5) > 0);
-
-    s = _awe_str_new("xyz", 3, 5);
-    assert(memcmp(s, "xyz  ", 5) == 0);
-
-    s = _awe_str_new_c('x', 5);
-    assert(memcmp(s, "x    ", 5) == 0);
-
-    c = _awe_str_cpy_sc(s, 3, 'w');
-    assert(c == 'w');
-    assert(memcmp(s, "w    ", 5) == 0);
-
-    printf("*** 'awestr.c' looks okay.\n");
-    return 0;
-}
-#endif
-
 
 /* end */
