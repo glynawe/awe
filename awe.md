@@ -62,12 +62,6 @@ of System/360 floating-point math. The differences exist for the sake
 of compatibility with Linux and GCC and backwards-compatibility with
 undocumented features of previous compilers.
 
-Initialisation of variables to zero is not requires by Algol W, but it
-seems to have been a side effect of the OS/360 operating system's
-loader. Hence missing initialisation statements would go undetected.
-It makes more sense to emulate that behaviour than ask people to hunt
-down subtle bugs.
-
 ▸ This documentation describes Awe's dialect in the form of edits to
 the ALGOL W Language Description in order to borrow its unambiguous
 formal language. The edits are NOT proposed changes to that document.
@@ -89,6 +83,19 @@ Awe is case-insensitive.
 
 > A letter may be substituted with its lowercase form in any
 > syntactic entity other than 〈string constant〉.
+
+
+### Initialization of variables
+
+Numeric variables are initialized to zero, string variables to spaces
+and references to `null`. The elements of arrays are initialised
+with those values.
+
+Initialisation of variables to zero is not required by Algol W, but it
+seems to have been a side effect of the OS/360 operating system's
+loader. Hence missing initialisation statements would go undetected.
+It makes more sense to emulate that behaviour than ask people to hunt
+down subtle bugs.
 
 
 ### Arithmetic
