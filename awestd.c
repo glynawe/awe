@@ -215,11 +215,11 @@ _awe_str intbase16(int i)
 _awe_str 
 base10 (double x)
 {
-    char _awe_repr[13], c_repr[14], sign, first_digit, *following_digits, *tailptr;
+    char _awe_repr[13], c_repr[15], sign, first_digit, *following_digits, *tailptr;
     int exponent;
 
     sprintf(c_repr, "%#+.6e", x);
-    assert(strlen(c_repr) <= 14);
+    assert(strlen(c_repr) < 15);
 
     assert(c_repr[0] == '+' || c_repr[0] == '-');
     sign = c_repr[0];
@@ -252,11 +252,11 @@ base10 (double x)
 _awe_str 
 longbase10 (double x)
 {
-    char _awe_repr[21], c_repr[22], sign, first_digit, *following_digits, *tailptr;
+    char _awe_repr[21], c_repr[23], sign, first_digit, *following_digits, *tailptr;
     int exponent;
 
     sprintf(c_repr, "%#+.14e", x);
-    assert(strlen(c_repr) <= 22);
+    assert(strlen(c_repr) < 23);
 
     assert(c_repr[0] == '+' || c_repr[0] == '-');
     sign = c_repr[0];
@@ -282,7 +282,7 @@ longbase10 (double x)
         sprintf(_awe_repr, "+%03d%c%c%s",  +exponent, sign, first_digit, following_digits);
 
     assert(strlen(_awe_repr) == 20);
-    return _awe_string((_awe_str)_awe_repr, 21);
+    return _awe_string((_awe_str)_awe_repr, 20);
 }
 
 

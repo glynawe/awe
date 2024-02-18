@@ -50,3 +50,5 @@ actual*.output
 /Examples/Logic/logic
 /Examples/Logic/Logic.tar.gz
 testme*
+a.out
+x.c
