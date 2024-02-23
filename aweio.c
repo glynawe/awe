@@ -681,17 +681,17 @@ _awe_write_real_any(_awe_loc loc, double r)
 
   switch (r_format) {
   case 'A': case 'a':
-    sprintf(real_buffer, "%*.*f", w, d, r);
+    snprintf(real_buffer, 256, "%*.*f", w, d, r);
     break;
   case 'S': case 's':
     if (r == 0.0) 
       /* Is is done to be consistent with page 42 of the June 1972 Reference Manual */
-      sprintf(real_buffer, "%*s", w, "0    ");
+      snprintf(real_buffer, 256, "%*s", w, "0    ");
     else
-      sprintf(real_buffer, "%*.*e", w, (w - 8), r); 
+      snprintf(real_buffer, 256, "%*.*e", w, (w - 8), r); 
     break;
   case 'F': case 'f':
-    sprintf(real_buffer, "%*.*g", w, (w - 7), r);
+    snprintf(real_buffer, 256, "%*.*g", w, (w - 7), r);
     break;
   default:
     _awe_error(loc, "R_FORMAT = \"%c\", this is not a valid format code.", r_format);
@@ -754,7 +754,7 @@ _awe_write_reference(_awe_loc loc, void *ref)
     else if (ref == _awe_uninitialized_reference)
         fprintf(_awe_active_printer->output, "%*s", w, "UNINITIALIZED");
     else {
-        sprintf(buffer, "%s.%i", _awe_class(ref), _awe_record_number(ref));
+        snprintf(buffer, 127, "%s.%i", _awe_class(ref), _awe_record_number(ref));
         assert(strlen(buffer) < 127);
         fprintf(_awe_active_printer->output, "%*s", w, buffer);
     }

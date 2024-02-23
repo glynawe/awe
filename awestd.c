@@ -198,7 +198,7 @@ _awe_gamma (_awe_loc loc, double arg)
 
 _awe_str intbase10(int i)
 {
-    sprintf((char*)_awe_return_string, " %c%010d", (i < 0 ? '-' : '+'), abs(i));
+    snprintf((char*)_awe_return_string, 13, " %c%010d", (i < 0 ? '-' : '+'), abs(i));
     assert(strlen((char*)_awe_return_string) == 12);
     return _awe_return_string;
 }
@@ -206,7 +206,7 @@ _awe_str intbase10(int i)
 
 _awe_str intbase16(int i)
 {
-    sprintf((char*)_awe_return_string, "    %08X", i);
+    snprintf((char*)_awe_return_string, 12, "    %08X", i);
     assert(strlen((char*)_awe_return_string) == 12);
     return _awe_return_string;
 }
@@ -218,7 +218,7 @@ base10 (double x)
     char _awe_repr[13], c_repr[15], sign, first_digit, *following_digits, *tailptr;
     int exponent;
 
-    sprintf(c_repr, "%#+.6e", x);
+    snprintf(c_repr, 15, "%#+.6e", x);
     assert(strlen(c_repr) < 15);
 
     assert(c_repr[0] == '+' || c_repr[0] == '-');
@@ -237,13 +237,13 @@ base10 (double x)
     exponent = strtol (c_repr + 10, &tailptr, 10);
 
     if (exponent <= -100) 
-        sprintf(_awe_repr, "-%03d%c%c%6s",  -exponent, sign, first_digit, following_digits);
+        snprintf(_awe_repr, 13, "-%03d%c%c%6s",  -exponent, sign, first_digit, following_digits);
     else if (exponent < 0) 
-        sprintf(_awe_repr, " -%02d%c%c%6s", -exponent, sign, first_digit, following_digits);
+        snprintf(_awe_repr, 13, " -%02d%c%c%6s", -exponent, sign, first_digit, following_digits);
     else if (exponent < 100) 
-        sprintf(_awe_repr, " +%02d%c%c%6s", +exponent, sign, first_digit, following_digits);
+        snprintf(_awe_repr, 13, " +%02d%c%c%6s", +exponent, sign, first_digit, following_digits);
     else
-        sprintf(_awe_repr, "+%03d%c%c%6s",  +exponent, sign, first_digit, following_digits);
+        snprintf(_awe_repr, 13, "+%03d%c%c%6s",  +exponent, sign, first_digit, following_digits);
 
     assert(strlen(_awe_repr) == 12);
     return _awe_string((_awe_str)_awe_repr, 12);
@@ -256,7 +256,7 @@ longbase10 (double x)
     char _awe_repr[21], c_repr[23], sign, first_digit, *following_digits, *tailptr;
     int exponent;
 
-    sprintf(c_repr, "%#+.14e", x);
+    snprintf(c_repr, 23, "%#+.14e", x);
     assert(strlen(c_repr) < 23);
 
     assert(c_repr[0] == '+' || c_repr[0] == '-');
@@ -275,13 +275,13 @@ longbase10 (double x)
     exponent = strtol (c_repr + 18, &tailptr, 10);
 
     if (exponent <= -100) 
-        sprintf(_awe_repr, "-%03d%c%c%14s",  -exponent, sign, first_digit, following_digits);
+        snprintf(_awe_repr, 21, "-%03d%c%c%14s",  -exponent, sign, first_digit, following_digits);
     else if (exponent < 0) 
-        sprintf(_awe_repr, " -%02d%c%c%14s", -exponent, sign, first_digit, following_digits);
+        snprintf(_awe_repr, 21, " -%02d%c%c%14s", -exponent, sign, first_digit, following_digits);
     else if (exponent < 100) 
-        sprintf(_awe_repr, " +%02d%c%c%14s", +exponent, sign, first_digit, following_digits);
+        snprintf(_awe_repr, 21, " +%02d%c%c%14s", +exponent, sign, first_digit, following_digits);
     else
-        sprintf(_awe_repr, "+%03d%c%c%14s",  +exponent, sign, first_digit, following_digits);
+        snprintf(_awe_repr, 21, "+%03d%c%c%14s",  +exponent, sign, first_digit, following_digits);
 
     assert(strlen(_awe_repr) == 20);
     return _awe_string((_awe_str)_awe_repr, 20);
