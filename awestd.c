@@ -206,7 +206,7 @@ _awe_str intbase10(int i)
 
 _awe_str intbase16(int i)
 {
-    snprintf((char*)_awe_return_string, 12, "    %08X", i);
+    snprintf((char*)_awe_return_string, 13, "    %08X", i);
     assert(strlen((char*)_awe_return_string) == 12);
     return _awe_return_string;
 }
