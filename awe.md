@@ -42,6 +42,7 @@ Language:
 - arrays may have dimensions of zero width;
 - compiler directives block comments.
 - numeric variables are initialized to zero, string variables to spaces
+- subarray 
 
 Standard Library:
 
@@ -56,11 +57,19 @@ Operating System Interface:
 - external reference procedures must be written in C;
 - Awe source files can be run though the C preprocessor.
 
-These differences should only affect the validity of programs that
-declare procedure formal parameters or rely on an exact representation
-of System/360 floating-point math. The differences exist for the sake
-of compatibility with Linux and GCC and backwards-compatibility with
+Flaws:
+
+- The integer expressions in subarray designators are passed by value,
+  but they should be passed by name. See section 7.3.2.3 of the Language 
+  Description. (However, a program that is affected by this would have to
+  be quite unusal.)
+
+Aside for the above flaw, these differences should only affect the validity 
+of programs that declare procedure formal parameters or rely on an exact 
+representation of System/360 floating-point math. The differences exist for 
+the sake of compatibility with Linux and GCC and backwards-compatibility with
 undocumented features of previous compilers.
+
 
 ▸ This documentation describes Awe's dialect in the form of edits to
 the ALGOL W Language Description in order to borrow its unambiguous
