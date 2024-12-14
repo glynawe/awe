@@ -67,7 +67,7 @@ awe:
 # ------------------------------------------------------------------------------
 # Build libawe.a
 
-CFLAGS=-std=gnu11 -Wall -Wextra -Werror
+CFLAGS=-std=gnu11 -Wall -Wextra -Werror -Wno-format-truncation 
 
 # In Cygwin GC_ALLOC crashes when used inside nested GCC auto functions.
 # This is a very obscure bug that the Cygwin maintainers WONTFIX.
