@@ -1,7 +1,8 @@
 AWE = ../../awe
 
-CFLAGS = -I../.. -L../..
+CFLAGS = -z execstack -I../.. -L../..
 LDLIBS =   -lawe -lm -lgc
+LDFLAGS += -z execstack
 
 .PHONY: test clean
 

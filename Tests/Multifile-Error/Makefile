@@ -2,8 +2,9 @@ AWE=../../awe
 LIBAWE=../../libawe.a
 AWEH_PATH=../..
 
-CFLAGS=-I$(AWEH_PATH)
+CFLAGS= -z execstack -I$(AWEH_PATH)
 LDLIBS=-lm -lgc $(LIBAWE)
+LDFLAGS += -z execstack
 
 .SUFFIXES: .alw
 .PHONY: test clean

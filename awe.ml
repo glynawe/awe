@@ -117,7 +117,8 @@ let compile (sources : string list) (operation : operation_t) (target : string) 
       let target_c = target ^ ".awe.c" in
       output_code target_c code ;
       let libs = "-lawe -lm -lgc"  in
-      let run_gcc = sprintf "gcc -std=gnu17 %s %s -o %s" (Filename.quote target_c) libs (Filename.quote target) in
+      (* Awe programs require an executable stack for call-by-name. "-z execstack" suppresses a warning from the GCC linker*)
+      let run_gcc = sprintf "gcc -std=gnu17 -z execstack %s %s -o %s" (Filename.quote target_c) libs (Filename.quote target) in
       let exitcode = Sys.command run_gcc in
       if exitcode = 0 then
         Sys.remove target_c

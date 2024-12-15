@@ -13,6 +13,12 @@ else
 LDLIBS += -lawe -lm -lgc
 endif
 
+# Awe programs require an executable stack for call-by-name
+# "-z execstack" suppresses a warning from the GCC linker
+# See: https://www.redhat.com/en/blog/linkers-warnings-about-executable-stacks-and-segments
+#
+CFLAGS += -z execstack
+LDFLAGS += -z execstack
 
 ifdef COMPILER_PATH
 CFLAGS += -I$(COMPILER_PATH) -L$(COMPILER_PATH)
