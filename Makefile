@@ -128,7 +128,7 @@ test-parsing:
 	./testparsing --test declarations Tests/parser-declarations*.dat 
 
 test-suite:
-	ocaml ./testprograms.ml -h Tests/*.alw
+	ocaml -I +str ./testprograms.ml -h Tests/*.alw
 	rm -f testme testme-*
 
 test-programs:

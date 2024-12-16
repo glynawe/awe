@@ -19,6 +19,8 @@ License along with Awe.  If not, see <http://www.gnu.org/licenses/>.
 
 *)
 
+#load "str.cma";;
+
 open Printf ;;
 
 exception Syntax_error of int ;;
@@ -143,6 +145,18 @@ let run_commands cs =
   in loop cs
 ;;
 
+(* XXX this is temporary to allow a warning message from GCC to be skipped *)
+(* Filter out the lines in [text] that contain [mark]. *)
+let exclude_lines (text: string) (mark: string) : string =
+    let regex = Str.regexp_string mark in
+    let keep line =
+      try ignore (Str.search_forward regex line 0) ; false
+      with Not_found -> true
+    in
+    let lines = String.split_on_char '\n' text in
+    String.concat "\n" (List.filter keep lines)
+;;
+
 let run_test filename awe_flags awe_compile awe_messages awe_stdin awe_stdout awe_stderr awe_exitcode =
   print_endline filename;
   let s = String.sub filename 0 (String.index filename '.') in
@@ -159,7 +173,7 @@ let run_test filename awe_flags awe_compile awe_messages awe_stdin awe_stdout aw
     else
       0  (* i.e. try to ignore it *)
   in
-  let awe_compile' = read_whole_file "testme-compile" in
+  let awe_compile' = exclude_lines (read_whole_file "testme-compile") "requires executable stack" in
   let awe_messages' = read_whole_file "testme-messages" in
   let awe_stderr'  = read_whole_file "testme-stderr"  in
   let awe_stdout'  = read_whole_file "testme-stdout"  in
