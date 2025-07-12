@@ -1411,7 +1411,7 @@ and binary_expression (loc      : Location.t)
        - variables to hold STRING(n) VALUE parameters;
        - a variable to hold the result of the function call;
        - thunks for Name parameters;
-       - array descriptors for subarray designator parameters;
+       - thunks for subarray designator parameters;
        - thunks for statements and expressions passed as PROCEDURE parameters.
 
    - 'precall':
@@ -1554,9 +1554,9 @@ and add_call_parameter (scope : Scope.t)
                    INTEGER PROCEDURE P (INTEGER VALUE RESULT N)
      Algol call:   P(a(i))
      C call:       { int _p_arg1; 
-                     _p_arg1 = *_awe_array_SUB(_awe_HERE, int, &a, i); 
+                     _p_arg1 = *a(_awe_HERE, i); 
                      p(&_p_arg1); 
-                     *_awe_array_SUB(_awe_HERE, int, &a, i) = _p_arg1; }
+                     *a(_awe_HERE, i) = _p_arg1; }
 
      Note how the actual parameter designators get called twice: once before the 
      procedure is entered and once after. This is supposed to happen. See section 5.3.2.2. *)
@@ -1748,7 +1748,10 @@ and add_call_parameter (scope : Scope.t)
        C code:       p(a);  /* simple! */
 
        If the actual parameter is a subarray designator, ie. its actual parameter list contains stars 
-       (Cf. 7.3.1 and 7.3.2.3) then a "slice" of the array is passed.
+       (Cf. 7.3.1 and 7.3.2.3) then a new array access function is wrapped around a call to the array's 
+       original function.  The stars in the <subarray designator list> become the new function's subscripts. 
+       The non-star subscripts are evaluated outside of the function so that their expressions only get 
+       called once.
 
        If the actual parameter is an array designator, ie. it has an actual parameter list without stars,
        then it designates a single element of an array, which is a type error.
@@ -1757,17 +1760,21 @@ and add_call_parameter (scope : Scope.t)
                     PROCEDURE P ( REAL ARRAY ( *, * ) )
        Algol call:  P( A( *, i, *, j ) )
        C code:      {
-                      _awe_DECLARE_SLICE(_awe_at(<location>), _p_arg1, 4, {0}, {1, i}, {0}, {1, j});
-                      p(&_p_arg1);
+                      const int _p_arg1_sub1 = i;
+                      const int _p_arg1_sub3 = j;
+                      int *_p_arg1 (_awe_loc loc, int _p_arg1_sub0, int _p_arg1_sub2) { 
+                        return a(_awe_at(<location>), _p_arg1_sub0, _p_arg1_sub1, _p_arg1_sub2, _p_arg1_sub3); 
+                      }
+                      p(_p_arg1);
                     }
   *)
 
   | By_array (ftype, n_dimensions) -> 
-     ( let rec count_stars : Tree.t list -> int =
-         function
+     ( let rec count_stars (actuals : Tree.t list) : int =
+         match actuals with
          | [] -> 0
-         | Tree.STAR _ :: a' -> 1 + count_stars a'
-         | _ :: a' -> count_stars a'
+         | Tree.STAR _ :: actuals' -> count_stars actuals' + 1
+         | _ :: actuals' -> count_stars actuals'
        in
        match actual with
        | Tree.Identifier (loc, id) ->   (* not a subarray designator *)
@@ -1784,29 +1791,38 @@ and add_call_parameter (scope : Scope.t)
               if List.length actuals <> n_dimensions then
                 error loc "expected %s here, this is %s" (describe_formal formal) (describe_definition defn)
               else
-                let n_stars = count_stars actuals in 
-                let n_non_stars = n_dimensions - n_stars in 
-                if n_non_stars = n_dimensions then
-                  error loc "expected %s here, this designates a single array element" (describe_formal formal)
-                else if n_stars = n_dimensions then
-                  {call with args = call.args @$.Code.id array_id} (* all stars, therefore subarray = array *)
+                let (_, n_non_stars, constant_declarations, parameter_declarations, array_parameters) =
+                  List.fold_left
+                    ( fun (n, nn, cds, pds, aps) actual ->
+                        let parameter = "$_sub$" $$ [var; code_of_int n] in 
+                        match actual with
+                        | Tree.STAR _ ->
+                            ( n + 1, nn, 
+                              cds, 
+                              pds @$. ("int $" $$ [parameter]),
+                              aps @$. parameter)
+                        | expr ->
+                            let ecode = expression_expect integer scope expr in
+                            ( n + 1, nn + 1, 
+                              cds @$. ("const int $ = $;\n" $$ [parameter; ecode]), 
+                              pds,
+                              aps @$. parameter )
+                    )
+                    (0, 0, Code.empty, Code.empty, Code.empty)
+                    actuals
+                in
+                if n_non_stars = 0 || n_non_stars = n_dimensions then  (* not a subarray designator *)
+                  {call with args = call.args @$.Code.id array_id}
                 else
-                  let subarray_declaration =
-                    let slice_initializers =
-                      List.map
-                        ( function
-                          | Tree.STAR _ -> Code.string "{0}"
-                          | expr -> "{1, $}" $$ [expression_expect integer scope expr] )
-                        actuals
-                    in
-                    "_awe_array_DECLARE_SUBARRAY($, $, $, $, $);\n" $$
-                      [ code_of_loc loc;
-                        var;
-                        code_of_int n_dimensions;
-                        Code.id array_id;
-                        Code.separate "," slice_initializers ]
+                  let subarray_function =   (* otherwise we need to build a new access function *)
+                    "$$(_awe_loc loc, $) { 
+                     return $($, $); 
+                    }\n" $$ [ c_pointer_type ftype; var; parameter_declarations; 
+                             Code.id array_id; code_of_loc loc; array_parameters ]
                   in
-                  {call with decls = call.decls @$ subarray_declaration; args = call.args @$. var}
+                  { call with
+                      decls = call.decls @$  constant_declarations @$ subarray_function;
+                      args  = call.args  @$. var }
           | _ -> 
               error loc "expected %s here, this is %s" (describe_formal formal) (describe_definition defn)
           )
@@ -2068,13 +2084,11 @@ and designator_or_expression (flavour : designator_t)
       | Array (etype, ndims) ->
           if List.length actuals <> ndims then
             error loc "Array '%s' requires %i parameter%s" (Id.to_string id) ndims (if ndims = 0 then "" else "s") ;
-          Designator { t = etype;
-                       c = "$_awe_array_SUB($, $, $, $)" $$
-                             [ qualifier Pointer etype;
-                               code_of_loc loc;
-                               (match etype with String n when n > 1 -> Code.string "unsigned char" | t -> ctype t);
-                               Code.id id;
-                               Code.separate ", " (List.map (expression_expect integer scope) actuals)] }
+          let cdims = List.map (expression_expect integer scope) actuals in
+          Designator 
+            { t = etype;
+              c = "$$($, $)" $$ [qualifier Pointer etype; Code.id id; code_of_loc loc; Code.separate ", " cdims]
+            }
       | Field (field_type, field_class) ->
           let field_name = Id.to_string id in
           if List.length actuals <> 1 then
@@ -2514,9 +2528,10 @@ and add_procedure_functions (block : block_t) : block_t =
 
    INTEGER I      --->       int( *i)(void)  
 
-   Algol arrays are translated into pointers to array descriptors.
+   Algol arrays are translated into functions that calculate pointers to subscript variables.
+   The functions have an _awe_loc argument so that they can report out-of-bounds runtime errors.
 
-   INTEGER ARRAY A ( *, * )   --->   _awe_array_t *a
+   INTEGER ARRAY A ( *, * )   --->   int ( *a)(_awe_loc,int,int) 
 
    Procedure parameters require parameter lists of their own (this is a Awe language extension.)
    Algol W and Algol 60 leave the parameter lists undeclared, but I found that that didn't 
@@ -2587,9 +2602,17 @@ and add_formal_segment (scope : Scope.t) (formals : formal_parameters_t) (segmen
       List.fold_left 
         ( fun f id -> 
             assert (ndims > 0);
+            let cformal = 
+              let rec array_args = 
+                function
+                | 1 -> "int"
+                | n -> "int," ^ array_args (n - 1)
+              in 
+              "$$(_awe_loc, $)" $$ [c_pointer_type t; Code.id id; Code.string (array_args ndims)]
+            in
             { procedure_locals = set_local loc f.procedure_locals id (Array (t, ndims));
               formal_types     = f.formal_types @ [By_array (t, ndims)];
-              arguments        = f.arguments @$. ("_awe_array_t *$" $$ [Code.id id]) } )
+              arguments        = f.arguments @$. cformal } )
         formals
         ids
   | e -> 
@@ -2620,9 +2643,14 @@ and add_label_declarations (block : block_t) (block_body : Tree.t list) : block_
 
 (* ** Array declarations ---------------------------------------------------------------------  *)
 
-(* Algol W are not very like C arrays: they can be multidimensional;  
+(* Algol arrays are translated into functions that calculate pointers to subscript variables.
+
+   The functions have an _awe_loc argument so that they can report out-of-bounds runtime errors.
+
+   Arrays need all sorts of special temporary variables and initializations
+   because they are not very like C arrays: they can be multidimensional;  
    their bounds are set at runtime; they can have non-zero lower bounds;
-   and some are "subarrays" that select slices of other array's data.
+   and some are "subarrays" that select elements out of other array's data. 
 
    An example Algol declaration: 
 
@@ -2632,22 +2660,41 @@ and add_label_declarations (block : block_t) (block_body : Tree.t list) : block_
    surrounding C block they will be placed in (see 'block_t' and 'block' 
    for more details about blocks):
 
-   block.outsidescope: Array bounds calculations.
+   block.outsidescope: Array bounds calculations. Array bound check. 
 
-       _awe_array_bounds _a_bounds[] = {{x - 2, x + 2}, {0, 2 * x + 1}};
+       const int _a_lwb1 = x - 2, _a_upb1 = x + 2;
+       const int _a_lwb2 = 0, _a_upb2 = 2 * x + 1;
 
-   block.variables: this macro declares a block of memory and an array descriptor
-                    on the stack. The bounds are checked when the descriptor is
-                    initialized.
+       _awe_array_bounds_check(a, _awe_at(1,2,4), 1);  /* macros: don't require 'a' to be defined */
+       _awe_array_bounds_check(a, _awe_at(1,2,4), 2);
 
-       _awe_array_DECLARE(awe_loc(<location>), a, sizeof(void* ), 2, _a_bounds);
+   block.prototypes: The array subscript function's prototype.
 
-   block.initialization: Initialization of array elements. Arrays of references are 
-                         initialized with _awe_uninitialized_reference, for runtime 
-                         checking, other types of array are initialized with default 
-                         values if !Options.initialize_all == true.
+       auto void * * a (_awe_loc loc, int _sub1, int _sub2);
 
-       _awe_array_FILL(void*, &a, _awe_uninitialized_reference);
+   block.variables: C array to hold the Algol array's elements. It is variable length,
+                    see http://gcc.gnu.org/onlinedocs/gcc/Variable-Length.html
+                    String arrays will have an extra array-of-character dimension.
+
+       void * _a_array [_a_upb1 - _a_lwb1 + 1][_a_upb2 - _a_lwb2 + 1];
+
+   block.functions: Array subscript function.
+
+        void * * a (_awe_loc loc, int _sub1, int _sub2) 
+        {
+            _awe_array_range_check(a, 1);
+            _awe_array_range_check(a, 2);
+            return &_a_array[_sub1 - _a_lwb1][_sub2 - _a_lwb2];
+        }
+
+   block.initialization: Initialization of REFERENCE elements.
+
+        { 
+            int _sub1, _sub2;
+            for (_sub1 = _a_lwb1; _sub1 <= _a_upb1; ++_sub1)
+                for (_sub2 = _a_lwb2; _sub2 <= _a_upb2; ++_sub2) 
+                    _a_array[_sub1 - _a_lwb1][_sub2 - _a_lwb2] = _awe_uninitialized_reference;
+        }
 *)
 
 and add_array_declaration (loc     : Location.t)
@@ -2657,36 +2704,81 @@ and add_array_declaration (loc     : Location.t)
                           (id      : Id.t) 
                           : block_t =
 
+  let array_id = Code.id id in
+  let ndims = List.length bounds in
+
   let initialize_bounds =
-    let bound_pair (cl, cu) = "{$, $}" $$ [cl; cu] in
-    "_awe_array_bound_t _$_bounds[] = {$};\n" $$ [Code.id id; Code.separate ", " (List.map bound_pair bounds)]
+    let initialize_bound dim (cl, cu) =
+      "const int _$_lwb$ = $, _$_upb$ = $;\n" $$ [ array_id; code_of_int dim; cl; array_id; code_of_int dim; cu] 
+    in
+    Code.concat (mapi 1 initialize_bound bounds)
   in
   
   let array_variable =
-    " _awe_array_DECLARE($, $, $, $, _$_bounds);\n" $$
-      [ code_of_loc loc;
-        Code.id id;
-        sizeof_ctype elttype;
-        code_of_int (List.length bounds);
-        Code.id id ]
+    let bound i = "[_$_upb$ - _$_lwb$ + 1]" $$ [array_id; code_of_int i; array_id; code_of_int i] in
+    let bounds = Code.concat (mapn 1 ndims bound) in
+    match elttype with
+    | String n when n > 1 -> "unsigned char _$_array$[$];\n" $$ [array_id; bounds; code_of_int n]
+    | t -> "$ _$_array$;\n" $$ [ctype t; array_id; bounds]
+  in
+  
+  let header = 
+    let arg i = "int _sub$" $$ [code_of_int i] in
+    let args = Code.separate ", " (mapn 1 ndims arg) in
+    "$$(_awe_loc loc, $)" $$ [c_pointer_type elttype; array_id; args]
+  in
+  
+  let subscripts = 
+    let sub i = "[_sub$ - _$_lwb$]" $$ [code_of_int i; array_id; code_of_int i] in
+    Code.concat (mapn 1 ndims sub) 
+  in
+
+  let designator_function =
+    let subscript_range_check dim = 
+      "_awe_array_range_check($, $);\n" $$ [array_id; code_of_int dim] 
+    in
+    let element_ptr = address_of elttype ("_$_array$" $$ [array_id; subscripts]) in
+    "$ 
+     {
+       $return $;
+     }
+    " $$ [ header; Code.concat (mapn 1 ndims subscript_range_check); element_ptr ]
+  in
+  
+  let array_bounds_check =
+    let check dim = "_awe_array_bounds_check($, $, $);\n" $$ [array_id; code_of_loc loc; code_of_int dim] in
+    Code.concat (mapn 1 ndims check)
+  in
+
+  (* Initialization is usually only done on reference variables. *)
+
+  let initialization_loops () =
+    let for_loop_var n = "_sub$" $$ [code_of_int n] in
+    let for_loop n = 
+      let cn = code_of_int n in
+      "for (_sub$ = _$_lwb$; _sub$ <= _$_upb$; ++_sub$)" $$ [cn; array_id;cn; cn; array_id;cn; cn]
+    in
+    let element = "_$_array$" $$ [array_id; subscripts] in
+    "{ int $;\n$\n$}
+     " $$ [ Code.separate ", " (mapn 1 ndims for_loop_var); 
+            Code.separate "\n" (mapn 1 ndims for_loop);
+            optionally_initialize_simple elttype element ]
   in
 
   let element_initialization =
+    if !Options.initialize_all then initialization_loops ()
+    else
       match elttype with
-      | Reference _ ->
-         "_awe_array_FILL(void*, $, _awe_uninitialized_reference);\n" $$ [Code.id id]
-      | String n when n > 1 && !Options.initialize_all ->
-         "_awe_array_FILL_WITH_SPACES($);\n" $$ [Code.id id]
-      | _ when !Options.initialize_all ->
-         "_awe_array_FILL($, $, $);\n" $$ [ctype elttype; Code.id id; default elttype]
-      | _ ->
-         Code.empty
+      | Reference _  -> initialization_loops ()
+      | _ -> Code.empty
   in
   
   { block with
-      scope          = set loc block.scope id (Array (elttype, List.length bounds)); 
-      outsidescope   = block.outsidescope   @$ initialize_bounds;
+      scope          = set loc block.scope id (Array (elttype, ndims)); 
+      outsidescope   = block.outsidescope   @$ initialize_bounds @$ array_bounds_check;
       variables      = block.variables      @$ array_variable;
+      prototypes     = block.prototypes     @$ ("auto $;\n" $$ [header]);
+      functions      = block.functions      @$ designator_function;
       initialization = block.initialization @$ element_initialization }
 
 (* end *)

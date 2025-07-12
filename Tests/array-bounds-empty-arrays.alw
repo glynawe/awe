@@ -5,7 +5,7 @@ begin
    a(0) := 1;
 end.
 ----stderr
-Tests/array-bounds-empty-arrays.alw:5:4: array subscript error: subscript 1 = 0, outside the range (0::-1)
+Tests/array-bounds-empty-arrays.alw:5:4: array subscript error: subscript 1 of 'a' = 0, of empty array range (0::-1)
 ----exitcode
 1
 ----end  

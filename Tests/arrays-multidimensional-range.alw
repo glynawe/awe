@@ -10,7 +10,7 @@ begin
     assert(a(3,11) = 0);  comment Uh oh;
 end.
 ----stderr
-Tests/arrays-multidimensional-range.alw:10:12: array subscript error: subscript 2 = 11, outside the range (1::10)
+Tests/arrays-multidimensional-range.alw:10:12: array subscript error: subscript 2 of 'a' = 11, outside the range (1::10)
 ----exitcode
 1
 ----end  

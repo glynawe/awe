@@ -23,7 +23,7 @@ end.
              2
              1
 ----stderr
-Tests/array-bounds.alw:10:13: array dimension error: dimension 1 is (1::-1)
+Tests/array-bounds.alw:10:13: array bounds error: bound 1 of 'a' is (1::-1) here
 ----exitcode
 1
 ----end  

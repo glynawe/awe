@@ -83,7 +83,7 @@ CFLAGS += -DNO_GC
 endif
 
 HEADERS = awe.h aweio.h
-SOURCES = aweexcept.c aweio.c awe.c awestd.c awestr.c awearray.c
+SOURCES = aweexcept.c  aweio.c awe.c awestd.c  awestr.c
 
 OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
 
