@@ -34,9 +34,9 @@ default: test
 install:
 	install -m 755 -d $(BINDIR) $(LIBDIR) $(INCDIR) $(DOCDIR) $(MANDIR1) $(MANDIR7)
 	install -m 755 awe      $(BINDIR)
-	install -m 644 awe.h    $(INCDIR)
-	install -m 644 aweio.h  $(INCDIR)
-	install -m 644 libawe.a $(LIBDIR)
+	install -m 644 libawe/awe.h    $(INCDIR)
+	install -m 644 libawe/aweio.h  $(INCDIR)
+	install -m 644 libawe/libawe.a $(LIBDIR)
 	install -m 644 awe.mk   $(INCDIR)
 	install -m 644 awe.html $(DOCDIR)
 	install -m 644 awe.1    $(MANDIR1)
@@ -57,7 +57,10 @@ uninstall:
 # ------------------------------------------------------------------------------
 # Build everything
 
-build: libawe.a awe manpages
+build : libawe awe manpages
+
+libawe:
+	make -C libawe build 
 
 awe:
 	make -f Makefile.awe byte-code
@@ -181,6 +184,7 @@ INSTALL.html: INSTALL.md markdown-to-html.py github-markdown.css
 # ------------------------------------------------------------------------------
 
 clean:
+	make -C libawe clean
 	make -f Makefile.testparsing clean
 	make -f Makefile.awe clean
 	for d in $(TESTS) ; do make clean -I $(shell pwd) -C $$d ; done

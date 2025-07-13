@@ -1,5 +1,6 @@
 /awe.1
 /awe.mk.7
+/_build
 *.o
 *.cmi
 *.cmo
@@ -52,3 +53,8 @@ actual*.output
 testme*
 a.out
 x.c
+libawe/libawe.a
+.gitignore
+libawe/scanner.inc
+libawe/scanner.dot
+awe.opam
