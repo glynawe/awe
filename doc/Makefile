@@ -30,9 +30,16 @@ awe.html: awe.md markdown-to-html.py github-markdown.css
 INSTALL.html: ../INSTALL.md markdown-to-html.py github-markdown.css
 	python3 markdown-to-html.py ../INSTALL.md INSTALL.html
 
+algolw.pdf: algolw.tex
+	pdflatex algolw
+	pdflatex algolw
+	pdflatex algolw
+
 github-markdown.css:
 	cp ../github-markdown.css .
 
 clean:
 	rm -f awe.1 awe.mk.7 awe.html awe.1.html awe.mk.7.html INSTALL.html
 	rm -f github-markdown.css
+	rm -f algolw.aux algolw.fdb_latexmk algolw.fls algolw.log algolw.toc algolw.synctex.gz special.idx syntax.idx
+#	rm -f algol.pdf

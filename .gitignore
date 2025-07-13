@@ -65,3 +65,15 @@ doc/awe.mk.7
 doc/awe.mk.7.html
 doc/github-markdown.css
 doc/INSTALL.html
+doc/algolw.aux
+doc/algolw.fdb_latexmk
+doc/algolw.fls
+doc/algolw.log
+doc/algolw.toc
+doc/special.idx
+doc/syntax.idx
+doc/special.ilg
+doc/special.ind
+doc/syntax.ilg
+doc/syntax.ind
+doc/algolw.synctex.gz
