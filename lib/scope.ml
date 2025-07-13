@@ -46,8 +46,6 @@ struct
 
   let redefine block id defn = 
     Table.IdMap.add id defn (Table.IdMap.remove id block)
-
-  let fold = Table.IdMap.fold
 end
  
 

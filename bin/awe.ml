@@ -21,7 +21,7 @@ License along with Awe.  If not, see <http://www.gnu.orglicenses/>.
 
 open Lexing ;;
 open Printf ;;
-
+open Awe ;;
 
 let usage : string = "\nUsage: awe [source.alw...] [-o executable | -c output.c | -p output.c]\n"
 
@@ -145,7 +145,7 @@ let command_line () : string list * operation_t * string =
 
   let addfile f = source_files := !source_files @ [f] in
 
-  let rec executable_filename filenames = 
+  let executable_filename filenames = 
     let lastname = List.hd (List.rev filenames) in
     try 
       Filename.chop_extension lastname

@@ -333,7 +333,7 @@ let rec last (xs : 'a list) : 'a =
   match xs with 
   | []       -> failwith "last"
   | [x]      -> x
-  | x :: xs' -> last xs'
+  | _ :: xs' -> last xs'
 
 
 (* Returns the best location to report an error. *)

@@ -27,11 +27,9 @@ type t = int
 
 let compare a b = a - b
 
-let exception_class = (Table.Id.create "_awe_class_0_exception", "exception")
-
 let global_class_array = DynArray.create (Table.Id.dummy, "")
 
-let create loc id = 
+let create _loc id = 
   let name = Table.Id.to_string id in
   let number = DynArray.length global_class_array in
   let global_id = Table.Id.create (Printf.sprintf "_awe_class_%i_%s" number name) in

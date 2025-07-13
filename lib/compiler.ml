@@ -240,7 +240,7 @@ let simple (scope : Scope.t) (tree : Tree.t) : Type.simple_t =
   | Tree.STRING (None)        -> String 16
   | Tree.BITS None            -> Bits 32
   | Tree.BITS (Some width)    -> Bits width
-  | Tree.REFERENCE (loc, [])  -> 
+  | Tree.REFERENCE (_loc, [])  -> 
       failwith "Compiler.simple: tree is Tree.REFERENCE with no ids."
   | Tree.REFERENCE (loc, [id]) ->
       ( match get loc scope id with
@@ -581,7 +581,7 @@ and separate_procedure (procedure : Tree.t) : Code.t =
    * A list of string declarations for each record class in the program, pointers to these 
      are used to identify records' classes at runtime (see the 'References' section of "awe.h")  *)
 
-and c_program_headers (tree : Tree.t) : Code.t =
+and c_program_headers (_tree : Tree.t) : Code.t =
   let class_name_code =
     let decls = 
       List.map 
@@ -754,14 +754,14 @@ and expression (scope : Scope.t) (tree : Tree.t) : typed_code_t =
 
   (* The real and exponent parts of an Algol real number are reassembled into a C floating point constants.*)
 
-  | Tree.Real          (loc, r, "") -> {t = Number(Short, Real);    c = Code.string r}
-  | Tree.Real          (loc, r, e)  -> {t = Number(Short, Real);    c = Code.string (sprintf "%se%s" r e)}
-  | Tree.LongReal      (loc, r, "") -> {t = Number(Long, Real);     c = Code.string r}
-  | Tree.LongReal      (loc, r, e)  -> {t = Number(Long, Real);     c = Code.string (sprintf "%se%s" r e)}
-  | Tree.Imaginary     (loc, r, "") -> {t = Number(Short, Complex); c = Code.string (r ^ "i")}
-  | Tree.Imaginary     (loc, r, e)  -> {t = Number(Short, Complex); c = Code.string (sprintf "%se%si" r e)}
-  | Tree.LongImaginary (loc, r, "") -> {t = Number(Long, Complex);  c = Code.string (r ^ "i")}
-  | Tree.LongImaginary (loc, r, e)  -> {t = Number(Long, Complex);  c = Code.string (sprintf "%se%si" r e)}
+  | Tree.Real          (_, r, "") -> {t = Number(Short, Real);    c = Code.string r}
+  | Tree.Real          (_, r, e)  -> {t = Number(Short, Real);    c = Code.string (sprintf "%se%s" r e)}
+  | Tree.LongReal      (_, r, "") -> {t = Number(Long, Real);     c = Code.string r}
+  | Tree.LongReal      (_, r, e)  -> {t = Number(Long, Real);     c = Code.string (sprintf "%se%s" r e)}
+  | Tree.Imaginary     (_, r, "") -> {t = Number(Short, Complex); c = Code.string (r ^ "i")}
+  | Tree.Imaginary     (_, r, e)  -> {t = Number(Short, Complex); c = Code.string (sprintf "%se%si" r e)}
+  | Tree.LongImaginary (_, r, "") -> {t = Number(Long, Complex);  c = Code.string (r ^ "i")}
+  | Tree.LongImaginary (_, r, e)  -> {t = Number(Long, Complex);  c = Code.string (sprintf "%se%si" r e)}
 
   (* STRING constants. The type "_awe_str" is "char *" but C string constants are "const char *". 
      In some places (only conditional expressions, it appears) that would cause a type mismatch, 
@@ -819,7 +819,7 @@ and expression (scope : Scope.t) (tree : Tree.t) : typed_code_t =
      suggesting that the eariler compiler did not insist on it - so Awe does not either.
 *)
 
-  | Tree.IF (loc, condition, then_clause) -> 
+  | Tree.IF (_loc, condition, then_clause) -> 
       let cc = expression_expect Logical scope condition in
       let ct = expression_expect Statement scope then_clause in 
       { t = Statement; 
@@ -911,7 +911,7 @@ and expression (scope : Scope.t) (tree : Tree.t) : typed_code_t =
 
 (* ** Iterative statements: WHILE, FOR - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *)
 
-  | Tree.WHILE (loc, condition, then_clause) -> 
+  | Tree.WHILE (_loc, condition, then_clause) -> 
       let cc = expression_expect Logical scope condition in
       let ct = expression_expect Statement scope then_clause in
       { t = Statement; 
@@ -1052,14 +1052,14 @@ and expression (scope : Scope.t) (tree : Tree.t) : typed_code_t =
         | Control                            -> {t = integer; c = Code.id id}
         | Procedure procedure_type           -> procedure_call loc scope id procedure_type []
         | Record (record_class, field_types) -> reference_expression loc scope id record_class field_types []
-        | Standard st  -> error loc "this standard I/O procedure requires one or more actual parameters" 
+        | Standard _  -> error loc "this standard I/O procedure requires one or more actual parameters" 
         | Analysis _   -> error loc "this procedure requires an actual parameter"
         | Array (_, _) -> error loc "this array requires subscripts" 
         | Field (_, _) -> error loc "Record fields expect one actual parameter"
         | Label        -> error loc "expected an expression here, this is a GOTO label" )
   | Tree.Parametrized (loc, id, actuals) as tree ->
       ( match (get loc scope id) with
-        | Array (etype, ndims) ->
+        | Array (_etype, _ndims) ->
             designator Lvalue scope tree
         | Procedure procedure_type  -> 
             procedure_call loc scope id procedure_type actuals
@@ -1067,7 +1067,7 @@ and expression (scope : Scope.t) (tree : Tree.t) : typed_code_t =
             standard_procedure loc scope stdproc actuals
         | Record (record_class, field_types) ->
             reference_expression loc scope id record_class field_types actuals
-        | Field (rtype, class_number) ->
+        | Field (_rtype, _class_number) ->
             designator Lvalue scope tree
         | Analysis t ->
             if List.length actuals = 1 then
@@ -1874,7 +1874,7 @@ and reference_expression (loc          : Location.t)
   if n_actuals <> 0 && n_actuals <> n_fields then
     error loc "%s expects 0 or %d parameters" (Id.to_string record_id) n_fields
   else 
-    let declarations, assignments, parameters, count = 
+    let declarations, assignments, parameters, _count = 
       if n_actuals = 0 then
         let f (declarations, assignments, parameters, count) field_t =
           match field_t with
@@ -2178,7 +2178,7 @@ and add_declaration (block : block_t) (decl : Tree.t) : block_t =
   | Tree.PROCEDURE (_, _, _, _, _) as procedure -> 
       add_procedure_declaration procedure block
 
-  | Tree.RECORD (loc, id, []) ->  (* previously defined by 'add_record_declaration' *)
+  | Tree.RECORD (_, _, []) ->  (* previously defined by 'add_record_declaration' *)
       block
 
   | Tree.RECORD (loc, id, fields) -> 
@@ -2297,7 +2297,7 @@ and add_record_declaration (loc : Location.t)
     List.fold_left 
       ( fun ds decl ->
           match decl with
-          | Tree.Simple (loc, t, ids) -> 
+          | Tree.Simple (_, t, ids) -> 
               let t = simple block.scope t in
               let fields = List.map (fun id -> (t, id)) ids in
               ds @ fields

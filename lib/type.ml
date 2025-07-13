@@ -175,8 +175,8 @@ and describe_formal =
   | By_value t -> describe_simple t ^ " VALUE parameter"
   | By_result t -> describe_simple t ^ " RESULT parameter"
   | By_value_result t -> describe_simple t ^ " VALUE RESULT parameter"
-  | By_procedure (Statement, fs) -> sprintf "a PROCEDURE parameter"
-  | By_procedure (t, fs) -> sprintf "%s PROCEDURE parameter" (describe_simple t)
+  | By_procedure (Statement, _) -> sprintf "a PROCEDURE parameter"
+  | By_procedure (t, _) -> sprintf "%s PROCEDURE parameter" (describe_simple t)
   | By_array (t, d) -> sprintf "a %i dimensional %s ARRAY parameter" d (string_of_simple t)
 
 and describe_procedure =
