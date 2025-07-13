@@ -58,3 +58,10 @@ libawe/libawe.a
 libawe/scanner.inc
 libawe/scanner.dot
 awe.opam
+doc/awe.1
+doc/awe.1.html
+doc/awe.html
+doc/awe.mk.7
+doc/awe.mk.7.html
+doc/github-markdown.css
+doc/INSTALL.html

@@ -15,17 +15,19 @@ DOCDIR = $(BASEDIR)/share/doc/awe
 MANDIR1 = $(BASEDIR)/share/man/man1
 MANDIR7 = $(BASEDIR)/share/man/man7
 
+export BINDIR LIBDIR DOCDIR INCDIR MANDIR1 MANDIR7
+
 # The default Makefile action is to do a re-build and perform all the tests
 
 .PHONY: default
-default: test
+default: build
 
 # Useful targets:
 
 .PHONY: build
 .PHONY: install uninstall
 .PHONY: test
-.PHONY: manpages webpages
+.PHONY: doc
 .PHONY: clean
 .PHONY: zip
 
@@ -37,10 +39,10 @@ install:
 	install -m 644 libawe/awe.h    $(INCDIR)
 	install -m 644 libawe/aweio.h  $(INCDIR)
 	install -m 644 libawe/libawe.a $(LIBDIR)
-	install -m 644 awe.mk   $(INCDIR)
-	install -m 644 awe.html $(DOCDIR)
-	install -m 644 awe.1    $(MANDIR1)
-	install -m 644 awe.mk.7 $(MANDIR7)
+	install -m 644 doc/awe.mk   $(INCDIR)
+	install -m 644 doc/awe.html $(DOCDIR)
+	install -m 644 doc/awe.1    $(MANDIR1)
+	install -m 644 doc/awe.mk.7 $(MANDIR7)
 	install -m 644 github-markdown.css $(DOCDIR)
 
 uninstall:
@@ -57,15 +59,16 @@ uninstall:
 # ------------------------------------------------------------------------------
 # Build everything
 
-build : libawe awe manpages
+build : libawe awe doc
 
 libawe:
 	make -C libawe build 
 
 awe:
-	make -f Makefile.awe byte-code
-	make test -C Tools
+	dune build
 
+doc:
+	make -C doc 
 
 # ------------------------------------------------------------------------------
 # Build libawe.a
@@ -152,39 +155,10 @@ endif
 
 
 # ------------------------------------------------------------------------------
-# Preprocess the documentation
-
-manpages: awe.1 awe.mk.7 awe.html github-markdown.css
-
-webpages: manpages awe.1.html awe.mk.7.html INSTALL.html
-
-awe.1 : man.py awe.1.md VERSION
-	python3 man.py awe.1.md awe.1 \
-                      VERSION="$(shell cat VERSION)" \
-                      BINDIR="$(BINDIR)" LIBDIR="$(LIBDIR)" DOCDIR="$(DOCDIR)" INCDIR="$(INCDIR)"
-
-awe.mk.7 : man.py awe.mk.7.md VERSION
-	python3 man.py awe.mk.7.md awe.mk.7 \
-                      VERSION="$(shell cat VERSION)" \
-                      BINDIR="$(BINDIR)" LIBDIR="$(LIBDIR)" DOCDIR="$(DOCDIR)" INCDIR="$(INCDIR)"
-
-awe.1.html: awe.1 htmltext.py
-	MANWIDTH=80 man ./awe.1 | python3 htmltext.py "awe(1): Awe ALGOL W compiler man page" > awe.1.html
-
-awe.mk.7.html: awe.mk.7 htmltext.py
-	MANWIDTH=80 man ./awe.mk.7 | python3 htmltext.py "awe.mk(7): Awe ALGOL W Makefile man page" > awe.mk.7.html
-
-awe.html: awe.md markdown-to-html.py github-markdown.css
-	python3 markdown-to-html.py awe.md awe.html
-
-INSTALL.html: INSTALL.md markdown-to-html.py github-markdown.css
-	python3 markdown-to-html.py INSTALL.md INSTALL.html
-
-
-# ------------------------------------------------------------------------------
 
 clean:
 	make -C libawe clean
+	make -C doc clean
 	make -f Makefile.testparsing clean
 	make -f Makefile.awe clean
 	for d in $(TESTS) ; do make clean -I $(shell pwd) -C $$d ; done

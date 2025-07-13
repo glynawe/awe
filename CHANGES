@@ -1,3 +1,7 @@
+July 2025:
+
+* Changed array indexing back to thunks.
+
 Wednesday, January 24 2024:
 
 * Improvements to analysis functions thank to Nicholas Brouard.
