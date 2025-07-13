@@ -20,7 +20,7 @@ License along with Awe.  If not, see <http://www.gnu.org/licenses/>.
 *)
 
 { open Printf
-  open Lexing
+  open Awe
 
   let rstrip s =
     let rec loop = function
@@ -29,8 +29,6 @@ License along with Awe.  If not, see <http://www.gnu.org/licenses/>.
       | i -> (String.sub s 0 (i + 1))
     in
     loop (String.length s - 1)
-
-  let error_count = ref 0 
 }
 
 let spaces = [' ' '\t']+
@@ -70,7 +68,6 @@ rule test entry_point error_count file_name line_number =
       { fprintf stderr "File %S, line %i:\ntest file syntax error\n" file_name line_number ;
         (error_count + 1) }
       
-
 { 
   let usage = "Usage:\n test-parsing --test (declarations|expressions) <test-file-name> ...\n"
 
@@ -102,3 +99,4 @@ rule test entry_point error_count file_name line_number =
       ( fprintf stderr "*** %i incorrectly parsed productions ***\n" error_count ;
         exit 1 )
 }
+      

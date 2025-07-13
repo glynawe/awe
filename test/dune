@@ -1,2 +1,16 @@
+(ocamllex testparsing)
+
 (test
- (name test_awe))
+ (name testparsing)
+ (modules testparsing)
+ (libraries awe)
+ (deps (glob_files parser-suite/*.dat))
+ (action 
+  (progn 
+  (run %{test} --test expressions  
+   parser-suite/parser-lexing.dat
+   parser-suite/parser-lexing-operators.dat
+   parser-suite/parser-expressions.dat
+   parser-suite/parser-statements.dat)
+  (run %{test} --test declarations 
+   parser-suite/parser-declarations.dat))))

@@ -71,41 +71,6 @@ doc:
 	make -C doc 
 
 # ------------------------------------------------------------------------------
-# Build libawe.a
-
-# Awe programs require an executable stack for call-by-name
-# "-z execstack" suppresses a warning from the GCC linker
-# See: https://www.redhat.com/en/blog/linkers-warnings-about-executable-stacks-and-segments
-
-CFLAGS=-std=gnu11 -z execstack -Wall -Wextra -Werror -Wno-format-truncation
-LDFLAGS += -z execstack
-
-# In Cygwin GC_ALLOC crashes when used inside nested GCC auto functions.
-# This is a very obscure bug that the Cygwin maintainers WONTFIX.
-ifeq ($(shell uname -o),Cygwin)
-$(warning "Compiling a runtime library that does not use libgc.")
-NO_GC=1
-CFLAGS += -DNO_GC
-endif
-
-HEADERS = awe.h aweio.h
-SOURCES = aweexcept.c  aweio.c awe.c awestd.c  awestr.c
-
-OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
-
-$(OBJECTS) : $(HEADERS)
-
-aweio.o: aweio.c scanner.inc
-
-scanner.inc: scanner.py
-	python3 scanner.py
-
-libawe.a: $(OBJECTS)
-	rm -f libawe.a
-	ar -cr libawe.a $(OBJECTS)
-
-
-# ------------------------------------------------------------------------------
 # test everything
 
 test: clean build test-parsing test-suite test-programs test-examples webpages
@@ -127,11 +92,7 @@ EXAMPLES = Examples/*
 .PHONY: test-parsing test-suite test-programs test-examples
 
 test-parsing:
-	make -f Makefile.testparsing
-	./testparsing --test expressions  Tests/parser-lexing*.dat 
-	./testparsing --test expressions  Tests/parser-expressions*.dat 
-	./testparsing --test expressions  Tests/parser-statements*.dat 
-	./testparsing --test declarations Tests/parser-declarations*.dat 
+	dune test
 
 test-suite:
 	ocaml -I +str ./testprograms.ml -h Tests/*.alw
@@ -165,35 +126,11 @@ clean:
 	for d in $(EXAMPLES) ; do make clean -I $(shell pwd) -C $$d ; done
 	make -C Tools clean
 	rm -f Tests/*.awe.c 
-	rm -f scanner.inc scanner.dot
-	rm -f *.o *.a
-	rm -f awe
-	rm -f awe.1 awe.mk.7 awe.html awe.1.html awe.mk.7.html INSTALL.html
-	rm -f awe.tar.gz
 	rm -f testme testme-*
-	rm -f awe.zip awe.tar.gz
+	rm -f awe.zip
 
 # ------------------------------------------------------------------------------
 
 zip:
 	git archive --format=zip --prefix=awe/ -o awe.zip HEAD
 
-# ------------------------------------------------------------------------------
-
-
-# This file is part of Awe. Copyright 2012 Glyn Webster.
-# 
-# Awe is free software: you can redistribute it and/or modify it
-# under the terms of the GNU General Public License as published
-# by the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# Awe is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public
-# License along with Awe.  If not, see <http://www.gnu.org/licenses/>.
-
-#end
