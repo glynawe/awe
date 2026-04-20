@@ -86,6 +86,7 @@ let assignment_compatible dest src =
   |  String l1,         String l2         -> l1 >= l2
   |  Reference x,       Reference y       -> ClassSet.inter x y <> ClassSet.empty
   |  Reference _,       Null              -> true
+  |  Null,              Null              -> true
   |  Logical,           Logical           -> true
   |  Bits _,            Bits _            -> true
   |  _,                 _                 -> false
@@ -128,6 +129,7 @@ let triplet_rule t1 t2 =
   | Logical,           Logical           -> Logical
   | Bits w1,           Bits w2           -> Bits (max w1 w2)
   | Statement,         Statement         -> Statement
+  | Null,              Null              -> Null
   | _,                 _                 -> raise Incompatible
 
 

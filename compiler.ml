@@ -154,7 +154,7 @@ exception Error of Location.t * string
 
 let error loc = Printf.ksprintf (fun message -> (raise (Error(loc, message))))
 
-let warning loc = Printf.kprintf (fun message -> prerr_endline (Location.to_string loc ^ " " ^ message))
+let warning loc = Printf.ksprintf (fun message -> prerr_endline (Location.to_string loc ^ " " ^ message))
 
 let output = Printf.printf
 

@@ -12,6 +12,7 @@ actual*.output
 .hgignore
 ._d
 ._bcdi
+_build
 .vscode
 .idea
 /scratch
@@ -52,3 +53,4 @@ actual*.output
 testme*
 a.out
 x.c
+_build/.db

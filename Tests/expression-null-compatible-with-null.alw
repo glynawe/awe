@@ -1,0 +1,11 @@
+begin
+    record rec (integer i);
+    reference(rec) r;
+    logical b;
+    r := null;
+    b := true;
+    assert (null = null);
+    assert ((if b then r else null) = null);
+    assert (null = null);
+    assert ((if true then null else null) = null);
+end
