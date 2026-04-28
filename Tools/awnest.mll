@@ -1,4 +1,4 @@
-(* awnest.mll -- Algol W block nesting annotater
+(* awnest.mll -- Algol W block nesting annotator
 
 (Note this "awnest.mll" source is the complete program, 
 "awnest.ml" is just a temporary output file.)

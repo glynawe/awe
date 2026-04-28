@@ -338,7 +338,7 @@ extern unsigned char _awe_latin1_of_ebcdic [256];
 
 extern unsigned char _awe_return_string [256];
 
-/* Copy a styring into the buffer, and return a pointer to the buffer. 
+/* Copy a string into the buffer, and return a pointer to the buffer. 
    External procedures must call this to return string values. */
 
 _awe_str _awe_string (_awe_str src, int srclen);

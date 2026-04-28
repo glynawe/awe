@@ -44,7 +44,7 @@ module Id : sig
   val compare   : t -> t -> int
   val eq        : t -> t -> bool
 
-  val dummy : t  (* an identifer that is never used *)
+  val dummy : t  (* an identifier that is never used *)
 end
 
 

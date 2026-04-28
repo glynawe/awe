@@ -12,7 +12,7 @@ A summary of the markup commands you can use in your src file:
 
     # PAGE TITLE / program name / program description
     ## heading
-    *itatics*
+    *italics*
     **bold**
     `monospace`
     {{MACRO}}
@@ -36,7 +36,7 @@ for arg in sys.argv[3:]:
 repls = [
     (r'^###? +(.+?)$', r'.SH "\1"'),         # ## heading
     (r'\*\*(.+?)\*\*', r'\\fB\1\\fR'),       # **bold**
-    (r'\*(.+?)\*',     r'\\fI\1\\fR'),       # *itatics*
+    (r'\*(.+?)\*',     r'\\fI\1\\fR'),       # *italics*
     (r'`(.+?)`',       r'\\fI\1\\fR'),       # `monospace`
     (r'^(.+?) -$',     r'\n.TP\n.B \1'),     # definition -
     (r'^# +(.+?) */ *(.+?) */ *(.+?) *$',

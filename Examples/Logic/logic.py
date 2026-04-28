@@ -77,10 +77,10 @@ A  ⇔  A
 A ∨ A  ⇔  A   //Idempotence
 A ∧ A  ⇔  A
 
-A ∧ B ⇔ B ∧ A   //Commutati∨ity
+A ∧ B ⇔ B ∧ A   //Commutativity
 A ∨ B ⇔ B ∨ A
 
-A ∧ (B ∧ C)  ⇔  (A ∧ B) ∧ C   //Associati∨ity
+A ∧ (B ∧ C)  ⇔  (A ∧ B) ∧ C   //Associativity
 A ∨ (B ∨ C)  ⇔  (A ∨ B) ∨ C
 
 A ∧ (B ∨ C)  ⇔  A ∧ B ∨ A ∧ C     //Distributivity

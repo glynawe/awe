@@ -13,7 +13,7 @@ def usage():
     # TITLE 1 / program name / short program description
 
     ## heading
-    *itatics*
+    *italics*
     **bold**
     `monospace`
     {{MACRO}}
@@ -41,7 +41,7 @@ for arg in sys.argv[3:]:
 repls = [
     (r'^###? +(.+?)$', r'.SH "\1"'),         # ## heading
     (r'\*\*(.+?)\*\*', r'\\fB\1\\fR'),       # **bold**
-    (r'\*(.+?)\*',     r'\\fI\1\\fR'),       # *itatics*
+    (r'\*(.+?)\*',     r'\\fI\1\\fR'),       # *italics*
     (r'`(.+?)`',       r'\\fI\1\\fR'),       # `monospace`
     ('^(.+?) *\n: +',    '\n.TP\n.B \\1\n'),     # definition
     (r'^# +(.+?) */ *(.+?) */ *(.+?) *$',

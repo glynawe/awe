@@ -16,7 +16,7 @@
 
   Algol W I/O is line oriented (a card reader and a printer!), so getc
   reads from a string, which is read from the card reader when required,
-  and putcf writes to strings, which are writen to the printer when full or
+  and putcf writes to strings, which are written to the printer when full or
   when a NEWLINE is put.
 
   Algol W (1972 version) does not have access to a file system, 
@@ -292,7 +292,7 @@ end;
 % islower -- true if c is lower case letter %
 logical procedure islower (integer value c);
 begin
-        % These are ECBDIC codes %
+        % These are EBCDIC codes %
         (c >= 129) and (c <= 137) or  % a..i %
         (c >= 145) and (c <= 153) or  % j..r %
         (c >= 162) and (c <= 169)     % s..z %
@@ -303,7 +303,7 @@ end;
 % isupper -- true if c is upper case letter %
 logical procedure isupper (integer value c);
 begin
-        % These are ECBDIC codes %
+        % These are EBCDIC codes %
         (c >= 193) and (c <= 201) or  % A..I %
         (c >= 209) and (c <= 217) or  % J..R %
         (c >= 226) and (c <= 233)     % S..Z %
@@ -314,7 +314,7 @@ end;
 % isdigit -- true if c is a digit %
 logical procedure isdigit (integer value c);
 begin
-        % These are ECBDIC codes %
+        % These are EBCDIC codes %
         (c >= 240) and (c <= 249)  % 0..9 %
 end;
 
@@ -323,7 +323,7 @@ end;
 % tolower -- convert a character to its lowercase form %
 integer procedure tolower (integer value c);
 begin
-        % Works on ECBDIC codes %
+        % Works on EBCDIC codes %
         if (isupper(c)) then (c - 64) else c
 end tolower;
 

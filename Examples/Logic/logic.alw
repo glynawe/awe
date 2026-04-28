@@ -18,7 +18,7 @@ PROCEDURE stderr;
    IOCONTROL(50001);  % redirect output to stderr (an Awe extension) %
 
 
-% NOTE: Algol W uses ECBDIC character codes! %
+% NOTE: Algol W uses EBCDIC character codes! %
 
 BOOLEAN PROCEDURE is_letter(STRING(1) VALUE c);
    c >= "a" AND c <= "i" OR

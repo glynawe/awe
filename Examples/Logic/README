@@ -1,4 +1,4 @@
-This is a toy intepreter for predicates (boolean expressions).
+This is a toy interpreter for predicates (boolean expressions).
 It produces a table of all possible valuations. You can put in
 multiple predicates separated by commas, all of them will be
 shown in the right hand columns.

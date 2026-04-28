@@ -130,7 +130,7 @@ let empty_actual_parameters =
 (* * Support functions ---------------------------------------------------------------- *)
 
 
-(* Shorthand for constucting C code scraps. *)
+(* Shorthand for constructing C code scraps. *)
 
 let ($$) template args = Code.template template args
 let (@$) a b = Code.add a b
@@ -183,7 +183,7 @@ let mapn (first : int) (last : int) (f : int -> 'a) : 'a list =
   loop last []
 
 
-(* 'snip_last' seperates the last element from the rest of a list *)
+(* 'snip_last' separates the last element from the rest of a list *)
 
 let snip_last (xs : 'a list) : ('a list * 'a) =
   match List.rev xs with
@@ -377,7 +377,7 @@ let cast (loc : Location.t) (t : simple_t) (e : typed_code_t) : Code.t =
 
 
 (* 'default t' return the C code value for initializing variable of simple type 't'. 
-   Record reference variables must be initalized to "_awe_uninitialized_reference" so that the runtime 
+   Record reference variables must be initialized to "_awe_uninitialized_reference" so that the runtime 
    can catch stray pointer errors.  Most of the rest are rarely used. *)
 
 let default (t : simple_t) : Code.t =
@@ -816,7 +816,7 @@ and expression (scope : Scope.t) (tree : Tree.t) : typed_code_t =
 
      The THEN branch of an IF THEN ELSE statement should be a <simple statement> 
      (see section 7.5.1), but Hendrik Boom's A68H code does not obey that rule, 
-     suggesting that the eariler compiler did not insist on it - so Awe does not either.
+     suggesting that the earlier compiler did not insist on it - so Awe does not either.
 *)
 
   | Tree.IF (loc, condition, then_clause) -> 
@@ -847,7 +847,7 @@ and expression (scope : Scope.t) (tree : Tree.t) : typed_code_t =
 (* ** CASE - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *)
 
   (* The CASE-OF-BEGIN-END statement. The selector expression is
-     stored in a temprory variable so that it does not get called a
+     stored in a temporary variable so that it does not get called a
      second time if there is a range error. *)
 
   | Tree.CASE (loc, selector, branches) -> 
@@ -917,7 +917,7 @@ and expression (scope : Scope.t) (tree : Tree.t) : typed_code_t =
       { t = Statement; 
         c = "while ($)\n $ \n" $$ [cc; ct] }
 
-  (* The limit and step expression of FOR statments are placed in
+  (* The limit and step expression of FOR statements are placed in
      temporary variables to prevent them from being called more than once. *)
 
   | Tree.FOR (loc, control, first, last, body) -> 
@@ -1296,7 +1296,7 @@ and binary_expression (loc      : Location.t)
 
     (* Equality. See rules about symbols T 6 and T 7.
 
-       Allowing the comparison of LOGICAL values was a Standford ALGOLW extension to
+       Allowing the comparison of LOGICAL values was a Stanford ALGOLW extension to
        Algol W.   *)
 
     | (Tree.EQ | Tree.NE), Bits _, Bits _ ->
@@ -1396,7 +1396,7 @@ and binary_expression (loc      : Location.t)
 
    Awe compiles each type of parameter in a different fashion (see 'add_call_parameter'.)
 
-   "Thunks" are temporary functions passed as auguments to functions, they calculate 
+   "Thunks" are temporary functions passed as arguments to functions, they calculate 
    the addresses of parameters, which are often held in temporary variables. 
    In a proper Algol runtime thunks are supposed to be untyped (have a undefined return 
    type and undefined number of arguments) and are used for every type of parameter, 
@@ -2385,7 +2385,7 @@ and add_record_declaration (loc : Location.t)
 
 (* ** Procedure declarations ---------------------------------------------------------------- *)
 
-(* All the procedures in an Algol block are visible to one and other, but in C only preceeding
+(* All the procedures in an Algol block are visible to one and other, but in C only preceding
    function declarations are visible, prototypes have to be added to allow mutually 
    recursive functions. Awe handles this difference by adding a prototype for every procedure
    to the top of every C block. 

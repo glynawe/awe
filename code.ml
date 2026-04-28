@@ -66,12 +66,12 @@ let emit_code (emit_string : string -> unit)
    | Add_comma (a, Empty) -> emit_node a
    | Add_comma (Empty, b) -> emit_node b
    | Add_comma (a, b)     -> emit_node a ; emit_string ", " ; emit_node b
-   | Concat (seperator, code_list) -> 
+   | Concat (separator, code_list) -> 
        let rec loop =
          function
          | []      -> ()
          | [c]     -> emit_node c
-         | c :: cs -> emit_node c ; emit_string seperator ; loop cs
+         | c :: cs -> emit_node c ; emit_string separator ; loop cs
        in
        loop code_list
    | Template (template, code_list) ->

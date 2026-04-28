@@ -19,7 +19,7 @@ License along with Awe.  If not, see <http://www.gnu.org/licenses/>.
 
 *)
 
-(* Rapidly concatenatable scraps of C code text. *)
+(* Rapidly concatenateable scraps of C code text. *)
 
 (* A scrap of C code. *)
 type t 
@@ -34,7 +34,7 @@ val id : Table.Id.t -> t
 val to_string : t -> string
 
 
-(* 'separate seperator scrap_list' concatenates a list of C code scraps,
+(* 'separate separator scrap_list' concatenates a list of C code scraps,
     using the string 'separator' as a separator. *)
 val separate : string -> t list -> t
 

@@ -1,6 +1,6 @@
 /* io.c --very simple I/O library for Algol W programs */
 
-/* This provides the functions for the external procdure declarations in io.alw. */
+/* This provides the functions for the external procedure declarations in io.alw. */
 
 #include <stdio.h>
 #include <errno.h>

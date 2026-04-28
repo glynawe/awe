@@ -1,5 +1,5 @@
 comment
-     An "end" to let the contents of a preceeding
+     An "end" to let the contents of a preceding
      sequence of source files exist in the same scope,
      which gives you a primitive module system.
      The idea is that you do something like this: 

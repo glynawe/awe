@@ -90,7 +90,7 @@ begin
 
 begin
 
-    % This is the standard dodedecahedral cave system. %
+    % This is the standard dodecahedral cave system. %
 
     integer array  Tunnels (1 :: NumRooms, 1 :: MaxTunnels);
     integer array  NumTunnels (1 :: NumRooms);
