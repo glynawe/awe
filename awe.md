@@ -285,6 +285,15 @@ frequently that it is clear that the compiler he was using did not
 enforce it.)
 
 
+### If expressions
+
+Awe gives the left side of IF expressions a higher precedence than the Language Description specifies. This expression is allowed:
+
+    A := B + IF C THEN -1 ELSE 1
+
+Strictly, the IF part of that expression needs to be surrounded by parentheses, but Awe's lenience does not affect the behaviour of correct Algol W programs. (This discrepancy was noted by Dario Dariol.)
+
+
 ### Empty arrays
 
 Awe allows "empty arrays" to be declared.
