@@ -287,7 +287,7 @@ enforce it.)
 
 ### If expressions
 
-Awe gives the left side of IF expressions a higher precedence than the Language Description specifies. This expression is allowed:
+Awe gives the left side of IF and CASE expressions a higher precedence than the Language Description specifies. This expression is allowed:
 
     A := B + IF C THEN -1 ELSE 1
 
