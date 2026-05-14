@@ -291,7 +291,7 @@ Awe gives the left side of IF and CASE expressions a higher precedence than the 
 
     A := B + IF C THEN -1 ELSE 1
 
-Strictly, the IF part of that expression needs to be surrounded by parentheses, but Awe's lenience does not affect the behaviour of correct Algol W programs. (This discrepancy was noted by Dario Dariol.)
+Strictly, the IF part of that expression needs to be surrounded by parentheses. But this lenience does not affect the behaviour of correct Algol W programs. (This discrepancy was noted by Dario Dariol.)
 
 
 ### Empty arrays

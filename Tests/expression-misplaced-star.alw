@@ -1,0 +1,7 @@
+begin
+	integer array v(1::100);
+	v(*) := 42;
+end.
+----compiler
+Tests/expression-misplaced-star.alw:3:4: a subarray star cannot be used in an expression or designator
+----end

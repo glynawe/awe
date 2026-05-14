@@ -132,6 +132,7 @@
 program
 : expression EOF          { $1 }
 | expression FULLSTOP EOF { $1 }
+| FULLSTOP EOF            { Empty (pos 1) }
 ;
 
 separate_procedure

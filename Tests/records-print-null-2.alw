@@ -1,0 +1,9 @@
+begin
+  reference(Exception) p1,p2;
+  p1:= Exception;
+  p2 := null;
+  write(p1, null)
+end.
+----stdout
+   exception.0            null
+----end

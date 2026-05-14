@@ -1078,6 +1078,9 @@ and expression (scope : Scope.t) (tree : Tree.t) : typed_code_t =
         | defn -> 
             error loc "this is %s, it cannot be called or dereferenced" (describe_definition defn) )
 
+  | Tree.STAR  loc -> 
+      error loc "a subarray star cannot be used in an expression or designator"
+
   (* Any Tree node that's not one of the above will be due to a parser error. *)
   | e -> 
       failwith ( sprintf "Compiler.expression: %s is not an expression" (Tree.str e) )
@@ -1954,6 +1957,7 @@ and standard_procedure (loc : Location.t) (scope : Scope.t)
       | String 1 ->               "_awe_write_char($, $);\n" $$ [code_of_loc loc; pa.c]
       | String length ->          "_awe_write_string($, $, $);\n" $$ [code_of_loc loc; pa.c; code_of_int length]
       | Reference _ ->            "_awe_write_reference($, $);\n" $$ [code_of_loc loc; pa.c]
+      | Null ->                   "_awe_write_reference($, $);\n" $$ [code_of_loc loc; pa.c]
       | _ -> error ploc "%s cannot be written" (describe_simple pa.t)
     in
 
