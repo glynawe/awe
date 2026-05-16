@@ -746,7 +746,7 @@ The initial configuration handles line length, whitespace and page
 breaks in a relaxed way that better suits stream I/O. The Input/Output
 System can be returned to strict ALGOL W Language Description
 behaviour by setting Unix environment variables, or by this statement:
-`IOCONTROL(4, 40009, 40011)`
+`IOCONTROL(4, 40008, 40011)`
 
 The control codes:
 

@@ -1,0 +1,12 @@
+begin
+    record A(integer x);
+    record B(string(10) y);
+    reference(A) pa;
+    reference(B) pb;
+    pa := A;
+    pb := B;
+    write(pa = pb);
+end.
+----compiler
+Tests/TEST_W076.alw:8:14: a REFERENCE(a) and a REFERENCE(b) have no records in common
+----end

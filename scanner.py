@@ -177,7 +177,7 @@ transition_data = r'''
 301  c  301
 301  "  302  ;
 
-302  "  301  Scanner_addstring(scanner, "\"\"");
+302  "  301  Scanner_addchar(scanner, '"');
 302  w    0  Scanner_close_buffer(scanner); return String; 
 
 // Bits, in hexadecimal.

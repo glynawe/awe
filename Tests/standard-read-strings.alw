@@ -12,9 +12,9 @@ end.
 'abc'
 'a  '
 '   '
-'"" '
-'""a'
-'a""'
+'"  '
+'"a '
+'a" '
 ----stderr
 Tests/standard-read-strings.alw:5:11: String too long on line 1 of the standard input.
 ----exitcode

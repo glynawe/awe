@@ -1319,9 +1319,12 @@ and binary_expression (loc      : Location.t)
         { t = Logical; 
           c = "(_awe_str_cmp($, $, $, $) $ 0) " $$ [ca; code_of_int lena; cb; code_of_int lenb; c_equality operator] }
 
-    | (Tree.EQ | Tree.NE), (Reference(_) | Null), (Reference(_) | Null) ->
-        { t = Logical; 
-          c = "($ $ $)" $$ [ca; c_equality operator; cb] }
+    | (Tree.EQ | Tree.NE), ((Reference(_) | Null) as a), ((Reference(_) | Null) as b) ->
+        if Type.equal_simple_types a b then
+          { t = Logical; 
+            c = "($ $ $)" $$ [ca; c_equality operator; cb] }
+        else
+          error loc "%s and %s have no records in common" (Type.describe_simple a) (Type.describe_simple b)
 
     | (Tree.EQ | Tree.NE), Number(_,_), Number(_,_) ->
         { t = Logical; 

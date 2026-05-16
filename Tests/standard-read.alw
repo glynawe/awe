@@ -62,9 +62,9 @@ TRUE FALSE
 'abc'
 'a  '
 '   '
-'"" '
-'""a'
-'a""'
+'"  '
+'"a '
+'a" '
   TRUE   FALSE
              0
              1
