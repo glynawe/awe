@@ -1,0 +1,68 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Algolw",
+	"patterns": [
+		{
+			"name": "keyword.other.algolw",
+			"match": "(?i)\\b(abs|algol|and|array|assert|begin|bits|boolean|case|complex|div|do|else|end|false|for|fortran|go *to|goto|if|integer|is|logical|long|long *complex|long *integer|long *real|null|of|or|procedure|real|record|reference|rem|result|shl|short|shr|step|string|then|true|until|value|while)\\b"
+		},{
+			"name": "support.function.algolw",
+			"match": "(?i)\\b(arctan|base10|bitstring|code|cos|decode|divzero|endfile|entier|epsilon|exception|exp|experr|gamma|i_w|imag|imagpart|intbase10|intbase16|intdivzero|iocontrol|ln|lnlogerr|log|longarctan|longbase10|longcos|longepsilon|longexp|longgamma|longimag|longimagpart|longln|longlog|longrealpart|longsin|longsqrt|maxinteger|maxreal|number|odd|pi|r_d|r_format|r_w|read|readcard|readon|realpart|round|roundtoreal|s_w|sin|sincoserr|sqrt|sqrterr|time|truncate|write|writecard|writeon|xcpaction|xcplimit|xcpmark|xcpmsg|xcpnoted)\\b"
+		},{
+			"include": "#comments"
+		},{
+			"include": "#shortcomments"
+		},{
+			"include": "#tests"
+		},{
+			"name": "variable.algolw",
+			"match": "\\b([A-Za-z_][A-Za-z0-9_]*)\\b"
+		},{
+			"name": "constant.numeric.algolw",
+			"match": "\\b[0-9]+\\b"
+		},{
+			"name": "constant.numeric.float.algolw",
+			"match": "\\b[0-9]+[.][0-9]*('[-+]?[0-9]+)[IL]*\\b"
+		},{
+			"name": "constant.numeric.float.algolw",
+			"match": "\\b[.][0-9]+('[-+]?[0-9]+)[IL]*\\b"
+		},{
+			"name": "constant.numeric.hexadecimal.algolw",
+			"match": "\\b[#][0-9A-Fa-f]+\\b"
+		},{
+			"name": "meta.preprocessor.algolw",
+			"match": "^[#@].*"
+		},{
+			"include": "#strings"
+		}
+	],
+	"repository": {
+		"strings": {
+			"name": "string.quoted.double.algolw",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.algolw",
+					"match": "\"\""
+				}
+			]
+		},
+		"comments": {
+			"name": "comment.block.algolw",
+			"begin": "(?i)\\bcomment\\b",
+			"end": ";"
+		},
+		"shortcomments": {
+			"name": "comment.line.algolw",
+			"begin": "%",
+			"end": "[%;]"
+		},
+		"tests": {
+			"name": "meta.preprocessor.algolw",
+			"begin": "^----(compile|stdin|compile|messages|stdout|stderr|exitcode)\\b",
+			"end": "^----end"
+		}
+	},
+	"scopeName": "source.algolw"
+}

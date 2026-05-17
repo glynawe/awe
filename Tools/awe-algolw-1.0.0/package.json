@@ -1,0 +1,25 @@
+{
+  "name": "algolw",
+  "displayName": "algolw",
+  "description": "Highlightinh for Algol W.",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.110.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "algolw",
+      "aliases": ["AlgolW", "algolw"],
+      "extensions": [".alw"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "algolw",
+      "scopeName": "source.algolw",
+      "path": "./syntaxes/algolw.tmLanguage.json"
+    }]
+  }
+}
