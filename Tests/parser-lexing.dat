@@ -172,6 +172,30 @@ $too big, but lexically correct:
 '3IL
 1.0'3IL
 
+0.1IL
+0.1IL
+
+1LI
+1.0IL
+
+1.0'3LI
+1.0'3IL
+
+0.1LI
+0.1IL
+
+1.LI
+1.0IL
+
+1.'3LI
+1.0'3IL
+
+1.'3LI
+1.0'3IL
+
+'3LI
+1.0'3IL
+
 "String"
 "String"
 

@@ -286,13 +286,25 @@ rule token = parse
 | (unscaled_real as r) (tenpower (exponent as e))? (['I' 'i'] as i)? (['L' 'l'] as l)?
     { return_token (make_real r e i l) }
 
+| (unscaled_real as r) (tenpower (exponent as e))? (['L' 'l'] as l)? (['I' 'i'] as i)? 
+    { return_token (make_real r e i l) }
+
 | tenpower (exponent as e) (['I' 'i'] as i)? (['L' 'l'] as l)?
+    { return_token (make_real "1.0" (Some e) i l) }
+
+| tenpower (exponent as e) (['L' 'l'] as l)? (['I' 'i'] as i)? 
     { return_token (make_real "1.0" (Some e) i l) }
 
 | (integer_number as r) (tenpower (exponent as e)) (['I' 'i'] as i)? (['L' 'l'] as l)?
     { return_token (make_real (r ^ ".0") (Some e) i l) }
 
+| (integer_number as r) (tenpower (exponent as e)) (['L' 'l'] as l)? (['I' 'i'] as i)? 
+    { return_token (make_real (r ^ ".0") (Some e) i l) }
+
 | (integer_number as r) ['I' 'i'] (['L' 'l'] as l)?
+    { return_token (make_real (r ^ ".0") None (Some "I") l) }
+
+| (integer_number as r) (['L' 'l'] as l)? ['I' 'i'] 
     { return_token (make_real (r ^ ".0") None (Some "I") l) }
 
 | (integer_number as r) ['L' 'l']
