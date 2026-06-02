@@ -301,7 +301,7 @@ Awe allows "empty arrays" to be declared.
 ▸ Replace the last sentence of 5.2.2. Array Declarations, Semantics with this:
 
 > In order to be valid, for every bound pair, the value of the upper
-> bound may be no lower than one less than the upper bound. If a
+> bound may be no lower than one less than the lower bound. If a
 > valid array has any bound pair where the upper bound is one less
 > than the lower bound then it denotes an empty array.
 

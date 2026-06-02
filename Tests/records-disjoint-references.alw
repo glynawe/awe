@@ -7,6 +7,6 @@ begin
     pb := B;
     write(pa = pb);
 end.
-----compiler
-Tests/TEST_W076.alw:8:14: a REFERENCE(a) and a REFERENCE(b) have no records in common
+----compile
+Tests/records-disjoint-references.alw:8:14: a REFERENCE(a) and a REFERENCE(b) have no records in common
 ----end
