@@ -39,6 +39,8 @@ License along with Awe.  If not, see <http://www.gnu.org/licenses/>.
 
 unsigned char _awe_return_string [256];
 
+unsigned char _awe_left_operand_string [256];
+
 
 _awe_str
 _awe_string (_awe_str src, int srclen)

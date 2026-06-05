@@ -1,4 +1,7 @@
 begin
+   string(5) procedure hello; "Hello";
+   string(5) procedure world; "World";
+
    assert("abc" = "abc");
    assert("bce" > "abc");
    assert("abc" < "bce");
@@ -21,4 +24,11 @@ begin
    assert("abc  " < "bce ");
    assert("bce "  > "abc  ");
    assert("abc "  < "bce  ");
+
+   comment a test of the dual string buffers for function result comparison;
+
+   assert(~ (hello = world));
+   assert(hello ~= world);
+   assert(~ (hello > world));
+   assert(hello < world);
 end.

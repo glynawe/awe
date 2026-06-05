@@ -333,10 +333,16 @@ extern unsigned char _awe_latin1_of_ebcdic [256];
 
 
 /* This is a buffer for strings returned from function procedures.
-   (Awe arranges its string-handling code in such a way that only on
-   such buffer is necessary.) */
+   (Awe arranges its string-handling code in such a way that usually 
+   only on such buffer is necessary.) */
 
 extern unsigned char _awe_return_string [256];
+
+/* This is used for the left operand of string comparison operators: 
+   the one exception to the the above. */
+
+extern unsigned char _awe_left_operand_string [256];
+
 
 /* Copy a string into the buffer, and return a pointer to the buffer. 
    External procedures must call this to return string values. */

@@ -1300,7 +1300,12 @@ and binary_expression (loc      : Location.t)
     (* Equality. See rules about symbols T 6 and T 7.
 
        Allowing the comparison of LOGICAL values was a Stanford ALGOLW extension to
-       Algol W.   *)
+       Algol W.
+
+       A '_awe_left_operand_string' buffer is used for the left operand of
+       string comparisons. Without this '_awe_return_string' is overwritten by
+       the right operand when both operands are string function calls.
+    *)
 
     | (Tree.EQ | Tree.NE), Bits _, Bits _ ->
         { t = Logical; 
@@ -1315,10 +1320,13 @@ and binary_expression (loc      : Location.t)
     | (Tree.EQ | Tree.NE), String lena, String 1 ->
         { t = Logical; 
           c = "(_awe_str_cmp_sc($, $, $) $ 0) " $$ [ca; code_of_int lena; cb; c_equality operator] }
-    | (Tree.EQ | Tree.NE), String lena, String lenb ->
+    |
+      (Tree.EQ | Tree.NE), String lena, String lenb ->
         { t = Logical; 
-          c = "(_awe_str_cmp($, $, $, $) $ 0) " $$ [ca; code_of_int lena; cb; code_of_int lenb; c_equality operator] }
-
+          c = "({ _awe_str_cpy (_awe_left_operand_string, $, $, $);
+                  _awe_str_cmp(_awe_left_operand_string, $, $, $) $ 0; })"
+              $$ [code_of_int lena; ca; code_of_int lena;
+                  code_of_int lena; cb; code_of_int lenb; c_equality operator] }
     | (Tree.EQ | Tree.NE), ((Reference(_) | Null) as a), ((Reference(_) | Null) as b) ->
         if Type.equal_simple_types a b then
           { t = Logical; 
@@ -1349,8 +1357,10 @@ and binary_expression (loc      : Location.t)
             $$ [ca; code_of_int lena; cb; c_inequality operator] }
     | (Tree.GT  | Tree.GE  | Tree.LT  | Tree.LE), String lena, String lenb ->
         { t = Logical; 
-          c = "(_awe_str_cmp($, $, $, $) $ 0) " 
-            $$ [ca; code_of_int lena; cb; code_of_int lenb; c_inequality operator] }
+          c = "({ _awe_str_cpy (_awe_left_operand_string, $, $, $);
+                  _awe_str_cmp(_awe_left_operand_string, $, $, $) $ 0; })"
+              $$ [code_of_int lena; ca; code_of_int lena;
+                  code_of_int lena; cb; code_of_int lenb; c_inequality operator] }
 
     | (Tree.GT  | Tree.GE  | Tree.LT  | Tree.LE), Number(_,(Real|Integer)), Number(_,(Real|Integer)) ->
         { t = Logical; 
