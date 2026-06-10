@@ -5,6 +5,14 @@ Awe is a new compiler for the ALGOL W language. It is a complete implementation 
 
 The main requirements for compiling Awe are a Unix-like operating system, GCC, Python3, OCaml and Boehm GC. For details read [INSTALL](INSTALL.md) and awe(1).
 
+## This is the "Array descriptors" branch
+
+This version of Awe implements arrays using *array descriptors*, as described in
+Modern Compiler Design' by Grune, Bal, Jacobs and Langendoen. They are
+efficient, and mesh with externally defined code well, but do not have
+completely correct call-by-name behaviour. The Awe in the main branch correctly
+implements arrays using call-by-name *thunk* procedures.
+
 ## Thank You
 
 Thank you to: Hendrick Boom, Tony Marsland, Carey Bloodworth, John Boutland, Nicolas Brouard and Dario Dariol for a great deal of expert advice, encouragement and testing; and the authors of the *Algol W Language Description* for creating such an unambiguous work.
