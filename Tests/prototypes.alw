@@ -75,7 +75,7 @@ void i3 (int *pv);
 void i4 (int *pv);
 
 /* PROCEDURE i5 (INTEGER ARRAY arr (*)); ALGOL "i5"; */
-void i5 (_awe_array_t *arr);
+void i5 (int *arr(_awe_loc, int));
 
 /* PROCEDURE i6 (INTEGER PROCEDURE proc); ALGOL "i6"; */
 void i6 (int (*proc)());
@@ -99,7 +99,7 @@ void s3 (_awe_str pv);
 void s4 (_awe_str pv);
 
 /* PROCEDURE s5 (STRING(10) ARRAY arr (*)); ALGOL "s5"; */
-void s5 (_awe_array_t *arr);
+void s5 (_awe_str arr(_awe_loc, int));
 
 /* PROCEDURE s6 (STRING(10) PROCEDURE proc); ALGOL "s6"; */
 void s6 (_awe_str (proc)());
@@ -123,7 +123,7 @@ void c3 (unsigned char *pv);
 void c4 (unsigned char *pv);
 
 /* PROCEDURE c5 (STRING(1) ARRAY arr (*)); ALGOL "c5"; */
-void c5 (_awe_array_t *arr);
+void c5 (unsigned char *arr(_awe_loc, int));
 
 /* PROCEDURE c6 (STRING(1) PROCEDURE proc); ALGOL "c6"; */
 void c6 (unsigned char (*proc)());
@@ -147,7 +147,7 @@ void r3 (void * *pv);
 void r4 (void * *pv);
 
 /* PROCEDURE r5 (REFERENCE(r) ARRAY arr (*)); ALGOL "r5"; */
-void r5 (_awe_array_t *arr);
+void r5 (void * *arr(_awe_loc, int));
 
 /* PROCEDURE r6 (REFERENCE(r) PROCEDURE proc); ALGOL "r6"; */
 void r6 (void * (*proc)());

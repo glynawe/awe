@@ -14,7 +14,7 @@ end.
              8
             10
 ----stderr
-Tests/array-range.alw:8:15: array subscript error: subscript 1 = 6, outside the range (1::5)
+Tests/array-range.alw:8:15: array subscript error: subscript 1 of 'a' = 6, outside the range (1::5)
 ----exitcode
 1
 ----end  

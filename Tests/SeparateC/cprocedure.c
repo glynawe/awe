@@ -3,10 +3,10 @@
 
 #include "program.awe.h"
 
-void Test (int v, int *r, int *vr, int *(*n)(void), _awe_array_t *a)
+void Test (int v, int *r, int *vr, int *(*n)(void), int *a(_awe_loc, int))
 {
-    #define N    *n()                                    /* Name parameter */
-    #define A(j) *_awe_array_SUB(_awe_HERE, int, a, (j)) /* array parameter */
+    #define N    *n()               /* Name parameter */
+    #define A(j) *a(_awe_HERE, (j)) /* array parameter */
 
     int j;
 

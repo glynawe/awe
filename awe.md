@@ -56,14 +56,7 @@ Operating System Interface:
 - external reference procedures must be written in C;
 - Awe source files can be run though the C preprocessor.
 
-Flaws:
-
-- The integer expressions in subarray designators are passed by value,
-  but they should be passed by name. See section 7.3.2.3 of the Language 
-  Description. (However, a program that is affected by this would have to
-  be quite unusual.)
-
-Aside for the above flaw, these differences should only affect the validity 
+These differences should only affect the validity 
 of programs that declare procedure formal parameters or rely on an exact 
 representation of System/360 floating-point math. The differences exist for 
 the sake of compatibility with Linux and GCC and backwards-compatibility with
@@ -640,10 +633,12 @@ Description*.)
 
 #### Array errors
 
-- `bound 〈n〉 of '〈array〉' is (〈min〉::〈max〉) here` (Raised when an array is declared, if 〈min〉 is more than 1 greater than 〈max〉.)
-- `subscript 〈n〉  = 〈i〉, outside the range (〈min〉::〈max〉)` (Arrays are "empty" if 〈min〉 is 1 greater than 〈max〉.)
+"bound 〈n〉 of '〈array〉' is (〈min〉::〈max〉) here"
 
-See [Empty arrays](#empty-arrays) above.
+"subscript 〈n〉 of '〈array〉' = 〈i〉, outside the range (〈min〉::〈max〉)"
+"subscript 〈n〉 of '〈array〉' = 〈i〉, of empty array range (〈min〉::〈max〉)"
+
+(Arrays are "empty" if 〈min〉 is 1 greater than 〈max〉. See [Empty arrays](#empty-arrays) above.)
 
 #### String errors
 
@@ -890,6 +885,7 @@ interfaces of separately compiled procedures. An example:
 INTEGER PROCEDURE UNPACK (BITS VALUE W; INTEGER RESULT LO, HI); 
     ALGOL "unpack16";
 ```
+
 Awe translates these procedure declarations into equivalent C function
 prototypes, and writes those to the standard output while it is
 compiling.  You will need to provide a separately compiled C function
@@ -959,8 +955,11 @@ The C library, `timelib.c`:
 #include <awe.h>
 #include <time.h>
 #include "when.awe.h"
-#define HMS(i) *_awe_array_SUB(_awe_HERE, int, hms, i)
-void localtime_wrapper (_awe_array *hms, int *dst)
+
+/* For convenience: */
+#define HMS(i) *hms(_awe_HERE, (i))
+
+void localtime_wrapper (int *(*hms)(_awe_loc, int), int *dst)
 {
     time_t t = time(NULL);
     struct tm *T = localtime(&t);
@@ -1088,8 +1087,8 @@ These are C equivalents of ALGOL W formal parameters:
 | `T x` (i.e. Call by Name)  | `t* (*x)()`                   |
 | `PROCEDURE x`              | `void (*x)()`                 |
 | `T PROCEDURE x`            | `t (*x)()`                    |
-| `T ARRAY x (*)`            | `_awe_array_t *x`             |
-| `T ARRAY x (*,*)`          | `_awe_array_t *x`             | 
+│ `T ARRAY x (*)`            │ `t* (*x)(_awe_loc, int)`      │
+│ `T ARRAY x (*,*)`          │ `t* (*x)(_awe_loc, int, int)` │
 
 where `T` is an ALGOL W simple type, `t` is its C equivalent 
 and `t*` is a C pointer to its equivalent.
@@ -1126,42 +1125,21 @@ Becomes:
 void x (int (*y)(unsigned int z));
 ```
 
-**ARRAY** parameters are represented by pointers to `_awe_array_t`, the Awe
-runtime's stack-based multidimensional array type.
+**ARRAY** parameters are represented by pointers to functions that return
+pointers to elements. 
 
+An ARRAY function takes a source code location ('_awe_loc')
+argument, followed by a list of integer arguments for its
+subscripts.  Use the macro '_awe_HERE' for the source code
+location argument.
 
-### Arrays
+Calling an array function with the array's lowest subscripts will
+yield a pointer to the array's underlying storage. ALGOL W arrays
+are stored in row-major order.
 
 `_awe_array_t` structures contain useful information about arrays,
 for example their number of dimensions and upper and lower bounds
 of those dimensions. Read awe.h for details.
-
-A pointer to an element of an `_awe_array` can be obtained using the
-`_awe_array_SUB` macro:
-
-```
-_awe_array_SUB(loc, type, array, subscripts...)
-```
-
-Where:
-
-- `loc`            is a source location (use the `_awe_HERE` macro)
-- `type`           is the C type of the array's elements
-- `array`          is pointer to the array
-- `subscripts...`  all further arguments are integer subscripts
-
-For example, this accesses element `x(2,j+1)` of the two-dimensional
-integer array x:
-
-``` 
-*_awe_array_SUB(_awe_HERE, int, x, 2, j+1)
-```
-
-Macros can be used to make array access less cumbersome:
-
-```
-#define X(i,j) *_awe_array_SUB(_awe_HERE, int, x, (i), (j))
-```
 
 ### Records
 
@@ -1230,4 +1208,4 @@ These references point to C structures rather than valid ALGOL W records, so:
 * ALGOL W code should never allocate new dummy class records.
 
 ---
-Glyn Webster, 2024
+Glyn Webster, 2026

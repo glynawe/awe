@@ -142,113 +142,30 @@ int _awe_is (void *ref, const char *class);
 
 /* Arrays. - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
-/* Array descriptors represent multidimensional arrays with non-zero
-   lower bounds, and slices taken from such arrays. Arrays and their
-   'descriptors' are allocated on the stack. 
+/* The '_awe_array_bounds_check' macro checks that an array dimension's bounds are valid. */
+/* A lower bound one less than its upper bound is allowed, it creates an empty array. */
 
-   See 'Modern Compiler Design' by Grune, Bal, Jacobs and Langendoen
-   for the approach taken here.
-*/
-
-typedef struct _awe_array_bound {
-    int lower, upper;
-} _awe_array_bound_t;
+#define _awe_array_bounds_check(a, _awe_src_line, d)\
+    if (_##a##_upb##d - _##a##_lwb##d + 1 < 0) { \
+        _awe_array_bounds_error(_awe_src_line, #a, d, _##a##_lwb##d, _##a##_upb##d);\
+    }
+void _awe_array_bounds_error(_awe_loc l, const char *array, int subscript, int lwb, int upb);
 
 
-typedef struct _awe_array {  /* array descriptor */
-    void *element_data;  /* storage for the elements of the array */
-    long  nelements;     /* total number of elements in element_data */
-    long  element_size;  /* the size of one element */
-    int   ndimensions;   /* number of array dimensions */
-    long  total_offset;  /* total of offsets to element at 0 in all dimensions */
-    long *multipliers;   /* number of bytes between each subscript of a dimension */
-    _awe_array_bound_t *bounds;        /* bounds of each dimension */
-} _awe_array_t;
+/* Array designators use the _awe_array_range_check macro to check 
+   that subscripts are within their dimensions' bounds. */
+/* The gcc compiler flag -D AWE_NO_ARRAY_CHECKS turns off array subscript range checking. */
 
-/* Note that for subarrays element_data and nelements are the same as
-   for the base array */
+#ifdef AWE_NO_ARRAY_CHECKS
+#define _awe_array_range_check(a, d)
+#else
+#define _awe_array_range_check(a, d)\
+    if (!(_sub##d >= _##a##_lwb##d && _sub##d <= _##a##_upb##d)) {        \
+        _awe_array_range_error(loc, #a, d, _##a##_lwb##d, _##a##_upb##d, _sub##d);\
+    }
+void _awe_array_range_error(_awe_loc l, const char *array, int subscript, int lwb, int upb, int sub);
+#endif
 
-
-typedef struct _awe_array_slicer {
-    _Bool slice;     /* slice along this dimension? */
-    int subscript;   /* subscript of the slice */
-} _awe_array_slicer_t;
-
-
-void
-_awe_array_initialize ( _awe_loc loc,
-                        _awe_array_t *array,
-                        int ndimensions,
-                        _awe_array_bound_t *bounds,
-                        long *multipliers,
-                        long element_size );
-
-
-void
-_awe_subarray_initialize ( _awe_loc loc,
-                        const _awe_array_t *array,
-                        _awe_array_t *subarray,
-                        const _awe_array_slicer_t *slicers,
-                        _awe_array_bound_t *bounds,
-                        long *multipliers );
-
-
-void *
-_awe_array_element_pointer ( _awe_loc loc,
-                             const _awe_array_t *array,
-                             const int *subscripts );
-
-
-/* array subscript, as pointer to element */
-#define _awe_array_SUB(loc, type, array, ...)                 \
-    (type*)_awe_array_element_pointer((loc), (array), (int[]){__VA_ARGS__})
-
-
-/* declare an array on the stack. */
-#define _awe_array_DECLARE(loc, array, elementsize, ndimensions, bounds_array) \
-    _awe_array_t _##array##_descriptor;                                 \
-    _awe_array_t *array = &_##array##_descriptor;                       \
-                                                                        \
-    const int _##array##_ndimensions = (ndimensions);                   \
-    long _##array##_multipliers [_##array##_ndimensions];               \
-                                                                        \
-    _awe_array_initialize( (loc),                                       \
-                           &_##array##_descriptor,                      \
-                           _##array##_ndimensions,                      \
-                           (bounds_array),                              \
-                           _##array##_multipliers,                      \
-                           (elementsize) );                             \
-                                                                        \
-    char _##array##_element_data [array->nelements * array->element_size]; \
-    array->element_data = _##array##_element_data;                      \
-    
-
-
-/* declare a subarray on the stack */
-#define _awe_array_DECLARE_SUBARRAY(loc, subarray, ndimensions, array_ptr, ...) \
-    _awe_array_t _##subarray##_descriptor;                              \
-    _awe_array_t *subarray = &_##subarray##_descriptor;                 \
-                                                                        \
-    const int _##subarray##_ndimensions = (ndimensions);                \
-    _awe_array_bound_t _##subarray##_bounds[_##subarray##_ndimensions]; \
-    long _##subarray##_multipliers [_##subarray##_ndimensions];         \
-    _awe_array_slicer_t _##subarray##_slicers[] = {__VA_ARGS__};        \
-                                                                        \
-    _awe_subarray_initialize( (loc),                                    \
-                              (array_ptr),                              \
-                              subarray,                                 \
-                              _##subarray##_slicers,                    \
-                              _##subarray##_bounds,                     \
-                              _##subarray##_multipliers )
-
-
-#define _awe_array_FILL(element_type, array, filler)                   \
-    for (int _i_ = 0; _i_ < array->nelements; ++_i_)                         \
-        ((element_type*)(array->element_data))[_i_] = (filler)
-
-#define _awe_array_FILL_WITH_SPACES(array)                              \
-    for (int _i_ = 0; _i_ < array->nelements * array->element_size; ++_i_)    \
-        ((char*)(array->element_data))[_i_] = ' '
 
 
 /* Statements. - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
