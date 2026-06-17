@@ -1,0 +1,6 @@
+COMMENT This is a quick test program to run with the wrapper script;
+COMMENT Example: bash alw.sh test1.alw;
+
+begin
+	write("Hello world");
+end.

@@ -1,0 +1,8 @@
+COMMENT This is a quick test program to run with the wrapper script;
+COMMENT Example: bash alw.sh test2.alw;
+begin
+	integer n;
+	write("Enter an integer number: ");
+	read(n);
+	write(n);
+end.
